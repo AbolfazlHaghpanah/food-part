@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.foodpart.fooddata.FoodData
+import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
+import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
