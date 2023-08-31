@@ -68,6 +68,7 @@ fun categoryScreen(
                         style = MaterialTheme.typography.h1
                     )
                 },
+                backgroundColor = MaterialTheme.colors.background
             )
         }
     ) {
