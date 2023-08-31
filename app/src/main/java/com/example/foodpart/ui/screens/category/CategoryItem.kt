@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,58 +29,56 @@ import com.example.foodpart.ui.theme.FoodPartTheme
 @Composable
 fun categoryItem(
     category: String,
-    isSelected:Boolean
+    isSelected: Boolean,
+    modifier: Modifier = Modifier
 ) {
 
-    FoodPartTheme {
-
-        Column(
-            modifier = Modifier
-                .width(64.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                Modifier.then(
-                    if (isSelected) {
-                        Modifier
-                            .background(
-                                color = MaterialTheme.colors.secondary,
-                                shape = MaterialTheme.shapes.medium
-                            )
-                            .border(
-                                1.dp, MaterialTheme.colors.primary,
-                                MaterialTheme.shapes.medium
-                            )
-                    } else {
-                        Modifier
-                            .background(
-                                color = MaterialTheme.colors.secondary,
-                                shape = MaterialTheme.shapes.medium
-                            )
-                    }
-                )
-
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.category_item),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.Center)
-
-                )
-            }
-
-            Text(
-                text = "آبگوشت",
-                style = MaterialTheme.typography.subtitle1,
-                color = if (isSelected) MaterialTheme.colors.primary
-                    else MaterialTheme.colors.onBackground
-
+    Column(
+        modifier = modifier
+            .width(64.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            Modifier.then(
+                if (isSelected) {
+                    Modifier
+                        .background(
+                            color = MaterialTheme.colors.secondary,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .border(
+                            1.dp, MaterialTheme.colors.primary,
+                            MaterialTheme.shapes.medium
+                        )
+                } else {
+                    Modifier
+                        .background(
+                            color = MaterialTheme.colors.secondary,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                }
             )
 
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.category_item),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.Center)
 
+            )
         }
+
+        Text(
+            text = category,
+            style = MaterialTheme.typography.subtitle1,
+            color = if (isSelected) MaterialTheme.colors.primary
+            else MaterialTheme.colors.onBackground
+
+        )
+
+
     }
 }

@@ -25,42 +25,38 @@ import com.example.foodpart.ui.theme.FoodPartTheme
 
 @Composable
 fun foodItem(
-    name :String,
-    time : String
+    name: String,
+    time: String
 ) {
-    FoodPartTheme {
+    Column(
+
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier
+                .clip(shape = MaterialTheme.shapes.large)
+                .width(136.dp)
+                .height(84.dp),
+            painter = painterResource(id = R.drawable.food_item),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+
+            )
         Column(
-
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .width(136.dp)
         ) {
-            Image(
-                modifier = Modifier
-                    .clip(shape = MaterialTheme.shapes.large)
-                    .width(136.dp)
-                    .height(84.dp),
-                painter = painterResource(id = R.drawable.food_item),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
 
-                )
-            Column(
-                modifier = Modifier
-                    .width(136.dp)
-            ) {
-
-                Text(
-                   modifier =  Modifier.
-                        padding(8.dp , 4.dp),
-                    text = name,
-                    style = MaterialTheme.typography.subtitle1
-                )
-                Text(
-                    modifier =  Modifier.
-                    padding(8.dp , 4.dp),
-                    text = time,
-                    style = MaterialTheme.typography.subtitle2
-                )
-            }
+            Text(
+                modifier = Modifier.padding(8.dp, 4.dp),
+                text = name,
+                style = MaterialTheme.typography.subtitle1
+            )
+            Text(
+                modifier = Modifier.padding(8.dp, 4.dp),
+                text = time,
+                style = MaterialTheme.typography.subtitle2
+            )
         }
     }
 }
