@@ -2,7 +2,6 @@ package com.example.foodpart.ui.screens.category
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,17 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.material.Chip
-import androidx.compose.material.ChipColors
-import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 
 import androidx.compose.material.MaterialTheme
@@ -31,22 +25,15 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.theme.FoodPartTheme
-import kotlinx.coroutines.launch
+import com.example.foodpart.ui.screens.foodlist.foodItem
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -143,7 +130,10 @@ fun categoryScreen(
                 items(foodList.filter { it.category == categorySelectedState && it.subCategory == subCategoryState }) { item ->
 
                     foodItem(
-                        modifier = Modifier,
+                        modifier = Modifier
+                            .clickable {
+                                navController.navigate(AppScreens.FoodList.createRoute(item.category,item.category))
+                            },
                         item.foodName,
                         item.cookingTime
                     )
