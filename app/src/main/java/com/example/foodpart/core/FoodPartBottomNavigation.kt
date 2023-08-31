@@ -34,7 +34,6 @@ fun foodPartBottomNavigation(
                     )
             ),
         backgroundColor = MaterialTheme.colors.secondary,
-        contentColor = MaterialTheme.colors.onBackground
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -58,13 +57,17 @@ fun foodPartBottomNavigation(
                 icon = {
                     Icon(
                         painter = painterResource(id = item.icon),
-                        contentDescription = item.label
+                        contentDescription = item.label,
+                        tint = if(item.route == currentDestination?.route) MaterialTheme.colors.primary
+                        else MaterialTheme.colors.onBackground,
                     )
                 },
                 label = {
                     Text(
                         text = item.label,
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.subtitle1,
+                        color = if(item.route == currentDestination?.route) MaterialTheme.colors.primary
+                        else MaterialTheme.colors.onBackground,
                     )
                 }
 
