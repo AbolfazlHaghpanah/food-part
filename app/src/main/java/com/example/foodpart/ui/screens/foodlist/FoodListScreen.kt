@@ -1,12 +1,14 @@
-package com.example.foodpart.ui.screens.fooddetails
+package com.example.foodpart.ui.screens.foodlist
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun foodDetailsScreen(
+fun foodListScreen(
     navController: NavController,
-    id : Int
+    category: String,
+    appBarText : String,
+
 ) {
 
 }
