@@ -25,11 +25,12 @@ import com.example.foodpart.ui.theme.FoodPartTheme
 
 @Composable
 fun foodItem(
+    modifier: Modifier = Modifier,
     name: String,
     time: String
 ) {
     Column(
-
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(

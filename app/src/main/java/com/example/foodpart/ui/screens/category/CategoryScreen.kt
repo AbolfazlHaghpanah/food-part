@@ -41,7 +41,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.foodpart.R
+import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.theme.FoodPartTheme
 import kotlinx.coroutines.launch
@@ -50,7 +52,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun categoryScreen(
-    viewModel: CategoryScreenViewModel
+    viewModel: CategoryScreenViewModel,
+    navController: NavController
 ) {
     val categorySelectedState by viewModel.categoryFlow.collectAsState()
     val subCategoryState by viewModel.subCategoryFlow.collectAsState()
@@ -138,7 +141,11 @@ fun categoryScreen(
                 ) {
                 items(foodList.filter { it.category == categorySelectedState && it.subCategory == subCategoryState }) { item ->
 
-                    foodItem(item.foodName, item.cookingTime)
+                    foodItem(
+                        modifier = Modifier,
+                        item.foodName,
+                        item.cookingTime
+                    )
                 }
             }
 
