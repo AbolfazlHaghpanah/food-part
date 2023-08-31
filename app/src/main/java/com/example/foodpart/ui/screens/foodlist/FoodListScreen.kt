@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.foodlist
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 

@@ -52,7 +52,8 @@ private fun NavGraphBuilder.mainNavGraph(
     navController: NavController
 ) {
     composable(AppScreens.Category.route) {
-        categoryScreen(navController = navController, viewModel = CategoryScreenViewModel())
+        categoryScreen(navController = navController,
+            viewModel = CategoryScreenViewModel())
     }
 
     composable(AppScreens.Profile.route) {
