@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.screens.foodlist.foodItem
+import com.example.foodpart.ui.components.foodItem
 
 
 @OptIn(ExperimentalMaterialApi::class)

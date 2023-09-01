@@ -1,4 +1,4 @@
-package com.example.foodpart.ui.screens.foodlist
+package com.example.foodpart.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
