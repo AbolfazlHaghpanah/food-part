@@ -14,7 +14,9 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MenuDefaults
 import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,18 +36,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.foodpart.core.AppScreens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun foodDetailsAppBar(
     navController: NavController,
-    bottomSheetState: ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState,
 ) {
     val scope = rememberCoroutineScope()
     val menuState = remember {
         mutableStateOf(false)
     }
+
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background
     ) {
@@ -105,9 +110,11 @@ fun foodDetailsAppBar(
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
-                DropdownMenuItem(onClick = {
-                    menuState.value = false
-                }) {
+                DropdownMenuItem(
+                    onClick = {
+                        menuState.value = false
+                    }
+                ) {
                     Icon(
                         imageVector = Icons.Rounded.Star,
                         contentDescription = "Save"
