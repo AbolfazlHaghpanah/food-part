@@ -132,7 +132,7 @@ fun categoryScreen(
                     foodItem(
                         modifier = Modifier
                             .clickable {
-                                navController.navigate(AppScreens.FoodList.createRoute(item.category,item.category))
+                                navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                             },
                         item.foodName,
                         item.cookingTime

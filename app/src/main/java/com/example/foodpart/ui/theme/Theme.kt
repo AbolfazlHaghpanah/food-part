@@ -21,6 +21,7 @@ private val DarkColorScheme = darkColors(
     onBackground = onBackground,
     onSurface = onSurface,
     onError = red,
+
 )
 
 
