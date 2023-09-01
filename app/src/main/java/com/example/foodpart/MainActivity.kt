@@ -11,11 +11,17 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.rememberBottomDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.internal.illegalDecoyCallException
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -29,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.BottomNavigationItems
 import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
 import com.example.foodpart.fooddata.FoodData
@@ -48,10 +55,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FoodPartTheme {
+                val bottomNavState = remember{
+                    mutableStateOf(true)
+                }
                 val navController = rememberNavController()
                 Scaffold(
-                    bottomBar = {
-                        foodPartBottomNavigation(navController = navController)
+                    bottomBar =  {
+                        if (bottomNavState.value)
+                            foodPartBottomNavigation(navController = navController)
                     }
                 ) {
                     Column(
@@ -61,7 +72,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = AppScreens.Category.route
                         ) {
-                            mainNavGraph(navController)
+                            mainNavGraph(navController,bottomNavState)
                         }
                     }
                 }
@@ -70,10 +81,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
+
 private fun NavGraphBuilder.mainNavGraph(
-    navController: NavController
+    navController: NavController,
+    state: MutableState<Boolean>
 ) {
     composable(AppScreens.Category.route) {
+        state.value = true
         categoryScreen(
             navController = navController,
             viewModel = CategoryScreenViewModel()
@@ -81,18 +96,22 @@ private fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(AppScreens.Profile.route) {
+        state.value = true
         profileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
+        state.value = true
         loginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
+        state.value = true
         searchScreen(navController = navController)
     }
 
     composable(AppScreens.WhatToCook.route) {
+        state.value = true
         whatToCookScreen(navController = navController)
     }
 
@@ -107,7 +126,7 @@ private fun NavGraphBuilder.mainNavGraph(
     ) { backStackEntry ->
         val id = backStackEntry.arguments?.getInt("id")
             ?: throw IllegalStateException("id was null")
-
+        state.value = false
         foodDetailsScreen(
             navController = navController,
             id
@@ -121,7 +140,7 @@ private fun NavGraphBuilder.mainNavGraph(
                 type = NavType.StringType
                 nullable = false
             },
-            navArgument("appBar") {
+            navArgument("appbar") {
                 type = NavType.StringType
                 nullable = false
             }
@@ -130,9 +149,9 @@ private fun NavGraphBuilder.mainNavGraph(
         val category = backStackEntry.arguments?.getString("category")
             ?: throw IllegalStateException("category was null")
 
-        val appBar = backStackEntry.arguments?.getString("appBar")
+        val appBar = backStackEntry.arguments?.getString("appbar")
             ?: throw IllegalStateException("appbar was null")
-
+        state.value = false
         foodListScreen(
             navController,
             category,
