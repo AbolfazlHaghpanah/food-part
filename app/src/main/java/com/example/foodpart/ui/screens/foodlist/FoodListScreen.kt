@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.foodlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,19 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
+import com.example.foodpart.ui.components.foodItem
 
 @Composable
 fun foodListScreen(
@@ -48,7 +44,15 @@ fun foodListScreen(
         ) {
             items(foodList.filter { it.category == category }) { item ->
                 foodItem(
-                    modifier = Modifier,
+                    modifier = Modifier
+                        .clickable {
+                            navController
+                                .navigate(
+                                    AppScreens
+                                        .FoodDetails
+                                        .createRoute(item.id)
+                                )
+                        },
                     item.foodName,
                     item.cookingTime
                 )

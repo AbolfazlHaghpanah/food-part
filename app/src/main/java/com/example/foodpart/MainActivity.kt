@@ -40,6 +40,7 @@ import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
 import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.fooddata.foodList
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
@@ -55,12 +56,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FoodPartTheme {
-                val bottomNavState = remember{
+                val bottomNavState = remember {
                     mutableStateOf(true)
                 }
                 val navController = rememberNavController()
                 Scaffold(
-                    bottomBar =  {
+                    bottomBar = {
                         if (bottomNavState.value)
                             foodPartBottomNavigation(navController = navController)
                     }
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = AppScreens.Category.route
                         ) {
-                            mainNavGraph(navController,bottomNavState)
+                            mainNavGraph(navController, bottomNavState)
                         }
                     }
                 }
@@ -80,7 +81,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 
 private fun NavGraphBuilder.mainNavGraph(

@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.screens.foodlist.foodItem
+import com.example.foodpart.ui.components.foodItem
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -132,7 +132,7 @@ fun categoryScreen(
                     foodItem(
                         modifier = Modifier
                             .clickable {
-                                navController.navigate(AppScreens.FoodList.createRoute(item.category,item.category))
+                                navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                             },
                         item.foodName,
                         item.cookingTime
