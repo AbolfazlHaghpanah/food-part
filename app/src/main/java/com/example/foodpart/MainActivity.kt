@@ -47,6 +47,7 @@ import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
 import com.example.foodpart.ui.screens.login.loginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
+import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
@@ -107,7 +108,10 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Search.route) {
         state.value = true
-        searchScreen(navController = navController)
+        searchScreen(
+            navController = navController,
+            viewModel = SearchViewModel()
+        )
     }
 
     composable(AppScreens.WhatToCook.route) {
