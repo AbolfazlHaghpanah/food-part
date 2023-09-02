@@ -10,12 +10,14 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun foodPartTextField(
     textFieldState: MutableState<String>,
     label: String,
+    height: Dp,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
@@ -23,7 +25,7 @@ fun foodPartTextField(
         onValueChange = { it -> textFieldState.value = it },
         modifier = modifier
             .fillMaxWidth()
-            .height(85.dp),
+            .height(height),
         placeholder = {
             Text(
                 text = label,
@@ -33,8 +35,10 @@ fun foodPartTextField(
         },
         colors = TextFieldDefaults
             .textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = MaterialTheme.colors.background,
-                unfocusedIndicatorColor = MaterialTheme.colors.background
+                unfocusedIndicatorColor = MaterialTheme.colors.background,
+                placeholderColor = MaterialTheme.colors.onBackground
             ),
         shape = MaterialTheme.shapes.medium
     )

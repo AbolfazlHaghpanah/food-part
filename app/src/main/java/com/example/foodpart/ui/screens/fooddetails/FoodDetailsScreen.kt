@@ -90,6 +90,7 @@ fun foodDetailsScreen(
                     foodPartTextField(
                         modifier = Modifier
                             .padding(top = 16.dp),
+                        height= 84.dp,
                         textFieldState = reportTextState,
                         label = "اینجا بنویسید "
                     )

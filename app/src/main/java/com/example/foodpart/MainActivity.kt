@@ -40,7 +40,6 @@ import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
 import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.fooddata.foodList
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
