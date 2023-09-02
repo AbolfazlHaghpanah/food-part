@@ -16,6 +16,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,7 +42,16 @@ fun foodDetailsTab(
                 .widthIn(230.dp, 300.dp),
             selectedTabIndex = pagerState.currentPage,
             backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.onBackground
+            contentColor = MaterialTheme.colors.onBackground,
+            indicator = {
+                Box(modifier = Modifier
+                    .tabIndicatorOffset(it[pagerState.currentPage])
+                    .height(2.dp)
+                    .background(color = MaterialTheme.colors.primary)
+                    .width(40.dp)
+                    )
+
+            }
         ) {
             tabList.forEachIndexed { index, s ->
                 Tab(
