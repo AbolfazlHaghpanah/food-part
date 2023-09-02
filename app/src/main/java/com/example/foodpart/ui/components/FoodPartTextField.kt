@@ -32,7 +32,10 @@ fun foodPartTextField(
 
         },
         colors = TextFieldDefaults
-            .textFieldColors(focusedIndicatorColor = MaterialTheme.colors.background),
+            .textFieldColors(
+                focusedIndicatorColor = MaterialTheme.colors.background,
+                unfocusedIndicatorColor = MaterialTheme.colors.background
+            ),
         shape = MaterialTheme.shapes.medium
     )
 
