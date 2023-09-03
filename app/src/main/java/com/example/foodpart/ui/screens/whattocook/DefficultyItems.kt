@@ -12,7 +12,7 @@ sealed class DefficultyItems(
     var icon: Int,
     val name: String
 ){
-    object noMatter :DefficultyItems(R.drawable.check_circle_outline,"مهم نیست")
+    object noMatter :DefficultyItems(R.drawable.check_circle_outline_not_selected,"مهم نیست")
     object easy : DefficultyItems(R.drawable.check_circle_outline_not_selected,"آسان")
     object medium : DefficultyItems(R.drawable.check_circle_outline_not_selected,"متوسط")
 

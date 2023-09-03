@@ -10,6 +10,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -40,7 +41,11 @@ fun foodPartTextField(
                 unfocusedIndicatorColor = MaterialTheme.colors.background,
                 placeholderColor = MaterialTheme.colors.onBackground
             ),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        textStyle = MaterialTheme
+            .typography
+            .subtitle1
+            .copy(textAlign = TextAlign.Start)
     )
 
 }

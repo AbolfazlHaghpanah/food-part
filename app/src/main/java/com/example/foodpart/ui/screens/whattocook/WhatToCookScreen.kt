@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.whattocook
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
@@ -22,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,14 +31,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
+import com.example.foodpart.core.AppScreens
+import com.example.foodpart.fooddata.FoodData
+import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.foodPartButton
 import com.example.foodpart.ui.components.foodPartTextField
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun whatToCookScreen(
     navController: NavController
@@ -46,8 +53,17 @@ fun whatToCookScreen(
     var selectedDefficultyItems: DefficultyItems by remember {
         mutableStateOf(DefficultyItems.noMatter)
     }
+    selectedDefficultyItems.icon = R.drawable.check_circle_outline
     val itemTextState = remember {
         mutableStateOf("")
+    }
+    val timeTextState = remember {
+        mutableStateOf("")
+    }
+
+
+    val showHint = remember {
+        mutableStateOf(false)
     }
     Scaffold(
         topBar = {
@@ -67,7 +83,7 @@ fun whatToCookScreen(
                 .padding(it)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
             Column(
                 modifier = Modifier
@@ -76,15 +92,18 @@ fun whatToCookScreen(
                         color = MaterialTheme.colors.surface,
                         shape = MaterialTheme.shapes.medium
                     )
-                    .padding(16.dp),
+                    ,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceEvenly
 
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
+                        modifier = Modifier.padding(8.dp,2.dp),
                         text = "راهنما",
                         style = MaterialTheme.typography.subtitle1
                     )
@@ -93,16 +112,29 @@ fun whatToCookScreen(
                             .weight(1F)
                     )
 
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Clear,
-                            contentDescription = "close"
-                        )
+                    if (showHint.value) {
+                        IconButton(
+                            onClick = { showHint.value = false }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "close"
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = { showHint.value = true }) {
+                            Icon(
+                                imageVector = Icons.Rounded.KeyboardArrowDown,
+                                contentDescription = "hint"
+                            )
+                        }
                     }
 
 
                 }
-                Text(
+                if (showHint.value) Text(
+                    modifier = Modifier
+                        .padding(8.dp),
                     text = "کاربر گرامی مواد اولیه ی موجود را در قسمت “تو خونه چی داری ؟” وارد کرده و با علامت “،” از یکدیگر جدا کنید سپس کل زمانی که دارین را به دقیقه در بخش “چقدر وقت داری ؟” وارد کنین. سطح دستور پخت را انتخاب کرده و کلیک جستجو را بزنید تا با توجه به اطلاعات شما غذاهای پیشنهاد را نمایش دهیم.",
                     style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
                 )
@@ -122,7 +154,7 @@ fun whatToCookScreen(
             )
 
             foodPartTextField(
-                textFieldState = itemTextState,
+                textFieldState = timeTextState,
                 label = "چقد وقت داری؟",
                 height = 60.dp
             )
@@ -144,13 +176,14 @@ fun whatToCookScreen(
                         horizontalArrangement = Arrangement.spacedBy(2.dp),
                         modifier = Modifier
                             .clickable {
-                                item.icon = R.drawable.check_circle_outline
-                                selectedDefficultyItems = item
-                                Log.d("TAG", "whatToCookScreen: ")
+                                if (item != selectedDefficultyItems) {
+                                    selectedDefficultyItems = item
+                                }
                             }
                     ) {
                         Image(
-                            painter = painterResource(id = item.icon),
+                            painter = if (selectedDefficultyItems == item) painterResource(id = selectedDefficultyItems.icon)
+                            else painterResource(id = R.drawable.check_circle_outline_not_selected),
                             contentDescription = item.name
                         )
                         Text(
@@ -167,7 +200,14 @@ fun whatToCookScreen(
                     .weight(1F)
             )
 
-            foodPartButton(onClick = { /*TODO*/ }, text = "تایید")
+            foodPartButton(onClick = {
+                navController.navigate(
+                    AppScreens.FoodList.createRoute(
+                        foodList[0].category,
+                        "چی بپزم؟"
+                    )
+                )
+            }, text = "تایید")
 
 
         }
