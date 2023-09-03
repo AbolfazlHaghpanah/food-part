@@ -4,40 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.illegalDecoyCallException
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
-import com.example.foodpart.fooddata.FoodData
-import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
-import com.example.foodpart.ui.screens.login.loginScreen
+import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
@@ -85,7 +68,7 @@ private fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(AppScreens.Login.route) {
-        loginScreen(navController = navController)
+        LoginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
@@ -138,8 +121,5 @@ private fun NavGraphBuilder.mainNavGraph(
             category,
             appBar
         )
-
     }
-
-
 }
