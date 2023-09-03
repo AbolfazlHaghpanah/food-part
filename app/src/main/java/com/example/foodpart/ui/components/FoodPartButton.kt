@@ -25,7 +25,7 @@ fun foodPartButton(
         shape = MaterialTheme.shapes.medium
     ) {
         Text(
-            text = "ثبت",
+            text = text,
             style = MaterialTheme.typography.h3,
             color = MaterialTheme.colors.onBackground
         )

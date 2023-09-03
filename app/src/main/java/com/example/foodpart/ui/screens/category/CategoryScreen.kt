@@ -39,7 +39,7 @@ import com.example.foodpart.ui.components.foodItem
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun categoryScreen(
-    viewModel: CategoryScreenViewModel,
+    viewModel: CategoryScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavController
 ) {
     val categorySelectedState by viewModel.categoryFlow.collectAsState()

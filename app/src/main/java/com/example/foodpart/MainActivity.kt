@@ -40,7 +40,6 @@ import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
 import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.fooddata.foodList
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
@@ -147,6 +146,10 @@ private fun NavGraphBuilder.mainNavGraph(
             navArgument("appbar") {
                 type = NavType.StringType
                 nullable = false
+            },
+            navArgument("description"){
+                type = NavType.StringType
+                nullable = true
             }
         )
     ) { backStackEntry ->
@@ -155,11 +158,14 @@ private fun NavGraphBuilder.mainNavGraph(
 
         val appBar = backStackEntry.arguments?.getString("appbar")
             ?: throw IllegalStateException("appbar was null")
+
+        val description = backStackEntry.arguments?.getString("description")
         state.value = false
         foodListScreen(
             navController,
             category,
-            appBar
+            appBar,
+            description
         )
 
     }
