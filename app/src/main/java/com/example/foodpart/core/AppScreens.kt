@@ -20,9 +20,9 @@ sealed class AppScreens (val route : String){
 
     object WhatToCook : AppScreens("what-to-cook")
 
-    object FoodList : AppScreens("food-list/{category}/{appbar}"){
-        fun createRoute (category: String , appBar : String):String {
-            return "food-list/$category/$appBar"
+    object FoodList : AppScreens("food-list/{category}/{appbar}/{description}"){
+        fun createRoute (category: String , appBar : String ,description : String?):String {
+            return "food-list/$category/$appBar/$description"
         }
     }
 

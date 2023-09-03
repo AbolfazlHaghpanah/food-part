@@ -71,8 +71,6 @@ fun foodDetailsScreen(
         isFullImage = isFullImage,
         imageRes = R.drawable.food_image_details
     )
-
-
     else
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
@@ -90,7 +88,7 @@ fun foodDetailsScreen(
                     foodPartTextField(
                         modifier = Modifier
                             .padding(top = 16.dp),
-                        height= 84.dp,
+                        height = 84.dp,
                         textFieldState = reportTextState,
                         label = "اینجا بنویسید "
                     )
@@ -197,7 +195,8 @@ fun foodDetailsScreen(
                                 navController.navigate(
                                     AppScreens.FoodList.createRoute(
                                         food.category,
-                                        food.difficulty
+                                        food.difficulty,
+                                        null
                                     )
                                 )
                             }
@@ -243,7 +242,8 @@ fun foodDetailsScreen(
                                             navController.navigate(
                                                 AppScreens.FoodList.createRoute(
                                                     food.category,
-                                                    food.category
+                                                    food.category,
+                                                    null
                                                 )
                                             )
                                         }

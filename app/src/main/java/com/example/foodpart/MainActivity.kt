@@ -146,6 +146,10 @@ private fun NavGraphBuilder.mainNavGraph(
             navArgument("appbar") {
                 type = NavType.StringType
                 nullable = false
+            },
+            navArgument("description"){
+                type = NavType.StringType
+                nullable = true
             }
         )
     ) { backStackEntry ->
@@ -154,11 +158,14 @@ private fun NavGraphBuilder.mainNavGraph(
 
         val appBar = backStackEntry.arguments?.getString("appbar")
             ?: throw IllegalStateException("appbar was null")
+
+        val description = backStackEntry.arguments?.getString("description")
         state.value = false
         foodListScreen(
             navController,
             category,
-            appBar
+            appBar,
+            description
         )
 
     }

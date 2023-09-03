@@ -91,8 +91,7 @@ fun whatToCookScreen(
                     .background(
                         color = MaterialTheme.colors.surface,
                         shape = MaterialTheme.shapes.medium
-                    )
-                    ,
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
 
@@ -103,7 +102,7 @@ fun whatToCookScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        modifier = Modifier.padding(8.dp,2.dp),
+                        modifier = Modifier.padding(8.dp, 2.dp),
                         text = "راهنما",
                         style = MaterialTheme.typography.subtitle1
                     )
@@ -204,7 +203,8 @@ fun whatToCookScreen(
                 navController.navigate(
                     AppScreens.FoodList.createRoute(
                         foodList[0].category,
-                        "چی بپزم؟"
+                        "چی بپزم؟",
+                        "نتایج جستجو با ${itemTextState.value} \n در مدت ${timeTextState.value} دقیقه "
                     )
                 )
             }, text = "تایید")
