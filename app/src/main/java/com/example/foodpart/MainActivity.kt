@@ -6,15 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomDrawerState
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.illegalDecoyCallException
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,8 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.BottomNavigationItems
-import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
@@ -38,6 +28,7 @@ import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
+import com.example.foodpart.ui.screens.signup.SignUpScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
@@ -86,11 +77,11 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         state.value = true
-         profileScreen(navController = navController)
+        profileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
-        state.value = true
+        state.value = false
         LoginScreen(navController = navController)
     }
 
@@ -136,7 +127,7 @@ private fun NavGraphBuilder.mainNavGraph(
                 type = NavType.StringType
                 nullable = false
             },
-            navArgument("description"){
+            navArgument("description") {
                 type = NavType.StringType
                 nullable = true
             }
@@ -155,6 +146,15 @@ private fun NavGraphBuilder.mainNavGraph(
             category,
             appBar,
             description
+        )
+    }
+
+    composable(
+        route = AppScreens.SignUp.route
+    ) {
+        state.value = false
+        SignUpScreen(
+            navController
         )
     }
 }

@@ -1,16 +1,35 @@
-package com.example.foodpart.ui.screens.login
+package com.example.foodpart.ui.screens.signup
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,15 +42,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(
+fun SignUpScreen(
     navController: NavController
 ) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,7 +59,7 @@ fun LoginScreen(
             )
             {
                 IconButton(onClick = {
-                    navController.navigate(AppScreens.Profile.route)
+                    navController.popBackStack(AppScreens.Profile.route, inclusive = false)
                 }) {
                     Icon(
                         modifier = Modifier
@@ -52,7 +72,7 @@ fun LoginScreen(
                     )
                 }
                 Text(
-                    text = "ورود",
+                    text = "ثبت نام",
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
@@ -112,7 +132,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "برای ورود اطلاعات حساب خود را وارد کنید",
+                    text = "برای ثبت نام اطلاعات خود را وارد کنید",
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colors.onSurface,
                     style = MaterialTheme.typography.subtitle1
@@ -123,6 +143,7 @@ fun LoginScreen(
 
                 var username by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
+                var repeatPass by remember { mutableStateOf("") }
 
                 OutlinedTextField(
                     value = username,
@@ -160,7 +181,33 @@ fun LoginScreen(
 
                     placeholder = {
                         Text(
-                            text = "رمز ورود",
+                            text = "رمز عبور",
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    },
+                    colors = TextFieldDefaults
+                        .textFieldColors(
+                            focusedIndicatorColor = MaterialTheme.colors.background,
+                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    textStyle = MaterialTheme.typography.subtitle1
+                        .copy(textAlign = TextAlign.Start)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = repeatPass,
+                    onValueChange = { repeatPass = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .width(328.dp)
+                        .height(56.dp),
+
+                    placeholder = {
+                        Text(
+                            text = "تکرار رمز عبور",
                             style = MaterialTheme.typography.subtitle1
                         )
                     },
@@ -177,7 +224,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
-                    enabled = username.isNotEmpty() && password.isNotEmpty(),
+                    enabled = username.isNotEmpty() && password.isNotEmpty() && password == repeatPass,
                     onClick = {
                         navController.navigate(AppScreens.Profile.route)
                     },
@@ -205,10 +252,10 @@ fun LoginScreen(
 
                 Row(
                     Modifier
-                        .padding(start = 165.dp)
+                        .padding(start = 205.dp)
                 ) {
                     Text(
-                        text = "حساب کاربری ندارید؟",
+                        text = "قبلا ثبت نام کردید؟",
                         style = MaterialTheme.typography.subtitle2,
                         color = MaterialTheme.colors.onBackground,
                     )
@@ -216,22 +263,15 @@ fun LoginScreen(
                     Text(
                         modifier = Modifier
                             .clickable {
-                                navController.navigate(AppScreens.SignUp.route)
+                                navController.navigate(AppScreens.Login.route)
                             },
-                        text = " ثبت نام ",
+                        text = " ورود ",
                         style = MaterialTheme.typography.subtitle2,
                         color = Color(0xFF1976D2),
                     )
-
-
-                    Text(
-                        text = "کنید",
-                        style = MaterialTheme.typography.subtitle2,
-                        color = MaterialTheme.colors.onBackground,
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(228.dp))
+                Spacer(modifier = Modifier.height(164.dp))
 
             }
         }
