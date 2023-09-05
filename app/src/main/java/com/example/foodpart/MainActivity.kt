@@ -49,6 +49,7 @@ import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
+import com.example.foodpart.ui.signup.SignUpScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
@@ -147,7 +148,7 @@ private fun NavGraphBuilder.mainNavGraph(
                 type = NavType.StringType
                 nullable = false
             },
-            navArgument("description"){
+            navArgument("description") {
                 type = NavType.StringType
                 nullable = true
             }
@@ -168,6 +169,15 @@ private fun NavGraphBuilder.mainNavGraph(
             description
         )
 
+    }
+
+    composable(
+        route = AppScreens.SignUp.route
+    ) {
+        state.value = false
+        SignUpScreen(
+            navController
+        )
     }
 
 

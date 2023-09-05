@@ -26,5 +26,7 @@ sealed class AppScreens (val route : String){
         }
     }
 
+    object SignUp : AppScreens("sign-up")
+
 
 }
