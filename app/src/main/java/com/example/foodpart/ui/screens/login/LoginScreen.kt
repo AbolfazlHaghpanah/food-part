@@ -3,14 +3,19 @@ package com.example.foodpart.ui.screens.login
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -20,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodpart.R
+import com.example.foodpart.core.AppScreens
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -33,14 +39,16 @@ fun LoginScreen(
                 backgroundColor = MaterialTheme.colors.background
             )
             {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    navController.navigate(AppScreens.Profile.route)
+                }) {
                     Icon(
                         modifier = Modifier
                             .padding(1.dp)
-                            .width(7.41.dp)
-                            .height(12.dp),
+                            .width(24.dp)
+                            .height(24.dp),
                         tint = MaterialTheme.colors.onBackground,
-                        painter = painterResource(R.drawable.vector1),
+                        painter = rememberVectorPainter(Icons.Rounded.KeyboardArrowRight),
                         contentDescription = "Back"
                     )
                 }
@@ -132,8 +140,13 @@ fun LoginScreen(
                         )
                     },
                     colors = TextFieldDefaults
-                        .textFieldColors(focusedIndicatorColor = MaterialTheme.colors.background),
-                    shape = MaterialTheme.shapes.medium
+                        .textFieldColors(
+                            focusedIndicatorColor = MaterialTheme.colors.background,
+                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    textStyle = MaterialTheme.typography.subtitle1
+                        .copy(textAlign = TextAlign.Start)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -153,14 +166,22 @@ fun LoginScreen(
                         )
                     },
                     colors = TextFieldDefaults
-                        .textFieldColors(focusedIndicatorColor = MaterialTheme.colors.background),
-                    shape = MaterialTheme.shapes.medium
+                        .textFieldColors(
+                            focusedIndicatorColor = MaterialTheme.colors.background,
+                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    textStyle = MaterialTheme.typography.subtitle1
+                        .copy(textAlign = TextAlign.Start)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
-                    onClick = { },
+                    enabled = username.isNotEmpty() && password.isNotEmpty(),
+                    onClick = {
+                        navController.navigate(AppScreens.Profile.route)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .width(328.dp)
@@ -194,10 +215,13 @@ fun LoginScreen(
                     )
 
                     Text(
+                        modifier = Modifier
+                            .clickable { },
                         text = " ثبت نام ",
                         style = MaterialTheme.typography.subtitle2,
                         color = Color(0xFF1976D2),
                     )
+
 
                     Text(
                         text = "کنید",
@@ -212,6 +236,3 @@ fun LoginScreen(
         }
     )
 }
-
-
-
