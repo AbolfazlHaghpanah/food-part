@@ -25,31 +25,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.BottomNavigationItems
-import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
-import com.example.foodpart.fooddata.FoodData
-import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
-import com.example.foodpart.ui.screens.login.loginScreen
+import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
-import com.example.foodpart.ui.signup.SignUpScreen
+import com.example.foodpart.ui.screens.signup.SignUpScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
@@ -103,7 +96,7 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Login.route) {
         state.value = true
-        loginScreen(navController = navController)
+        LoginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
