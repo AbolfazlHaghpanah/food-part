@@ -86,12 +86,12 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         state.value = true
-        profileScreen(navController = navController)
+         profileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
         state.value = true
-        loginScreen(navController = navController)
+        LoginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
