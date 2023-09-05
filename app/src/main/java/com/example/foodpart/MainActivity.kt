@@ -45,7 +45,7 @@ import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
-import com.example.foodpart.ui.screens.login.loginScreen
+import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
@@ -98,12 +98,12 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         state.value = true
-        profileScreen(navController = navController)
+         profileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
         state.value = true
-        loginScreen(navController = navController)
+        LoginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
