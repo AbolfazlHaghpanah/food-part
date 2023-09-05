@@ -3,7 +3,6 @@ package com.example.foodpart.ui.screens.login
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

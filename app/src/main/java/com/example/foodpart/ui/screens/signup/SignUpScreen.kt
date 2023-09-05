@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.signup
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignUpScreen(
     navController: NavController
@@ -57,7 +59,7 @@ fun SignUpScreen(
             )
             {
                 IconButton(onClick = {
-                    navController.navigate(AppScreens.Profile.route)
+                    navController.popBackStack(AppScreens.Profile.route, inclusive = false)
                 }) {
                     Icon(
                         modifier = Modifier

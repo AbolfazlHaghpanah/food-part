@@ -4,26 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomDrawerState
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.illegalDecoyCallException
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -95,7 +81,7 @@ private fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(AppScreens.Login.route) {
-        state.value = true
+        state.value = false
         LoginScreen(navController = navController)
     }
 
@@ -161,7 +147,6 @@ private fun NavGraphBuilder.mainNavGraph(
             appBar,
             description
         )
-
     }
 
     composable(
@@ -172,6 +157,4 @@ private fun NavGraphBuilder.mainNavGraph(
             navController
         )
     }
-
-
 }
