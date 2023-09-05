@@ -4,7 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
@@ -18,26 +23,33 @@ import androidx.compose.runtime.internal.illegalDecoyCallException
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.BottomNavigationItems
 import com.example.foodpart.core.bottomNavItems
 import com.example.foodpart.core.foodPartBottomNavigation
+import com.example.foodpart.fooddata.FoodData
+import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
 import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
-import com.example.foodpart.ui.screens.login.LoginScreen
+import com.example.foodpart.ui.screens.login.loginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
 import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
+import com.example.foodpart.ui.signup.SignUpScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
@@ -86,12 +98,12 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         state.value = true
-         profileScreen(navController = navController)
+        profileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
         state.value = true
-        LoginScreen(navController = navController)
+        loginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
@@ -136,7 +148,7 @@ private fun NavGraphBuilder.mainNavGraph(
                 type = NavType.StringType
                 nullable = false
             },
-            navArgument("description"){
+            navArgument("description") {
                 type = NavType.StringType
                 nullable = true
             }
@@ -156,5 +168,17 @@ private fun NavGraphBuilder.mainNavGraph(
             appBar,
             description
         )
+
     }
+
+    composable(
+        route = AppScreens.SignUp.route
+    ) {
+        state.value = false
+        SignUpScreen(
+            navController
+        )
+    }
+
+
 }
