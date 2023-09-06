@@ -20,8 +20,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +56,7 @@ fun FoodDetailsScreen(
     val isFullImage = remember {
         mutableStateOf(false)
     }
+    val scaffoldState = rememberScaffoldState()
 
 
 
@@ -66,8 +71,40 @@ fun FoodDetailsScreen(
                 ReportModalBottomSheet(bottomSheetState = bottomSheetState)
             }) {
             Scaffold(
+                scaffoldState = scaffoldState,
+                snackbarHost = {
+                    SnackbarHost(it) {
+                        Snackbar(
+                            contentColor = MaterialTheme.colors.onBackground,
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            action = {
+                                TextButton(onClick = {
+                                    navController.navigate(
+                                        AppScreens.FoodList.createRoute(
+                                            category = food.category.category,
+                                            appBar = "علاقه مندی ها",
+                                            description = null
+                                        )
+                                    )
+                                }) {
+                                    Text(
+                                        text = "علاقه مندی ها",
+                                        style = MaterialTheme.typography.subtitle1,
+                                        color = MaterialTheme.colors.primary
+                                    )
+                                }
+                            },
+
+                            ) {
+                            Text(
+                                text = "دستور به علاقه مندی ها اضافه شد",
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                        }
+                    }
+                },
                 topBar = {
-                    FoodDetailsAppBar(navController, bottomSheetState)
+                    FoodDetailsAppBar(navController, bottomSheetState, scaffoldState)
                 }
             ) { paddingValues ->
                 LazyColumn(
@@ -159,7 +196,7 @@ fun FoodDetailsScreen(
                         }
                     }
                     item {
-                        foodDetailsTab(food)
+                        FoodDetailsTab(food)
                     }
                     item {
                         Text(
@@ -197,8 +234,8 @@ fun FoodDetailsScreen(
                                         .clickable {
                                             navController.navigate(
                                                 AppScreens.FoodList.createRoute(
-                                                    food.category.name,
-                                                    food.category.name,
+                                                    food.category.category,
+                                                    food.category.category,
                                                     null
                                                 )
                                             )

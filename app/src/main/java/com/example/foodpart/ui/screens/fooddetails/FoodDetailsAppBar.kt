@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 fun FoodDetailsAppBar(
     navController: NavController,
     bottomSheetState: ModalBottomSheetState,
+    scaffoldState: ScaffoldState
 ) {
     val scope = rememberCoroutineScope()
     val menuState = remember {
@@ -41,7 +43,8 @@ fun FoodDetailsAppBar(
     }
 
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.onBackground
     ) {
         IconButton(onClick = {
             navController.popBackStack()
@@ -74,9 +77,9 @@ fun FoodDetailsAppBar(
                 onDismissRequest = { menuState.value = false }
             ) {
                 DropdownMenuItem(onClick = {
-                        scope.launch {
-                            bottomSheetState.show()
-                        }
+                    scope.launch {
+                        bottomSheetState.show()
+                    }
                     menuState.value = false
                 }) {
                     Icon(
@@ -102,6 +105,9 @@ fun FoodDetailsAppBar(
                 }
                 DropdownMenuItem(
                     onClick = {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("")
+                        }
                         menuState.value = false
                     }
                 ) {
