@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -31,14 +35,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodPartTheme {
                 val navController = rememberNavController()
-
-                NavHost(
-                    navController = navController,
-                    startDestination = AppScreens.Category.route
-                ) {
-                    mainNavGraph(navController)
+                Scaffold {
+                    Column(
+                        Modifier.padding(it)
+                    ) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = AppScreens.Category.route
+                        ) {
+                            mainNavGraph(navController)
+                        }
+                    }
                 }
-
             }
         }
     }
