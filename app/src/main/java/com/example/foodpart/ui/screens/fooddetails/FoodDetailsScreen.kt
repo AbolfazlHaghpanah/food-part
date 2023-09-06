@@ -3,22 +3,18 @@ package com.example.foodpart.ui.screens.fooddetails
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Chip
-import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
@@ -29,7 +25,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,34 +35,27 @@ import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.components.foodDifficultyChip
-import com.example.foodpart.ui.components.foodPartButton
-import com.example.foodpart.ui.components.foodPartTextField
-import com.example.foodpart.ui.components.moreFoodItem
+import com.example.foodpart.ui.components.FoodDifficultyChip
 import com.example.foodpart.ui.components.foodItem
-import kotlinx.coroutines.launch
+import com.example.foodpart.ui.components.moreFoodItem
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun foodDetailsScreen(
+fun FoodDetailsScreen(
     navController: NavController,
     id: Int
 ) {
-    val food = foodList.filter { it.id == id }[0]
-    var reportTextState = remember {
-        mutableStateOf("")
-    }
+    val food = foodList.find { it.id == id }!!
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val scope = rememberCoroutineScope()
     val isFullImage = remember {
         mutableStateOf(false)
     }
 
 
 
-    if (isFullImage.value) fullScreenPicture(
+    if (isFullImage.value) FullScreenPicture(
         isFullImage = isFullImage,
         imageRes = R.drawable.food_image_details
     )
@@ -75,48 +63,16 @@ fun foodDetailsScreen(
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                Column(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colors.background)
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "گزارش دستور به عنوان نامناسب ",
-                        style = MaterialTheme.typography.h3
-                    )
-
-                    foodPartTextField(
-                        modifier = Modifier
-                            .padding(top = 16.dp),
-                        height = 84.dp,
-                        textFieldState = reportTextState,
-                        label = "اینجا بنویسید "
-                    )
-
-                    foodPartButton(
-                        modifier = Modifier
-                            .padding(top = 16.dp),
-                        onClick = {
-                            scope.launch {
-                                bottomSheetState.hide()
-                            }
-                        },
-                        text = "ثبت"
-                    )
-                }
-
-
+                ReportModalBottomSheet(bottomSheetState = bottomSheetState)
             }) {
             Scaffold(
-
                 topBar = {
-                    foodDetailsAppBar(navController, bottomSheetState)
+                    FoodDetailsAppBar(navController, bottomSheetState)
                 }
-            ) {
-
+            ) { paddingValues ->
                 LazyColumn(
                     modifier = Modifier
-                        .padding(it),
+                        .padding(paddingValues),
                     contentPadding = PaddingValues(16.dp)
                 ) {
                     item {
@@ -156,22 +112,13 @@ fun foodDetailsScreen(
                                 style = MaterialTheme.typography.subtitle1
                             )
 
-                            Chip(
-                                onClick = { /*TODO*/ },
-                                colors = ChipDefaults.chipColors(
-                                    backgroundColor = MaterialTheme.colors.error.copy(
-                                        alpha = 0.1F
+                            CookingTimeChip(time = food.cookingTime) {
+                                navController.navigate(
+                                    AppScreens.FoodList.createRoute(
+                                        food.category.category,
+                                        "زیر ${food.cookingTime}",
+                                        null
                                     )
-                                )
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.time),
-                                    contentDescription = "Cooking Time",
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = food.cookingTime,
-                                    style = MaterialTheme.typography.subtitle1
                                 )
                             }
                         }
@@ -182,20 +129,29 @@ fun foodDetailsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             food.meals.forEach { item ->
-                                Chip(onClick = {}) {
+                                Chip(onClick = {
+                                    navController.navigate(
+                                        AppScreens.FoodList.createRoute(
+                                            category = food.category.category,
+                                            appBar = item,
+                                            description = null
+                                        )
+                                    )
+                                }) {
                                     Text(
                                         text = item,
                                         style = MaterialTheme.typography.subtitle2
                                     )
                                 }
                             }
+
                             Spacer(modifier = Modifier.weight(1F))
 
-                            foodDifficultyChip(food = food) {
+                            FoodDifficultyChip(food = food) {
                                 navController.navigate(
                                     AppScreens.FoodList.createRoute(
-                                        food.category.name,
-                                        food.difficulty.name,
+                                        food.category.category,
+                                        food.difficulty.difficulty,
                                         null
                                     )
                                 )
@@ -217,7 +173,7 @@ fun foodDetailsScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            items(foodList
+                            items(items = foodList
                                 .filter { it.category == food.category }
                                 .filter { foodList.indexOf(it) <= 5 }) { item ->
                                 foodItem(

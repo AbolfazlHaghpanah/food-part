@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -35,7 +36,7 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.foodPartButton
-import com.example.foodpart.ui.components.foodPartTextField
+import com.example.foodpart.ui.components.FoodPartTextField
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -136,10 +137,11 @@ fun WhatToCookScreen(
                 )
             }
 
-            foodPartTextField(
+            FoodPartTextField(
                 textFieldState = itemTextState,
                 label = "چی تو خونه داری ؟",
-                height = 50.dp
+                modifier = Modifier
+                    .height(50.dp)
             )
 
             Text(
@@ -149,10 +151,10 @@ fun WhatToCookScreen(
                     .fillMaxWidth()
             )
 
-            foodPartTextField(
+            FoodPartTextField(
                 textFieldState = timeTextState,
                 label = "چقد وقت داری؟",
-                height = 60.dp
+                modifier = Modifier.height(60.dp)
             )
 
             Text(

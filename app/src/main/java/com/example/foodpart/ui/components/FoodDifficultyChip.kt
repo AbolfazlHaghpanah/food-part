@@ -22,7 +22,7 @@ import com.example.foodpart.ui.theme.yellow
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun foodDifficultyChip(
+fun FoodDifficultyChip(
     food: FoodData,
     onClick: () -> Unit
 ) {
@@ -33,7 +33,6 @@ fun foodDifficultyChip(
                 Difficulties.EASY -> green
                 Difficulties.MEDIUM -> yellow
                 Difficulties.HARD -> red
-                else -> yellow
             }
         ),
         colors = ChipDefaults.chipColors(
@@ -41,7 +40,6 @@ fun foodDifficultyChip(
                 Difficulties.EASY -> green.copy(alpha = (0.1f))
                 Difficulties.MEDIUM -> yellow.copy(alpha = (0.1f))
                 Difficulties.HARD -> red.copy(alpha = (0.1f))
-                else -> yellow.copy(alpha = (0.1f))
             }
         )
     ) {
@@ -52,12 +50,11 @@ fun foodDifficultyChip(
                 Difficulties.EASY -> green
                 Difficulties.MEDIUM -> yellow
                 Difficulties.HARD -> red
-                else -> yellow
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = food.difficulty.name,
+            text = food.difficulty.difficulty,
             style = MaterialTheme.typography.subtitle1
         )
     }

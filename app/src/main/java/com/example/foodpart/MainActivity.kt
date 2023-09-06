@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.screens.category.CategoryScreen
-import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
+import com.example.foodpart.ui.screens.fooddetails.FoodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.ProfileScreen
@@ -91,7 +91,7 @@ private fun NavGraphBuilder.mainNavGraph(
     ) { backStackEntry ->
         val id = backStackEntry.arguments?.getInt("id")
             ?: throw IllegalStateException("id was null")
-        foodDetailsScreen(
+        FoodDetailsScreen(
             navController = navController,
             id
         )
