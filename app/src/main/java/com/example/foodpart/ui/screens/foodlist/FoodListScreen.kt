@@ -100,7 +100,7 @@ fun foodListScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                items(foodList.filter { it.category == category }) { item ->
+                items(foodList.filter { it.category.category == category }) { item ->
                     foodItem(
                         modifier = Modifier
                             .clickable {

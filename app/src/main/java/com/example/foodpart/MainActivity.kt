@@ -19,16 +19,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.foodPartBottomNavigation
+import com.example.foodpart.ui.screens.category.CategoryScreen
 import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
-import com.example.foodpart.ui.screens.category.categoryScreen
 import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.foodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.profileScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.search.searchScreen
-import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
 import com.example.foodpart.ui.screens.signup.SignUpScreen
+import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
 class MainActivity : ComponentActivity() {
@@ -69,9 +69,8 @@ private fun NavGraphBuilder.mainNavGraph(
 ) {
     composable(AppScreens.Category.route) {
         state.value = true
-        categoryScreen(
-            navController = navController,
-            viewModel = CategoryScreenViewModel()
+        CategoryScreen(
+            navController = navController
         )
     }
 

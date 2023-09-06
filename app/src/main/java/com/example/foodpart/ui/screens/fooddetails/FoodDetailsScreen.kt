@@ -194,8 +194,8 @@ fun foodDetailsScreen(
                             foodDifficultyChip(food = food) {
                                 navController.navigate(
                                     AppScreens.FoodList.createRoute(
-                                        food.category,
-                                        food.difficulty,
+                                        food.category.name,
+                                        food.difficulty.name,
                                         null
                                     )
                                 )
@@ -241,8 +241,8 @@ fun foodDetailsScreen(
                                         .clickable {
                                             navController.navigate(
                                                 AppScreens.FoodList.createRoute(
-                                                    food.category,
-                                                    food.category,
+                                                    food.category.name,
+                                                    food.category.name,
                                                     null
                                                 )
                                             )
