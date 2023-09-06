@@ -202,7 +202,7 @@ fun whatToCookScreen(
             foodPartButton(onClick = {
                 navController.navigate(
                     AppScreens.FoodList.createRoute(
-                        foodList[0].category,
+                        foodList[0].category.name,
                         "چی بپزم؟",
                         "نتایج جستجو با ${itemTextState.value} \n در مدت ${timeTextState.value} دقیقه "
                     )
