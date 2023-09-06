@@ -34,13 +34,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.FoodPartBottomNavigation
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun profileScreen(
+fun ProfileScreen(
     navController: NavController
 ) {
     Scaffold(
+        bottomBar = {
+            FoodPartBottomNavigation(navController = navController)
+        },
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background

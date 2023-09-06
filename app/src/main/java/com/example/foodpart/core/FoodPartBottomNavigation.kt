@@ -1,6 +1,7 @@
 package com.example.foodpart.core
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -19,10 +20,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun foodPartBottomNavigation(
+fun FoodPartBottomNavigation(
     navController: NavController
 ) {
-    BottomNavigation (
+    BottomNavigation(
         modifier = Modifier
             .clip(
                 shape = MaterialTheme
@@ -34,12 +35,17 @@ fun foodPartBottomNavigation(
                     )
             ),
         backgroundColor = MaterialTheme.colors.secondary,
+
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
         bottomNavItems.forEach { item ->
             BottomNavigationItem(
+                modifier = Modifier
+                    .fillMaxSize()
+
+                ,
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = {
                     navController.navigate(item.route) {
@@ -56,20 +62,22 @@ fun foodPartBottomNavigation(
                 },
                 icon = {
                     Icon(
+                        modifier = Modifier
+                            ,
                         painter = painterResource(id = item.icon),
                         contentDescription = item.label,
-                        tint = if(item.route == currentDestination?.route) MaterialTheme.colors.primary
-                        else MaterialTheme.colors.onBackground,
                     )
                 },
                 label = {
                     Text(
+                        modifier = Modifier
+                            .wrapContentWidth(unbounded = true),
                         text = item.label,
-                        style = MaterialTheme.typography.subtitle1,
-                        color = if(item.route == currentDestination?.route) MaterialTheme.colors.primary
-                        else MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.subtitle2
                     )
-                }
+                },
+                selectedContentColor = MaterialTheme.colors.primary,
+                unselectedContentColor = MaterialTheme.colors.onBackground,
 
             )
 

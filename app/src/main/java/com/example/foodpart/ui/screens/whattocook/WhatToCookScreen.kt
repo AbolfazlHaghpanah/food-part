@@ -1,23 +1,18 @@
 package com.example.foodpart.ui.screens.whattocook
 
 import android.annotation.SuppressLint
-import android.util.Log
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -31,21 +26,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.fooddata.FoodData
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.foodPartButton
 import com.example.foodpart.ui.components.foodPartTextField
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun whatToCookScreen(
+fun WhatToCookScreen(
     navController: NavController
 
 ) {
@@ -66,6 +60,9 @@ fun whatToCookScreen(
         mutableStateOf(false)
     }
     Scaffold(
+        bottomBar = {
+            FoodPartBottomNavigation(navController = navController)
+        },
         topBar = {
             TopAppBar(
                 title = {

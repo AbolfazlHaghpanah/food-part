@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
+import com.example.foodpart.core.FoodPartBottomNavigation
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -27,6 +28,9 @@ fun CategoryScreen(
     navController: NavController
 ) {
     Scaffold(
+        bottomBar = {
+            FoodPartBottomNavigation(navController = navController)
+        },
         topBar = {
             TopAppBar(
                 title = {

@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun searchTextField(
+fun SearchTextField(
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel,
 ) {
@@ -54,7 +54,6 @@ fun searchTextField(
                         contentDescription = "Clear"
                     )
                 }
-            else null
         },
     )
 }
