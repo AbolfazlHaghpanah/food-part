@@ -1,6 +1,7 @@
 package com.example.foodpart.ui.screens.category
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -21,6 +23,8 @@ fun FoodListByCategory(
     viewModel: CategoryScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavController
 ) {
+    val indicationState = remember { MutableInteractionSource() }
+
     val foodListState by viewModel.foodListByCategoryFlow.collectAsState()
     LazyVerticalGrid(
         modifier = Modifier
@@ -35,7 +39,10 @@ fun FoodListByCategory(
 
             foodItem(
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        interactionSource = indicationState,
+                        indication = null
+                    ) {
                         navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                     },
                 item.foodName,
