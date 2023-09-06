@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -23,15 +25,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.foodItem
 @Composable
-fun searchScreen(
+fun SearchScreen(
     navController: NavController,
     viewModel: SearchViewModel
 ) {
     val text by viewModel.text.collectAsState()
     Scaffold(
+        bottomBar = {
+            FoodPartBottomNavigation(navController = navController)
+        },
         topBar = {
             TopAppBar(
                 title = {
@@ -53,7 +59,7 @@ fun searchScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
 
         ) {
-            searchTextField(
+            SearchTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
                 viewModel = viewModel
@@ -112,4 +118,5 @@ fun searchScreen(
             } else viewModel.setError(false)
         }
     }
+    Spacer(modifier = Modifier.imePadding())
 }
