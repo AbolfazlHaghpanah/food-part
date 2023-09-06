@@ -7,13 +7,13 @@ data class FoodData(
     val difficulty: Difficulties,
     val cookingTime: String,
     val category: Categories,
-    val subCategory: String,
+    val subCategory: List<String>,
     val meals: List<String>
 )
 
 enum class Categories(
     val category: String,
-    val subCategories: List<String>?
+    var subCategories: List<String>?
 ) {
     MAIN(
         "غذای اصلی", listOf("خورشت", "سنتی", "ملل")
@@ -43,7 +43,7 @@ val foodList = listOf<FoodData>(
         Difficulties.MEDIUM,
         "۱ ساعت",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("نهار", "صبحانه")
     ),
     FoodData(
@@ -53,7 +53,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۴۵ دقیقه",
         Categories.MAIN,
-        "سنتی",
+        listOf("سنتی","خورشت"),
         listOf("صبحانه")
     ),
     FoodData(
@@ -63,7 +63,7 @@ val foodList = listOf<FoodData>(
         Difficulties.HARD,
         "۲ ساعت",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("نهار", "شام")
     ),
     FoodData(
@@ -73,7 +73,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۴۰ دقیقه",
         Categories.MAIN,
-        "سنتی",
+        listOf("سنتی","خورشت"),
         listOf("نهار", "شام")
     ),
     FoodData(
@@ -83,7 +83,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۴۵ دقیقه",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("صبحانه", "نهار")
     ),
     FoodData(
@@ -93,7 +93,7 @@ val foodList = listOf<FoodData>(
         Difficulties.MEDIUM,
         "۷۰ دقیقه",
         Categories.MAIN,
-        "سنتی",
+        listOf("سنتی","خورشت"),
         listOf("نهار")
     ),
     FoodData(
@@ -103,7 +103,7 @@ val foodList = listOf<FoodData>(
         Difficulties.HARD,
         "۲ ساعت و ۳۰ دقیقه",
         Categories.SALAD,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -113,7 +113,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۳۰ دقیقه",
         Categories.SONATI,
-        "ملل",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -123,7 +123,7 @@ val foodList = listOf<FoodData>(
         Difficulties.HARD,
         "۳ ساعت",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -133,7 +133,7 @@ val foodList = listOf<FoodData>(
         Difficulties.MEDIUM,
         "۲ ساعت و ۳۰ دقیقه",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -143,7 +143,7 @@ val foodList = listOf<FoodData>(
         Difficulties.HARD,
         "۴ ساعت",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -153,7 +153,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۵۰ دقیقه",
         Categories.SALAD,
-        "خورشت",
+        listOf("سنتی"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -163,7 +163,7 @@ val foodList = listOf<FoodData>(
         Difficulties.MEDIUM,
         "۱ ساعت و ۱۵ دقیقه",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -173,7 +173,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۴۵ دقیقه",
         Categories.MAIN,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
@@ -183,7 +183,7 @@ val foodList = listOf<FoodData>(
         Difficulties.EASY,
         "۲۰ دقیقه",
         Categories.SALAD,
-        "خورشت",
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     )
 )
