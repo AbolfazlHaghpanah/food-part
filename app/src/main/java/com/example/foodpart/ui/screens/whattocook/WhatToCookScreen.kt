@@ -115,7 +115,7 @@ fun WhatToCookScreen(
                     )
                 )
             },
-                text = "تایید",
+                text = "جستجو",
                 enabled = {
                     itemTextState.value.isNotEmpty() && timeTextState.value.isNotEmpty()
                 }
