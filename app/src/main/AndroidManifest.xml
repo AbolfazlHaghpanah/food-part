@@ -8,10 +8,9 @@
         android:icon="@mipmap/food_part_logo"
         android:roundIcon="@mipmap/food_part_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FoodPart"
-        tools:targetApi="31"
+        android:theme="@style/SplashScreenTheme"
         android:windowSoftInputMode="adjustResize"
-        >
+        tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
