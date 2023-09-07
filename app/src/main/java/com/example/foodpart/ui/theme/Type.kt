@@ -28,7 +28,7 @@ val Typography = Typography(
     h3 = TextStyle(
         fontSize = 14.sp,
         fontFamily = FontFamily(Font(R.font.iranyekan_mediom)),
-        fontWeight = FontWeight(700),
+        fontWeight = FontWeight(500),
         textAlign = TextAlign.Center
     ),
     body1 = TextStyle(
