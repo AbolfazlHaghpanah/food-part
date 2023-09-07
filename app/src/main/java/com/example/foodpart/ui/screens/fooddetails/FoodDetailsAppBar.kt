@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import com.example.foodpart.core.AppScreens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -49,16 +50,24 @@ fun FoodDetailsAppBar(
 
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
-        contentColor = MaterialTheme.colors.onBackground
+        elevation = 0.dp
     ) {
         IconButton(onClick = {
-            navController.popBackStack()
+            navController.popBackStack(
+                route = AppScreens.Category.route,
+                inclusive = false
+            )
         }) {
-            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Back")
+            Icon(
+                imageVector = Icons.Rounded.KeyboardArrowRight,
+                contentDescription = "Back",
+                tint = MaterialTheme.colors.onBackground
+            )
         }
         Text(
             text = "اطلاعات غذا",
-            style = MaterialTheme.typography.h2
+            style = MaterialTheme.typography.h2,
+            color = MaterialTheme.colors.onBackground
         )
         Spacer(modifier = Modifier.weight(1F))
         Box {
@@ -68,7 +77,8 @@ fun FoodDetailsAppBar(
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
                     contentDescription = "Menu",
-                    Modifier.rotate(90f)
+                    Modifier.rotate(90f),
+                    tint = MaterialTheme.colors.onBackground
                 )
             }
             DropdownMenu(
@@ -101,9 +111,9 @@ fun FoodDetailsAppBar(
                         this.putExtra(Intent.EXTRA_TEXT, "Sharing a food from Food Part")
                         type = "text/plain"
                     }
-                    val bundle : Bundle = Bundle.EMPTY
+                    val bundle: Bundle = Bundle.EMPTY
 
-                    startActivity(context,sendIntent,bundle)
+                    startActivity(context, sendIntent, bundle)
                     menuState.value = false
                 }) {
                     Icon(
@@ -135,6 +145,7 @@ fun FoodDetailsAppBar(
             }
 
         }
+
 
     }
 

@@ -39,7 +39,8 @@ fun CategoryScreen(
                         style = MaterialTheme.typography.h1
                     )
                 },
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
             )
         }
     ) {

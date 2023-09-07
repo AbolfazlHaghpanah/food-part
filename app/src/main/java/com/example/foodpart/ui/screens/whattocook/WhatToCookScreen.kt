@@ -54,7 +54,8 @@ fun WhatToCookScreen(
                         style = MaterialTheme.typography.h2
                     )
                 },
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
             )
         }
     ) {

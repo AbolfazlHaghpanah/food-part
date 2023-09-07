@@ -19,8 +19,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.foodpart.R
 
 @Composable
 fun WhatToCookHint(
@@ -76,7 +78,7 @@ fun WhatToCookHint(
         if (isHintShow) Text(
             modifier = Modifier
                 .padding(8.dp, bottom = 16.dp),
-            text = "کاربر گرامی مواد اولیه ی موجود را در قسمت “تو خونه چی داری ؟” وارد کرده و با علامت “،” از یکدیگر جدا کنید سپس کل زمانی که دارین را به دقیقه در بخش “چقدر وقت داری ؟” وارد کنین. سطح دستور پخت را انتخاب کرده و کلیک جستجو را بزنید تا با توجه به اطلاعات شما غذاهای پیشنهاد را نمایش دهیم.",
+            text = stringResource(R.string.what_to_cook_hint),
             style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
         )
 
