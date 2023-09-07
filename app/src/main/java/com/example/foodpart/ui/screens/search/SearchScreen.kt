@@ -23,21 +23,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.components.foodItem
+import com.example.foodpart.ui.components.FoodItem
+
 @Composable
-fun searchScreen(
+fun SearchScreen(
     navController: NavController,
     viewModel: SearchViewModel
 ) {
     val text by viewModel.text.collectAsState()
+    val isError by viewModel.isError.collectAsState()
     Scaffold(
+        bottomBar = {
+            FoodPartBottomNavigation(navController = navController)
+        },
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "دنبال چی میگردی ؟",
-                        style = MaterialTheme.typography.h1
+                        text = if (!isError)"دنبال چی میگردی ؟" else "دنبال چیزی می گردی؟",
+                        style = MaterialTheme.typography.h2
                     )
                 },
                 backgroundColor = MaterialTheme.colors.background
@@ -53,7 +59,7 @@ fun searchScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
 
         ) {
-            searchTextField(
+            SearchTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
                 viewModel = viewModel
@@ -80,7 +86,7 @@ fun searchScreen(
 
 
                         items(foodList.filter { it.foodName.contains(text) }) { item ->
-                            foodItem(
+                            FoodItem(
                                 modifier = Modifier
                                     .clickable {
                                         navController
@@ -102,7 +108,7 @@ fun searchScreen(
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = "اوپس چیزی پیدا نشد",
-                            style = MaterialTheme.typography.h3
+                            style = MaterialTheme.typography.body1
                         )
                     }
 

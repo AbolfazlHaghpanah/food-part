@@ -19,7 +19,7 @@ val Typography = Typography(
         textAlign = TextAlign.Center
     ),
     h2 = TextStyle(
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
         fontWeight = FontWeight(800),
         letterSpacing = 0.3.sp,
@@ -27,23 +27,47 @@ val Typography = Typography(
     ),
     h3 = TextStyle(
         fontSize = 14.sp,
-        fontFamily = FontFamily(Font(R.font.iranyekan_regular)),
-        fontWeight = FontWeight(700),
+        fontFamily = FontFamily(Font(R.font.iranyekan_mediom)),
+        fontWeight = FontWeight(500),
         textAlign = TextAlign.Center
     ),
-    subtitle1 = TextStyle(
+    body1 = TextStyle(
         fontSize = 13.sp,
         lineHeight = 19.8.sp,
         fontFamily = FontFamily(Font(R.font.iranyekan_regular)),
         fontWeight = FontWeight(400),
         textAlign = TextAlign.Center
+
     ),
-    subtitle2 = TextStyle(
+    body2 = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 19.8.sp,
+        fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
+        fontWeight = FontWeight(700),
+        textAlign = TextAlign.Center
+    ),
+    subtitle1 = TextStyle(
         fontSize = 11.sp,
+        lineHeight = 16.7.sp,
+        fontFamily = FontFamily(Font(R.font.iranyekan_regular)),
+        fontWeight = FontWeight(400),
+        textAlign = TextAlign.Center
+    ),
+    caption = TextStyle(
+        fontSize = 12.sp,
         lineHeight = 16.7.sp,
         fontFamily = FontFamily(Font(R.font.iranyekan_mediom)),
         fontWeight = FontWeight(400),
         textAlign = TextAlign.Center
-    )
+    ),
 
-)
+    button = TextStyle(
+        fontSize = 16.sp,
+        lineHeight = 16.98.sp,
+        fontFamily = FontFamily(Font(R.font.iranyekan_extrabold)),
+        fontWeight = FontWeight(800),
+        textAlign = TextAlign.Center
+    ),
+
+
+    )

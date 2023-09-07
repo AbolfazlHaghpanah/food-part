@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -30,16 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.components.foodItem
+import com.example.foodpart.ui.components.FoodItem
 import kotlinx.coroutines.launch
 
 @Composable
-fun foodListScreen(
+fun FoodListScreen(
     navController: NavController,
     category: String,
     appBarText: String,
     description: String? = null
-
 ) {
 
     val lazyColumnState = rememberLazyGridState()
@@ -72,36 +72,46 @@ fun foodListScreen(
             }
         },
         topBar = {
-            foodListAppBar(
+            FoodListAppBar(
                 navController = navController,
                 appBarText = appBarText
             )
         }
     ) {
         Column(
-            Modifier.padding(it)
+            Modifier
+                .padding(it)
         ) {
-            if (description!=null){
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    text = description,
-                    style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
-                )
-            }
+
+
             LazyVerticalGrid(
                 state = lazyColumnState,
                 modifier = Modifier
                     .fillMaxWidth(),
                 columns = GridCells
                     .Fixed(2),
-                contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(16.dp)
             ) {
-                items(foodList.filter { it.category == category }) { item ->
-                    foodItem(
+
+                if (description != null) {
+                    item(
+                        span = {
+                            GridItemSpan(2)
+                        }
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = description,
+                            style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
+                        )
+                    }
+                }
+
+                items(foodList.filter { it.category.category == category }) { item ->
+                    FoodItem(
                         modifier = Modifier
                             .clickable {
                                 navController

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -35,13 +36,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
@@ -51,7 +49,6 @@ import com.example.foodpart.core.AppScreens
 fun SignUpScreen(
     navController: NavController
 ) {
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,14 +70,9 @@ fun SignUpScreen(
                 }
                 Text(
                     text = "ثبت نام",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                        fontWeight = FontWeight(700),
-                        color = MaterialTheme.colors.onBackground,
-                        textAlign = TextAlign.Right,
-                        letterSpacing = 0.27.sp,
-                    )
+                    style = MaterialTheme.typography.h2,
+                    color = MaterialTheme.colors.onBackground,
+                    textAlign = TextAlign.Right,
                 )
             }
         },
@@ -135,7 +127,7 @@ fun SignUpScreen(
                     text = "برای ثبت نام اطلاعات خود را وارد کنید",
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.body1
                         .copy(textAlign = TextAlign.Start)
                 )
 
@@ -156,13 +148,13 @@ fun SignUpScreen(
                     placeholder = {
                         Text(
                             text = "نام کاربری",
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.body1
                         )
                     },
                     colors = TextFieldDefaults
                         .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.background,
-                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                            focusedIndicatorColor = MaterialTheme.colors.surface,
+                            unfocusedIndicatorColor = MaterialTheme.colors.surface
                         ),
                     shape = MaterialTheme.shapes.medium,
                     textStyle = MaterialTheme.typography.subtitle1
@@ -178,17 +170,19 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .width(328.dp)
                         .height(56.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
 
                     placeholder = {
                         Text(
                             text = "رمز عبور",
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.body1
                         )
                     },
                     colors = TextFieldDefaults
                         .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.background,
-                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                            focusedIndicatorColor = MaterialTheme.colors.surface,
+                            unfocusedIndicatorColor = MaterialTheme.colors.surface
                         ),
                     shape = MaterialTheme.shapes.medium,
                     textStyle = MaterialTheme.typography.subtitle1
@@ -204,17 +198,19 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .width(328.dp)
                         .height(56.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
 
                     placeholder = {
                         Text(
                             text = "تکرار رمز عبور",
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.body1
                         )
                     },
                     colors = TextFieldDefaults
                         .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.background,
-                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                            focusedIndicatorColor = MaterialTheme.colors.surface,
+                            unfocusedIndicatorColor = MaterialTheme.colors.surface
                         ),
                     shape = MaterialTheme.shapes.medium,
                     textStyle = MaterialTheme.typography.subtitle1
@@ -238,13 +234,8 @@ fun SignUpScreen(
                     Text(
                         text = "تایید",
                         modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                            fontWeight = FontWeight(800),
-                            color = MaterialTheme.colors.onBackground,
-                            textAlign = TextAlign.Center
-                        )
+                        style = MaterialTheme.typography.button,
+                        color = MaterialTheme.colors.onBackground,
                     )
                 }
 
@@ -256,7 +247,7 @@ fun SignUpScreen(
                 ) {
                     Text(
                         text = "قبلا ثبت نام کردید؟",
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle1,
                         color = MaterialTheme.colors.onBackground,
                     )
 
@@ -266,7 +257,7 @@ fun SignUpScreen(
                                 navController.navigate(AppScreens.Login.route)
                             },
                         text = " ورود ",
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle1,
                         color = Color(0xFF1976D2),
                     )
                 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.foodpart.R
+import com.example.foodpart.fooddata.Difficulties
 import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.ui.theme.green
 import com.example.foodpart.ui.theme.red
@@ -21,26 +22,24 @@ import com.example.foodpart.ui.theme.yellow
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun foodDifficultyChip(
-    food : FoodData,
-    onClick : ()->Unit
+fun FoodDifficultyChip(
+    food: FoodData,
+    onClick: () -> Unit
 ) {
     Chip(
         onClick = onClick,
         border = BorderStroke(
             1.dp, color = when (food.difficulty) {
-                "آسان" -> green
-                "متوسط" -> yellow
-                "پیچیده" -> red
-                else -> yellow
+                Difficulties.EASY -> green
+                Difficulties.MEDIUM -> yellow
+                Difficulties.HARD -> red
             }
         ),
         colors = ChipDefaults.chipColors(
             backgroundColor = when (food.difficulty) {
-                "آسان" -> green.copy(alpha = (0.1f))
-                "متوسط" -> yellow.copy(alpha = (0.1f))
-                "پیچیده" -> red.copy(alpha = (0.1f))
-                else -> yellow.copy(alpha = (0.1f))
+                Difficulties.EASY -> green.copy(alpha = (0.1f))
+                Difficulties.MEDIUM -> yellow.copy(alpha = (0.1f))
+                Difficulties.HARD -> red.copy(alpha = (0.1f))
             }
         )
     ) {
@@ -48,16 +47,15 @@ fun foodDifficultyChip(
             painter = painterResource(id = R.drawable.deficulity),
             contentDescription = "",
             tint = when (food.difficulty) {
-                "آسان" -> green
-                "متوسط" -> yellow
-                "پیچیده" -> red
-                else -> yellow
+                Difficulties.EASY -> green
+                Difficulties.MEDIUM -> yellow
+                Difficulties.HARD -> red
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = food.difficulty,
-            style = MaterialTheme.typography.subtitle1
+            text = food.difficulty.difficulty,
+            style = MaterialTheme.typography.caption
         )
     }
 }

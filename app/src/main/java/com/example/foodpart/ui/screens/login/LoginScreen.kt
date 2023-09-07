@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -16,13 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 
@@ -53,14 +51,9 @@ fun LoginScreen(
                 }
                 Text(
                     text = "ورود",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                        fontWeight = FontWeight(700),
-                        color = MaterialTheme.colors.onBackground,
-                        textAlign = TextAlign.Right,
-                        letterSpacing = 0.27.sp,
-                    )
+                    style = MaterialTheme.typography.h2,
+                    color = MaterialTheme.colors.onBackground,
+                    textAlign = TextAlign.Right,
                 )
             }
         },
@@ -115,8 +108,10 @@ fun LoginScreen(
                     text = "برای ورود اطلاعات حساب خود را وارد کنید",
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colors.onSurface,
-                    style = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    style = MaterialTheme.typography.body1
+                        .copy(
+                            textAlign = TextAlign.Start
+                        )
                 )
 
                 Spacer(modifier = Modifier.height(43.dp))
@@ -135,13 +130,13 @@ fun LoginScreen(
                     placeholder = {
                         Text(
                             text = "نام کاربری",
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.body1
                         )
                     },
                     colors = TextFieldDefaults
                         .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.background,
-                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                            focusedIndicatorColor = MaterialTheme.colors.surface,
+                            unfocusedIndicatorColor = MaterialTheme.colors.surface
                         ),
                     shape = MaterialTheme.shapes.medium,
                     textStyle = MaterialTheme.typography.subtitle1
@@ -157,17 +152,19 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .width(328.dp)
                         .height(56.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
 
                     placeholder = {
                         Text(
                             text = "رمز ورود",
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.body1,
                         )
                     },
                     colors = TextFieldDefaults
                         .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.background,
-                            unfocusedIndicatorColor = MaterialTheme.colors.background
+                            focusedIndicatorColor = MaterialTheme.colors.surface,
+                            unfocusedIndicatorColor = MaterialTheme.colors.surface
                         ),
                     shape = MaterialTheme.shapes.medium,
                     textStyle = MaterialTheme.typography.subtitle1
@@ -191,14 +188,10 @@ fun LoginScreen(
                     Text(
                         text = "تایید",
                         modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                            fontWeight = FontWeight(800),
-                            color = MaterialTheme.colors.onBackground,
-                            textAlign = TextAlign.Center
-                        )
+                        style = MaterialTheme.typography.button,
+                        color = MaterialTheme.colors.onBackground,
                     )
+
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -209,7 +202,7 @@ fun LoginScreen(
                 ) {
                     Text(
                         text = "حساب کاربری ندارید؟",
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle1,
                         color = MaterialTheme.colors.onBackground,
                     )
 
@@ -219,14 +212,14 @@ fun LoginScreen(
                                 navController.navigate(AppScreens.SignUp.route)
                             },
                         text = " ثبت نام ",
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle1,
                         color = Color(0xFF1976D2),
                     )
 
 
                     Text(
                         text = "کنید",
-                        style = MaterialTheme.typography.subtitle2,
+                        style = MaterialTheme.typography.subtitle1,
                         color = MaterialTheme.colors.onBackground,
                     )
                 }

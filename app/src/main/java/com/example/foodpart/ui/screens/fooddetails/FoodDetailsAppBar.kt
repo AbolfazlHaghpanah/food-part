@@ -1,22 +1,20 @@
 package com.example.foodpart.ui.screens.fooddetails
 
-import android.view.Menu
+import android.content.Intent
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MenuDefaults
 import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.Snackbar
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -25,42 +23,51 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun foodDetailsAppBar(
+fun FoodDetailsAppBar(
     navController: NavController,
     bottomSheetState: ModalBottomSheetState,
+    scaffoldState: ScaffoldState
 ) {
     val scope = rememberCoroutineScope()
     val menuState = remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.background
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 0.dp
     ) {
         IconButton(onClick = {
-            navController.popBackStack()
+            navController.popBackStack(
+                route = AppScreens.Category.route,
+                inclusive = false
+            )
         }) {
-            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Back")
+            Icon(
+                imageVector = Icons.Rounded.KeyboardArrowRight,
+                contentDescription = "Back",
+                tint = MaterialTheme.colors.onBackground
+            )
         }
         Text(
             text = "اطلاعات غذا",
-            style = MaterialTheme.typography.h1
+            style = MaterialTheme.typography.h2,
+            color = MaterialTheme.colors.onBackground
         )
         Spacer(modifier = Modifier.weight(1F))
         Box {
@@ -70,23 +77,23 @@ fun foodDetailsAppBar(
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
                     contentDescription = "Menu",
-                    Modifier.rotate(90f)
+                    Modifier.rotate(90f),
+                    tint = MaterialTheme.colors.onBackground
                 )
             }
             DropdownMenu(
                 modifier = Modifier
-                    .width(160.dp)
                     .background(
                         color = MaterialTheme.colors.surface,
-                        shape = MaterialTheme.shapes.small
-                    ),
+                    )
+                    .width(160.dp),
                 expanded = menuState.value,
                 onDismissRequest = { menuState.value = false }
             ) {
                 DropdownMenuItem(onClick = {
-                        scope.launch {
-                            bottomSheetState.show()
-                        }
+                    scope.launch {
+                        bottomSheetState.show()
+                    }
                     menuState.value = false
                 }) {
                     Icon(
@@ -95,10 +102,18 @@ fun foodDetailsAppBar(
                     )
                     Text(
                         text = "گزارش",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
                 DropdownMenuItem(onClick = {
+                    val sendIntent: Intent = Intent().apply {
+                        this.action = Intent.ACTION_SEND
+                        this.putExtra(Intent.EXTRA_TEXT, "Sharing a food from Food Part")
+                        type = "text/plain"
+                    }
+                    val bundle: Bundle = Bundle.EMPTY
+
+                    startActivity(context, sendIntent, bundle)
                     menuState.value = false
                 }) {
                     Icon(
@@ -107,11 +122,14 @@ fun foodDetailsAppBar(
                     )
                     Text(
                         text = "ارسال",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
                 DropdownMenuItem(
                     onClick = {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("")
+                        }
                         menuState.value = false
                     }
                 ) {
@@ -121,12 +139,13 @@ fun foodDetailsAppBar(
                     )
                     Text(
                         text = "ذخیره",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
             }
 
         }
+
 
     }
 

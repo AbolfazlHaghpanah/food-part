@@ -1,14 +1,12 @@
 package com.example.foodpart
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -18,34 +16,26 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.foodPartBottomNavigation
-import com.example.foodpart.ui.screens.category.CategoryScreenViewModel
-import com.example.foodpart.ui.screens.category.categoryScreen
-import com.example.foodpart.ui.screens.fooddetails.foodDetailsScreen
-import com.example.foodpart.ui.screens.foodlist.foodListScreen
+import com.example.foodpart.ui.screens.category.CategoryScreen
+import com.example.foodpart.ui.screens.fooddetails.FoodDetailsScreen
+import com.example.foodpart.ui.screens.foodlist.FoodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
-import com.example.foodpart.ui.screens.profile.profileScreen
+import com.example.foodpart.ui.screens.profile.ProfileScreen
+import com.example.foodpart.ui.screens.search.SearchScreen
 import com.example.foodpart.ui.screens.search.SearchViewModel
-import com.example.foodpart.ui.screens.search.searchScreen
-import com.example.foodpart.ui.screens.whattocook.whatToCookScreen
 import com.example.foodpart.ui.screens.signup.SignUpScreen
+import com.example.foodpart.ui.screens.whattocook.WhatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
 
+@Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
             FoodPartTheme {
-                val bottomNavState = remember {
-                    mutableStateOf(true)
-                }
                 val navController = rememberNavController()
-                Scaffold(
-                    bottomBar = {
-                        if (bottomNavState.value)
-                            foodPartBottomNavigation(navController = navController)
-                    }
-                ) {
+                Scaffold {
                     Column(
                         Modifier.padding(it)
                     ) {
@@ -53,7 +43,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = AppScreens.Category.route
                         ) {
-                            mainNavGraph(navController, bottomNavState)
+                            mainNavGraph(navController)
                         }
                     }
                 }
@@ -62,40 +52,32 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 private fun NavGraphBuilder.mainNavGraph(
     navController: NavController,
-    state: MutableState<Boolean>
 ) {
     composable(AppScreens.Category.route) {
-        state.value = true
-        categoryScreen(
-            navController = navController,
-            viewModel = CategoryScreenViewModel()
+        CategoryScreen(
+            navController = navController
         )
     }
 
     composable(AppScreens.Profile.route) {
-        state.value = true
-        profileScreen(navController = navController)
+        ProfileScreen(navController = navController)
     }
 
     composable(AppScreens.Login.route) {
-        state.value = false
         LoginScreen(navController = navController)
     }
 
     composable(AppScreens.Search.route) {
-        state.value = true
-        searchScreen(
+        SearchScreen(
             navController = navController,
             viewModel = SearchViewModel()
         )
     }
 
     composable(AppScreens.WhatToCook.route) {
-        state.value = true
-        whatToCookScreen(navController = navController)
+        WhatToCookScreen(navController = navController)
     }
 
     composable(
@@ -109,8 +91,7 @@ private fun NavGraphBuilder.mainNavGraph(
     ) { backStackEntry ->
         val id = backStackEntry.arguments?.getInt("id")
             ?: throw IllegalStateException("id was null")
-        state.value = false
-        foodDetailsScreen(
+        FoodDetailsScreen(
             navController = navController,
             id
         )
@@ -140,8 +121,7 @@ private fun NavGraphBuilder.mainNavGraph(
             ?: throw IllegalStateException("appbar was null")
 
         val description = backStackEntry.arguments?.getString("description")
-        state.value = false
-        foodListScreen(
+        FoodListScreen(
             navController,
             category,
             appBar,
@@ -152,7 +132,6 @@ private fun NavGraphBuilder.mainNavGraph(
     composable(
         route = AppScreens.SignUp.route
     ) {
-        state.value = false
         SignUpScreen(
             navController
         )

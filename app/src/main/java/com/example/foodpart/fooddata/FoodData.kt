@@ -4,155 +4,186 @@ data class FoodData(
     val foodName: String,
     val recipes: String,
     val id: Int,
-    val difficulty: String,
+    val difficulty: Difficulties,
     val cookingTime: String,
-    val category: String,
-    val subCategory: String,
+    val category: Categories,
+    val subCategory: List<String>,
     val meals: List<String>
 )
 
+enum class Categories(
+    val category: String,
+    var subCategories: List<String>?
+) {
+    MAIN(
+        "غذای اصلی", listOf("خورشت", "سنتی", "ملل")
+    ),
+    SALAD(
+        "سالاد", listOf("ایتالیایی", "سنتی", "ملل")
+    ),
+    SONATI(
+        "سنتی", null
+    )
+}
+
+
+enum class Difficulties(val difficulty: String) {
+
+    HARD("دشوار"),
+    MEDIUM("متوسط"),
+    EASY("ساده")
+}
+
+
 val foodList = listOf<FoodData>(
     FoodData(
-        "قیمه بادمجان", "مواد لازم:... ", 1, "متوسط", "۱ ساعت", "غذای اصلی", "خورشت",
+        "قیمه بادمجان",
+        "مواد لازم:... ",
+        1,
+        Difficulties.MEDIUM,
+        "۱ ساعت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("نهار", "صبحانه")
     ),
     FoodData(
         "کباب کوبیده",
         "مواد لازم:...",
         2,
-        "ساده",
+        Difficulties.EASY,
         "۴۵ دقیقه",
-        "غذای اصلی",
-        "سنتی",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("صبحانه")
     ),
     FoodData(
         "فسنجان",
         "مواد لازم:...",
         3,
-        "پیچیده",
+        Difficulties.HARD,
         "۲ ساعت",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("نهار", "شام")
     ),
     FoodData(
         "آب‌پزخورشت",
         "مواد لازم:...",
         4,
-        "ساده",
+        Difficulties.EASY,
         "۴۰ دقیقه",
-        "غذای اصلی",
-        "سنتی",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("نهار", "شام")
     ),
     FoodData(
         "کوکو سبزی",
         "مواد لازم:...",
         5,
-        "آسان",
+        Difficulties.EASY,
         "۴۵ دقیقه",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("صبحانه", "نهار")
     ),
     FoodData(
         "شوید باقالی",
         "مواد لازم:...",
         6,
-        "متوسط",
+        Difficulties.MEDIUM,
         "۷۰ دقیقه",
-        "غذای اصلی",
-        "سنتی",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("نهار")
     ),
     FoodData(
         "سیب‌زمینی خورشت",
         "مواد لازم:...",
         7,
-        "پیچیده",
+        Difficulties.HARD,
         "۲ ساعت و ۳۰ دقیقه",
-        "غذای اصلی",
-        "خورشت", listOf("شام", "نهار")
+        Categories.SALAD,
+        listOf("سنتی","خورشت"),
+        listOf("شام", "نهار")
     ),
     FoodData(
         "ماکارونی",
         "مواد لازم:...",
         8,
-        "آسان",
+        Difficulties.EASY,
         "۳۰ دقیقه",
-        "غذای اصلی",
-        "ملل",
+        Categories.SONATI,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "خورشت قیمه",
         "مواد لازم:...",
         9,
-        "پیچیده",
+        Difficulties.HARD,
         "۳ ساعت",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "لوبیا پلو",
         "مواد لازم:...",
         10,
-        "متوسط",
+        Difficulties.MEDIUM,
         "۲ ساعت و ۳۰ دقیقه",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "میرزاقاسمی",
         "مواد لازم:...",
         11,
-        "پیچیده",
+        Difficulties.HARD,
         "۴ ساعت",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "ته‌چین",
         "مواد لازم:...",
         12,
-        "آسان",
+        Difficulties.EASY,
         "۵۰ دقیقه",
-        "غذای اصلی",
-        "خورشت",
+        Categories.SALAD,
+        listOf("سنتی"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "آش رشته",
         "مواد لازم:...",
         13,
-        "متوسط",
+        Difficulties.MEDIUM,
         "۱ ساعت و ۱۵ دقیقه",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "کشک بادمجان",
         "مواد لازم:...",
         14,
-        "ساده",
+        Difficulties.EASY,
         "۴۵ دقیقه",
-        "غذای اصلی",
-        "خورشت",
+        Categories.MAIN,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     ),
     FoodData(
         "سالاد اسفناج",
         "مواد لازم:...",
         15,
-        "آسان",
+        Difficulties.EASY,
         "۲۰ دقیقه",
-        "سالاد",
-        "خورشت",
+        Categories.SALAD,
+        listOf("سنتی","خورشت"),
         listOf("شام", "نهار")
     )
 )

@@ -2,22 +2,22 @@ package com.example.foodpart.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 
 @Composable
-fun foodPartButton(
+fun FoodPartButton(
     onClick : ()->Unit,
     text : String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled : ()->Boolean ={true}
 ) {
     Button(
+        enabled = enabled() ,
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
@@ -26,7 +26,7 @@ fun foodPartButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.button,
             color = MaterialTheme.colors.onBackground
         )
     }
