@@ -54,8 +54,9 @@ fun SearchTextField(
         shape = MaterialTheme.shapes.medium,
         isError = isError,
         trailingIcon = {
-            if (text != "")
+            if (text != "" || textState != "")
                 IconButton(onClick = {
+                    textState = ""
                     viewModel.SetText("")
                 }) {
                     Icon(
