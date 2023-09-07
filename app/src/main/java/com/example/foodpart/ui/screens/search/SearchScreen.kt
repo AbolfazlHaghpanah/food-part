@@ -33,7 +33,6 @@ fun SearchScreen(
     viewModel: SearchViewModel
 ) {
     val text by viewModel.text.collectAsState()
-    val isError by viewModel.isError.collectAsState()
     Scaffold(
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
@@ -42,7 +41,7 @@ fun SearchScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (!isError)"دنبال چی میگردی ؟" else "دنبال چیزی می گردی؟",
+                        text = "دنبال چی میگردی ؟",
                         style = MaterialTheme.typography.h2
                     )
                 },
@@ -62,11 +61,11 @@ fun SearchScreen(
             SearchTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                viewModel = viewModel
+                viewModel = viewModel,
             )
 
 
-            if (text.length != 0) {
+            if (text.isNotEmpty()) {
                 Text(
                     text = "نتایج جستجو با $text",
                     style = MaterialTheme.typography.subtitle1
@@ -75,9 +74,8 @@ fun SearchScreen(
                         .fillMaxWidth()
                 )
 
-                if (foodList.filter { it.foodName.contains(text) }.size != 0) {
+                if (foodList.filter { it.foodName.contains(text) }.isNotEmpty()) {
                     viewModel.setError(false)
-
                     LazyVerticalGrid(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
