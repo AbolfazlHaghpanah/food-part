@@ -16,7 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.foodpart.ui.components.FoodPartTextField
-import com.example.foodpart.ui.components.foodPartButton
+import com.example.foodpart.ui.components.FoodPartButton
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -47,7 +47,7 @@ fun ReportModalBottomSheet(
             label = "اینجا بنویسید "
         )
 
-        foodPartButton(
+        FoodPartButton(
             modifier = Modifier
                 .padding(top = 16.dp),
             onClick = {
