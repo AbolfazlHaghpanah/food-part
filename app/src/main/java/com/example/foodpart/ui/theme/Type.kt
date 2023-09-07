@@ -39,7 +39,7 @@ val Typography = Typography(
         textAlign = TextAlign.Center
     ),
     subtitle2 = TextStyle(
-        fontSize = 11.sp,
+        fontSize = 12.sp,
         lineHeight = 16.7.sp,
         fontFamily = FontFamily(Font(R.font.iranyekan_mediom)),
         fontWeight = FontWeight(400),

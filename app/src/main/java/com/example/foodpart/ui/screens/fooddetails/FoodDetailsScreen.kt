@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -75,6 +76,8 @@ fun FoodDetailsScreen(
                 snackbarHost = {
                     SnackbarHost(it) {
                         Snackbar(
+                            modifier = Modifier
+                                .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
                             contentColor = MaterialTheme.colors.onBackground,
                             backgroundColor = MaterialTheme.colors.secondary,
                             action = {
@@ -166,7 +169,11 @@ fun FoodDetailsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             food.meals.forEach { item ->
-                                Chip(onClick = {
+                                Chip(
+                                    modifier = Modifier
+                                        .padding(end = 8.dp)
+                                        .width(80.dp),
+                                    onClick = {
                                     navController.navigate(
                                         AppScreens.FoodList.createRoute(
                                             category = food.category.category,
@@ -177,7 +184,9 @@ fun FoodDetailsScreen(
                                 }) {
                                     Text(
                                         text = item,
-                                        style = MaterialTheme.typography.subtitle2
+                                        style = MaterialTheme.typography.subtitle2,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
                                     )
                                 }
                             }
