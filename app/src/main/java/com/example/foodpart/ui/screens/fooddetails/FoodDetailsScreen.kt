@@ -41,8 +41,8 @@ import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.FoodDifficultyChip
-import com.example.foodpart.ui.components.foodItem
-import com.example.foodpart.ui.components.moreFoodItem
+import com.example.foodpart.ui.components.FoodItem
+import com.example.foodpart.ui.components.MoreFoodItem
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
@@ -92,7 +92,7 @@ fun FoodDetailsScreen(
                                 }) {
                                     Text(
                                         text = "علاقه مندی ها",
-                                        style = MaterialTheme.typography.subtitle1,
+                                        style = MaterialTheme.typography.caption,
                                         color = MaterialTheme.colors.primary
                                     )
                                 }
@@ -101,7 +101,7 @@ fun FoodDetailsScreen(
                             ) {
                             Text(
                                 text = "دستور به علاقه مندی ها اضافه شد",
-                                style = MaterialTheme.typography.subtitle1
+                                style = MaterialTheme.typography.caption
                             )
                         }
                     }
@@ -149,7 +149,7 @@ fun FoodDetailsScreen(
                             Text(
                                 modifier = Modifier.padding(8.dp, 0.dp),
                                 text = "برای ۴ نفر",
-                                style = MaterialTheme.typography.subtitle1
+                                style = MaterialTheme.typography.caption
                             )
 
                             CookingTimeChip(time = food.cookingTime) {
@@ -184,7 +184,7 @@ fun FoodDetailsScreen(
                                 }) {
                                     Text(
                                         text = item,
-                                        style = MaterialTheme.typography.subtitle2,
+                                        style = MaterialTheme.typography.caption,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                     )
@@ -220,9 +220,9 @@ fun FoodDetailsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             items(items = foodList
-                                .filter { it.category == food.category }
+                                .filter { it.category.category == food.category.category }
                                 .filter { foodList.indexOf(it) <= 5 }) { item ->
-                                foodItem(
+                                FoodItem(
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .clickable {
@@ -238,7 +238,7 @@ fun FoodDetailsScreen(
 
                             }
                             item {
-                                moreFoodItem(
+                                MoreFoodItem(
                                     modifier = Modifier
                                         .clickable {
                                             navController.navigate(

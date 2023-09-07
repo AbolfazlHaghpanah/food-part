@@ -75,7 +75,6 @@ fun FoodDetailsAppBar(
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colors.surface,
-                        shape = MaterialTheme.shapes.small
                     )
                     .width(160.dp),
                 expanded = menuState.value,
@@ -93,7 +92,7 @@ fun FoodDetailsAppBar(
                     )
                     Text(
                         text = "گزارش",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
                 DropdownMenuItem(onClick = {
@@ -113,7 +112,7 @@ fun FoodDetailsAppBar(
                     )
                     Text(
                         text = "ارسال",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
                 DropdownMenuItem(
@@ -130,7 +129,7 @@ fun FoodDetailsAppBar(
                     )
                     Text(
                         text = "ذخیره",
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.body1
                     )
                 }
             }

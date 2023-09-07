@@ -55,7 +55,7 @@ fun FoodDifficultyChip(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = food.difficulty.difficulty,
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.caption
         )
     }
 }

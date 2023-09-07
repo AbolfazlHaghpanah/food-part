@@ -26,7 +26,7 @@ fun FoodPartButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.button,
             color = MaterialTheme.colors.onBackground
         )
     }

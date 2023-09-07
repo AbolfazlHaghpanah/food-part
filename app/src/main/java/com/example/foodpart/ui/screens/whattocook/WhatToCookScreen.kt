@@ -77,7 +77,7 @@ fun WhatToCookScreen(
 
             Text(
                 text = "با ، جدا کنید ",
-                style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start),
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -92,7 +92,7 @@ fun WhatToCookScreen(
 
             Text(
                 text = "دستور چقدر سخت باشه ؟",
-                style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start),
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
                 modifier = Modifier
                     .fillMaxWidth()
             )
