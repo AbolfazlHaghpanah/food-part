@@ -1,5 +1,7 @@
 package com.example.foodpart.ui.screens.fooddetails
 
+import android.content.Intent
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +28,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
@@ -41,6 +45,7 @@ fun FoodDetailsAppBar(
     val menuState = remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
@@ -68,11 +73,11 @@ fun FoodDetailsAppBar(
             }
             DropdownMenu(
                 modifier = Modifier
-                    .width(160.dp)
                     .background(
                         color = MaterialTheme.colors.surface,
                         shape = MaterialTheme.shapes.small
-                    ),
+                    )
+                    .width(160.dp),
                 expanded = menuState.value,
                 onDismissRequest = { menuState.value = false }
             ) {
@@ -92,6 +97,14 @@ fun FoodDetailsAppBar(
                     )
                 }
                 DropdownMenuItem(onClick = {
+                    val sendIntent: Intent = Intent().apply {
+                        this.action = Intent.ACTION_SEND
+                        this.putExtra(Intent.EXTRA_TEXT, "Sharing a food from Food Part")
+                        type = "text/plain"
+                    }
+                    val bundle : Bundle = Bundle.EMPTY
+
+                    startActivity(context,sendIntent,bundle)
                     menuState.value = false
                 }) {
                     Icon(

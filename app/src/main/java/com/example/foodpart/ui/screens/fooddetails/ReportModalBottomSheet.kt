@@ -15,14 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.foodpart.ui.components.foodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.components.foodPartButton
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReportModalBottomSheet(
-    bottomSheetState : ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState
 ) {
     val reportTextState: MutableState<String> = remember {
         mutableStateOf("")
@@ -31,7 +31,7 @@ fun ReportModalBottomSheet(
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colors.background)
+            .background(color = MaterialTheme.colors.secondary)
             .padding(16.dp)
     ) {
         Text(
