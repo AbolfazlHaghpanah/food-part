@@ -24,13 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
@@ -52,14 +47,9 @@ fun ProfileScreen(
                 Text(
                     text = "حساب کاربری",
                     modifier = Modifier.padding(start = 16.dp),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                        fontWeight = FontWeight(700),
-                        color = MaterialTheme.colors.onBackground,
-                        textAlign = TextAlign.Right,
-                        letterSpacing = 0.27.sp,
-                    )
+                    style = MaterialTheme.typography.h2,
+                    color = MaterialTheme.colors.onBackground,
+                    textAlign = TextAlign.Right,
                 )
             }
         },
@@ -89,14 +79,13 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-
                     Text(
                         text = "مهمان",
                         modifier = Modifier
                             .width(35.dp)
                             .height(20.dp),
                         color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.h3,
+                        style = MaterialTheme.typography.body2,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -117,13 +106,8 @@ fun ProfileScreen(
                     Text(
                         text = "وارد شوید",
                         modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontFamily = FontFamily(Font(R.font.iranyekan_bold)),
-                            fontWeight = FontWeight(800),
-                            color = MaterialTheme.colors.onBackground,
-                            textAlign = TextAlign.Center
-                        )
+                        style = MaterialTheme.typography.button,
+                        color = MaterialTheme.colors.onBackground,
                     )
                 }
 
