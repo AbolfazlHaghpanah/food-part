@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.components.foodItem
+import com.example.foodpart.ui.components.FoodItem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,7 +40,6 @@ fun FoodListScreen(
     category: String,
     appBarText: String,
     description: String? = null
-
 ) {
 
     val lazyColumnState = rememberLazyGridState()
@@ -112,7 +111,7 @@ fun FoodListScreen(
                 }
 
                 items(foodList.filter { it.category.category == category }) { item ->
-                    foodItem(
+                    FoodItem(
                         modifier = Modifier
                             .clickable {
                                 navController

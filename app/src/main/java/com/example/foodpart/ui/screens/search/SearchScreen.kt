@@ -4,10 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,13 +25,15 @@ import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.foodList
-import com.example.foodpart.ui.components.foodItem
+import com.example.foodpart.ui.components.FoodItem
+
 @Composable
 fun SearchScreen(
     navController: NavController,
     viewModel: SearchViewModel
 ) {
     val text by viewModel.text.collectAsState()
+    val isError by viewModel.isError.collectAsState()
     Scaffold(
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
@@ -42,8 +42,8 @@ fun SearchScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "دنبال چی میگردی ؟",
-                        style = MaterialTheme.typography.h1
+                        text = if (!isError)"دنبال چی میگردی ؟" else "دنبال چیزی می گردی؟",
+                        style = MaterialTheme.typography.h2
                     )
                 },
                 backgroundColor = MaterialTheme.colors.background
@@ -86,7 +86,7 @@ fun SearchScreen(
 
 
                         items(foodList.filter { it.foodName.contains(text) }) { item ->
-                            foodItem(
+                            FoodItem(
                                 modifier = Modifier
                                     .clickable {
                                         navController
@@ -108,7 +108,7 @@ fun SearchScreen(
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = "اوپس چیزی پیدا نشد",
-                            style = MaterialTheme.typography.h3
+                            style = MaterialTheme.typography.body1
                         )
                     }
 
@@ -118,5 +118,4 @@ fun SearchScreen(
             } else viewModel.setError(false)
         }
     }
-    Spacer(modifier = Modifier.imePadding())
 }

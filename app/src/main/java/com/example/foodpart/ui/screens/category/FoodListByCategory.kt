@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.ui.components.foodItem
+import com.example.foodpart.ui.components.FoodItem
 
 @Composable
 fun FoodListByCategory(
@@ -37,7 +37,7 @@ fun FoodListByCategory(
         ) {
         items(foodListState) { item ->
 
-            foodItem(
+            FoodItem(
                 modifier = Modifier
                     .clickable(
                         interactionSource = indicationState,

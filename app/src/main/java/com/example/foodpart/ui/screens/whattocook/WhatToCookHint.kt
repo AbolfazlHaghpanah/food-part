@@ -46,7 +46,7 @@ fun WhatToCookHint(
             Text(
                 modifier = Modifier.padding(8.dp, 3.dp),
                 text = "راهنما",
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.body1
             )
             Spacer(
                 modifier = Modifier
@@ -77,7 +77,7 @@ fun WhatToCookHint(
             modifier = Modifier
                 .padding(8.dp, bottom = 16.dp),
             text = "کاربر گرامی مواد اولیه ی موجود را در قسمت “تو خونه چی داری ؟” وارد کرده و با علامت “،” از یکدیگر جدا کنید سپس کل زمانی که دارین را به دقیقه در بخش “چقدر وقت داری ؟” وارد کنین. سطح دستور پخت را انتخاب کرده و کلیک جستجو را بزنید تا با توجه به اطلاعات شما غذاهای پیشنهاد را نمایش دهیم.",
-            style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
+            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
         )
 
     }

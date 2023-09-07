@@ -73,7 +73,7 @@ fun FoodPartBottomNavigation(
                         modifier = Modifier
                             .wrapContentWidth(unbounded = true),
                         text = item.label,
-                        style = MaterialTheme.typography.subtitle2
+                        style = MaterialTheme.typography.subtitle1
                     )
                 },
                 selectedContentColor = MaterialTheme.colors.primary,

@@ -27,11 +27,11 @@ fun SearchTextField(
         onValueChange = {
             viewModel.SetText(it)
         },
-        textStyle = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start),
+        textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
         placeholder = {
             Text(
                 text = "اینجا بنویس ...",
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.body1
             )
         },
         colors = TextFieldDefaults

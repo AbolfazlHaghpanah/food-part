@@ -33,7 +33,8 @@ fun DifficultyList(
     ) {
         defficultyItemsList.forEach { item ->
             Row(
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
                 modifier = Modifier
                     .clickable(
                         interactionSource = interactionSource,

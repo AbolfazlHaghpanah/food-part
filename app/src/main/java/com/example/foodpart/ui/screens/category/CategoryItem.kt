@@ -64,7 +64,7 @@ fun CategoryItem(
 
         Text(
             text = category,
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.body1,
             color = if (isSelected) MaterialTheme.colors.primary
             else MaterialTheme.colors.onBackground
 

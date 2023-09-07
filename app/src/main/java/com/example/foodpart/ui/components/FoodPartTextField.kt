@@ -31,13 +31,13 @@ fun FoodPartTextField(
             Row {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.body1
                 )
                 Spacer(modifier = Modifier
                     .weight(1F))
                 Text(
                     text = placeholderCND.orEmpty(),
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.body1
                 )
             }
 
@@ -47,12 +47,12 @@ fun FoodPartTextField(
                 backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = MaterialTheme.colors.surface,
                 unfocusedIndicatorColor = MaterialTheme.colors.surface,
-                placeholderColor = MaterialTheme.colors.onBackground
+                placeholderColor = MaterialTheme.colors.onSurface
             ),
         shape = MaterialTheme.shapes.medium,
         textStyle = MaterialTheme
             .typography
-            .subtitle1
+            .body1
             .copy(textAlign = TextAlign.Start)
     )
 

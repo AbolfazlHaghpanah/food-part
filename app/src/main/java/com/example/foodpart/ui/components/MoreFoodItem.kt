@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun moreFoodItem(
+fun MoreFoodItem(
     modifier:Modifier = Modifier
 ) {
     Box(
@@ -39,7 +39,7 @@ fun moreFoodItem(
         ) {
             Text(
                 text = "بیشتر",
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.body1
             )
             Icon(imageVector = Icons.Rounded.KeyboardArrowLeft, contentDescription = "more")
         }

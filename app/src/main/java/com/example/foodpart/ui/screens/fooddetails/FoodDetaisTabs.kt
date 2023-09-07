@@ -111,7 +111,7 @@ fun FoodDetailsTab(
                                 .padding(16.dp)
                                 .fillMaxWidth(),
                             text = food.recipes,
-                            style = MaterialTheme.typography.subtitle2.copy(textAlign = TextAlign.Start)
+                            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
                         )
                     }
 
@@ -122,7 +122,7 @@ fun FoodDetailsTab(
                                 .padding(16.dp)
                                 .fillMaxWidth(),
                             text = food.recipes,
-                            style = MaterialTheme.typography.subtitle2.copy(textAlign = TextAlign.Start)
+                            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
                         )
                     }
 
@@ -133,7 +133,7 @@ fun FoodDetailsTab(
                                 .padding(16.dp)
                                 .fillMaxWidth(),
                             text = food.recipes,
-                            style = MaterialTheme.typography.subtitle2.copy(textAlign = TextAlign.Start)
+                            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
                         )
                     }
                 }
