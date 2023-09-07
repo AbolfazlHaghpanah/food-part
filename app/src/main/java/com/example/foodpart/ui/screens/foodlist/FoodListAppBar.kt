@@ -11,25 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun foodListAppBar(
-    navController : NavController,
-    appBarText :String
+fun FoodListAppBar(
+    navController: NavController,
+    appBarText: String
 ) {
-        TopAppBar (
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.onBackground
-        ) {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Rounded.KeyboardArrowRight,
-                    contentDescription = "Back"
-                )
-            }
-            Text(
-                text = appBarText,
-                style = MaterialTheme.typography.h1
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.onBackground
+    ) {
+        IconButton(onClick = {
+            navController.popBackStack()
+        }) {
+            Icon(
+                imageVector = Icons.Rounded.KeyboardArrowRight,
+                contentDescription = "Back"
             )
         }
+        Text(
+            text = appBarText,
+            style = MaterialTheme.typography.h2
+        )
+    }
 }

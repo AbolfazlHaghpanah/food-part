@@ -18,7 +18,7 @@ import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.screens.category.CategoryScreen
 import com.example.foodpart.ui.screens.fooddetails.FoodDetailsScreen
-import com.example.foodpart.ui.screens.foodlist.foodListScreen
+import com.example.foodpart.ui.screens.foodlist.FoodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.ProfileScreen
 import com.example.foodpart.ui.screens.search.SearchScreen
@@ -121,7 +121,7 @@ private fun NavGraphBuilder.mainNavGraph(
             ?: throw IllegalStateException("appbar was null")
 
         val description = backStackEntry.arguments?.getString("description")
-        foodListScreen(
+        FoodListScreen(
             navController,
             category,
             appBar,

@@ -1,6 +1,9 @@
 package com.example.foodpart.ui.components
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -14,18 +17,29 @@ import androidx.compose.ui.text.style.TextAlign
 fun FoodPartTextField(
     textFieldState: MutableState<String>,
     label: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    placeholderCND :String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions()
 ) {
     OutlinedTextField(
+        keyboardOptions = keyboardOptions,
         value = textFieldState.value,
         onValueChange = { it -> textFieldState.value = it },
         modifier = modifier
             .fillMaxWidth(),
         placeholder = {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.subtitle1
-            )
+            Row {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Spacer(modifier = Modifier
+                    .weight(1F))
+                Text(
+                    text = placeholderCND.orEmpty(),
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
 
         },
         colors = TextFieldDefaults
