@@ -1,6 +1,5 @@
 package com.example.foodpart.core
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.foodpart.R
 
 sealed class BottomNavigationItems(
@@ -20,7 +19,7 @@ sealed class BottomNavigationItems(
 
 }
 
-val bottomNavItems = listOf<BottomNavigationItems>(
+val bottomNavItems = listOf(
     BottomNavigationItems.Category,
     BottomNavigationItems.WhatToCook,
     BottomNavigationItems.Search,

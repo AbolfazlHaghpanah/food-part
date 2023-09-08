@@ -57,7 +57,7 @@ fun SearchTextField(
             if (text != "" || textState != "")
                 IconButton(onClick = {
                     textState = ""
-                    viewModel.SetText("")
+                    viewModel.setText("")
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Clear,
@@ -68,7 +68,7 @@ fun SearchTextField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = {
-                viewModel.SetText(textState)
+                viewModel.setText(textState)
             }
         )
     )

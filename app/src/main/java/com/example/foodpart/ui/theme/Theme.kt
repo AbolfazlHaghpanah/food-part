@@ -4,7 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 
-private val DarkColorScheme = darkColors(
+private val darkColorScheme = darkColors(
     primary = primary,
     secondary = secondary,
     background = background,
@@ -24,7 +24,7 @@ fun FoodPartTheme(
     MaterialTheme(
         typography = Typography,
         content = content,
-        colors = DarkColorScheme,
+        colors = darkColorScheme,
         shapes = Shapes
     )
 }

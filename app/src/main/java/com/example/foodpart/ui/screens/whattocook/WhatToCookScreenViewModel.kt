@@ -8,8 +8,8 @@ class WhatToCookScreenViewModel : ViewModel() {
     private val _isHintShow = MutableStateFlow(true)
     val isHintShow = _isHintShow.asStateFlow()
 
-    private val _selectedDifficultyItems: MutableStateFlow<DefficultyItems> =
-        MutableStateFlow(DefficultyItems.noMatter)
+    private val _selectedDifficultyItems: MutableStateFlow<DifficultyItems> =
+        MutableStateFlow(DifficultyItems.NoMatter)
     val selectedDifficultyItems = _selectedDifficultyItems.asStateFlow()
 
     private val _itemsText = MutableStateFlow("")
@@ -23,7 +23,7 @@ class WhatToCookScreenViewModel : ViewModel() {
         _isHintShow.value = isHintShow
     }
 
-    fun setSelectedDifficultyItems(difficultyItems: DefficultyItems) {
+    fun setSelectedDifficultyItems(difficultyItems: DifficultyItems) {
         _selectedDifficultyItems.value = difficultyItems
     }
 

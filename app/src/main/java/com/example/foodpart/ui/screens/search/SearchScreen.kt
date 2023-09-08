@@ -74,7 +74,7 @@ fun SearchScreen(
                         .fillMaxWidth()
                 )
 
-                if (foodList.filter { it.foodName.contains(text) }.isNotEmpty()) {
+                if (foodList.any { it.foodName.contains(text) }) {
                     viewModel.setError(false)
                     LazyVerticalGrid(
                         verticalArrangement = Arrangement.spacedBy(16.dp),

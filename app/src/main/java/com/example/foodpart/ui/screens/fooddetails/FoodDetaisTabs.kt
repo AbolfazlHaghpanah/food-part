@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 fun FoodDetailsTab(
     food: FoodData
 ) {
-    val tabList = listOf<String>("مواد اولیه", "طرز تهیه", "اطلاعات بیشتر")
+    val tabList = listOf("مواد اولیه", "طرز تهیه", "اطلاعات بیشتر")
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
     Column {
