@@ -68,7 +68,8 @@ fun FoodListByCategory(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center),
-                verticalArrangement = Arrangement.spacedBy(21.dp)
+                verticalArrangement = Arrangement.spacedBy(21.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "غذایی برای نمایش وجود ندارد",
