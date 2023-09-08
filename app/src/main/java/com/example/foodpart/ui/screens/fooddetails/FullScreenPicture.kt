@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.fooddetails
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -64,6 +65,9 @@ fun FullScreenPicture(
             }
         }
     ) {
+        BackHandler {
+            isFullImage.value = false
+        }
         AnimatedVisibility(
             visible = isFullImage.value,
             enter = fadeIn(),
