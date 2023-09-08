@@ -31,7 +31,7 @@ fun DifficultyList(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        defficultyItemsList.forEach { item ->
+        difficultyItemsList.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp),

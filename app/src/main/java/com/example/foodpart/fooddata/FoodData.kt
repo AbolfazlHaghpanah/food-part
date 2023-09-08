@@ -35,7 +35,7 @@ enum class Difficulties(val difficulty: String) {
 }
 
 
-val foodList = listOf<FoodData>(
+val foodList = listOf(
     FoodData(
         "قیمه بادمجان",
         "مواد لازم:... ",

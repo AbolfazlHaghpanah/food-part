@@ -7,16 +7,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,8 +30,8 @@ import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.Categories
-import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.FoodPartTextField
 
 @SuppressLint("SuspiciousIndentation", "FlowOperatorInvokedInComposition")
 @Composable
@@ -34,12 +40,16 @@ fun WhatToCookScreen(
     viewModel: WhatToCookScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
 ) {
+    var isItemTextValid by remember {
+        mutableStateOf(true)
+    }
+    val textFieldFocusManger = LocalFocusManager.current
 
-    val itemTextState = remember {
+    var itemTextState by remember {
         mutableStateOf("")
     }
 
-    val timeTextState = remember {
+    var timeTextState by remember {
         mutableStateOf("")
     }
     Scaffold(
@@ -69,12 +79,23 @@ fun WhatToCookScreen(
 
             WhatToCookHint()
 
+
             FoodPartTextField(
-                textFieldState = itemTextState,
-                label = "چی تو خونه داری ؟",
+                value = itemTextState,
+                placeholder = "چی تو خونه داری ؟",
                 modifier = Modifier
-                    .height(56.dp)
+                    .height(56.dp),
+                onValueChange = {
+                    itemTextState = it
+                },
+                isError = !isItemTextValid,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = {
+                    textFieldFocusManger.moveFocus(FocusDirection.Down)
+                }),
+                errorMassage = "این فیلد باید پر بشه!"
             )
+
 
             Text(
                 text = "با ، جدا کنید ",
@@ -84,11 +105,16 @@ fun WhatToCookScreen(
             )
 
             FoodPartTextField(
-                textFieldState = timeTextState,
-                label = "چقد وقت داری؟",
+                value = timeTextState,
+                placeholder = "چقد وقت داری؟",
+                onValueChange = { timeTextState = it },
                 modifier = Modifier.height(56.dp),
                 placeholderCND = "دقیقه",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions()
             )
 
             Text(
@@ -105,21 +131,25 @@ fun WhatToCookScreen(
                     .weight(1F)
             )
 
-            FoodPartButton(onClick = {
-                viewModel.setItemText(itemTextState.value)
-                viewModel.setTimeText(timeTextState.value)
-                navController.navigate(
-                    AppScreens.FoodList.createRoute(
-                        Categories.MAIN.category,
-                        "چی بپزم؟",
-                        viewModel.getDescriptionText()
-                    )
-                )
-            },
-                text = "جستجو",
-                enabled = {
-                    itemTextState.value.isNotEmpty() && timeTextState.value.isNotEmpty()
-                }
+            FoodPartButton(
+                onClick = {
+                    textFieldFocusManger.clearFocus()
+                    if (itemTextState.isNotEmpty()) {
+                        viewModel.setItemText(itemTextState)
+                        viewModel.setTimeText(timeTextState)
+                        navController.navigate(
+                            AppScreens.FoodList.createRoute(
+                                Categories.MAIN.category,
+                                "چی بپزم؟",
+                                viewModel.getDescriptionText()
+                            )
+                        )
+
+                    } else {
+                        isItemTextValid = false
+                    }
+                },
+                text = "جستجو"
             )
 
 

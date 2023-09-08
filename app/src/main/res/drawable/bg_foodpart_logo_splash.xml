@@ -3,9 +3,10 @@
     <item>
         <color android:color="#17171A" />
     </item>
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/logodark1" />
-    </item>
+    <item
+        android:height="64dp"
+        android:width="64dp"
+        android:drawable="@drawable/logodark1"
+        android:gravity="center"
+        />
 </layer-list>

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -16,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.SplashScreenViewModel
 import com.example.foodpart.ui.screens.category.CategoryScreen
 import com.example.foodpart.ui.screens.fooddetails.FoodDetailsScreen
 import com.example.foodpart.ui.screens.foodlist.FoodListScreen
@@ -29,9 +32,14 @@ import com.example.foodpart.ui.theme.FoodPartTheme
 
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
+    private val viewModel: SplashScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         setContent {
             FoodPartTheme {
                 val navController = rememberNavController()

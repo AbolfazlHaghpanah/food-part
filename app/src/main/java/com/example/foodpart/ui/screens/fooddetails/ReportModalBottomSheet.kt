@@ -9,14 +9,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.FoodPartTextField
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -24,11 +26,14 @@ import kotlinx.coroutines.launch
 fun ReportModalBottomSheet(
     bottomSheetState: ModalBottomSheetState
 ) {
-    val reportTextState: MutableState<String> = remember {
+
+    val focusManger = LocalFocusManager.current
+    var reportTextState by remember {
         mutableStateOf("")
     }
 
     val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colors.secondary)
@@ -43,8 +48,9 @@ fun ReportModalBottomSheet(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .height(84.dp),
-            textFieldState = reportTextState,
-            label = "اینجا بنویسید "
+            value = reportTextState,
+            onValueChange = { reportTextState = it },
+            placeholder = "اینجا بنویسید "
         )
 
         FoodPartButton(
@@ -52,6 +58,7 @@ fun ReportModalBottomSheet(
                 .padding(top = 16.dp),
             onClick = {
                 scope.launch {
+                    focusManger.clearFocus()
                     bottomSheetState.hide()
                 }
             },

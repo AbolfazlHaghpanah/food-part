@@ -13,7 +13,7 @@ class SearchViewModel : ViewModel() {
     val text = _text.asStateFlow()
 
 
-    fun SetText(text: String) {
+    fun setText(text: String) {
         _text.value = text
     }
 

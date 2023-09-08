@@ -1,6 +1,6 @@
 package com.example.foodpart.ui.screens.signup
 
-import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,16 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -33,9 +30,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -43,16 +43,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.FoodPartTextField
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignUpScreen(
     navController: NavController
 ) {
+    BackHandler {
+        navController.popBackStack(AppScreens.Profile.route, inclusive = false)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
             )
             {
                 IconButton(onClick = {
@@ -76,14 +81,16 @@ fun SignUpScreen(
                 )
             }
         },
-        content = {
+        content = { paddingValues ->
+            val focusManager = LocalFocusManager.current
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(start = 24.dp, end = 24.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
                     .background(color = MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Center
             ) {
                 Row(
                     Modifier
@@ -136,108 +143,94 @@ fun SignUpScreen(
                 var username by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
                 var repeatPass by remember { mutableStateOf("") }
-
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
-
-                    placeholder = {
-                        Text(
-                            text = "نام کاربری",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-                    placeholder = {
-                        Text(
-                            text = "رمز عبور",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = repeatPass,
-                    onValueChange = { repeatPass = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-                    placeholder = {
-                        Text(
-                            text = "تکرار رمز عبور",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    enabled = username.isNotEmpty() && password.isNotEmpty() && password == repeatPass,
-                    onClick = {
-                        navController.navigate(AppScreens.Profile.route)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(
-                        text = "تایید",
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.button,
-                        color = MaterialTheme.colors.onBackground,
-                    )
+                var isUsernameVaild by remember {
+                    mutableStateOf(true)
                 }
+                var isPasswordVaild by remember {
+                    mutableStateOf(true)
+                }
+                var isRepeatPasswordVaild by remember {
+                    mutableStateOf(true)
+                }
+
+
+                FoodPartTextField(
+                    value = username,
+                    onValueChange = {
+                        username = it
+                        isUsernameVaild = true
+                    },
+                    placeholder = "نام کاربری",
+                    isError = !isUsernameVaild,
+                    errorMassage = "نام کاربری را وارد کنید",
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    })
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FoodPartTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        isPasswordVaild = true
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    ),
+                    placeholder = "رمز عبور",
+                    isError = !isPasswordVaild,
+                    errorMassage = if (password == repeatPass) "رمز عبور را وارد کنید" else null,
+                    keyboardActions = KeyboardActions(onNext = {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    })
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FoodPartTextField(
+                    value = repeatPass,
+                    onValueChange = {
+                        repeatPass = it
+                        isRepeatPasswordVaild = true
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    placeholder = "تکرار رمز عبور",
+                    isError = !isRepeatPasswordVaild,
+                    errorMassage = if (repeatPass.isEmpty()) "رمزعبور را مجدد وارد کنید"
+                    else "رمز عبور با رمز عبور مجدد یکسان نیست",
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                    })
+
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FoodPartButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        when ("") {
+                            username -> isUsernameVaild = false
+                            password -> isPasswordVaild = false
+                            repeatPass -> isRepeatPasswordVaild = false
+                            else -> {
+                                if (repeatPass == password) navController.navigate(AppScreens.Profile.route)
+                                else isRepeatPasswordVaild = false
+                            }
+                        }
+                    },
+                    text = "تایید"
+                )
+
 
                 Spacer(modifier = Modifier.height(8.dp))
 
