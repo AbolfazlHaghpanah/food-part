@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.profile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -29,6 +28,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
+import com.example.foodpart.ui.components.FoodPartButton
 
 @Composable
 fun ProfileScreen(
@@ -52,6 +52,9 @@ fun ProfileScreen(
             }
         },
         content = {
+            BackHandler {
+                navController.popBackStack(route = AppScreens.Category.route, inclusive = false)
+            }
             Column(
                 modifier = Modifier
                     .padding(start = 24.dp, end = 24.dp)
@@ -63,7 +66,7 @@ fun ProfileScreen(
             ) {
                 Row(
                     Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         modifier = Modifier
@@ -91,26 +94,10 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(17.dp))
 
-                Button(
-                    onClick = {
-                        navController.navigate(AppScreens.Login.route)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(327.dp)
-                        .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(
-                        text = "وارد شوید",
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.button,
-                        color = MaterialTheme.colors.onBackground,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(530.dp))
+                FoodPartButton(
+                    onClick = { navController.navigate(AppScreens.Login.route) },
+                    text = "وارد شوید"
+                )
 
             }
         }
