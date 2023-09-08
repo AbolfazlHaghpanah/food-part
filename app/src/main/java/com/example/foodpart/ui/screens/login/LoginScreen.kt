@@ -53,7 +53,8 @@ fun LoginScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
             )
             {
                 IconButton(onClick = {
@@ -90,7 +91,7 @@ fun LoginScreen(
                     .padding(paddingValues)
                     .background(color = MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Center
             ) {
                 Row(
                     Modifier

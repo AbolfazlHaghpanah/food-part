@@ -40,7 +40,8 @@ fun ProfileScreen(
         },
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
             ) {
                 Text(
                     text = "حساب کاربری",
