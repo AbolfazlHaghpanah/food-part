@@ -1,6 +1,6 @@
 package com.example.foodpart.ui.screens.signup
 
-import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +19,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -43,12 +41,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.ui.components.FoodPartTextField
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignUpScreen(
     navController: NavController
 ) {
+    BackHandler {
+        navController.popBackStack(AppScreens.Profile.route, inclusive = false)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,14 +77,15 @@ fun SignUpScreen(
                 )
             }
         },
-        content = {
+        content = { paddingValues ->
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(start = 24.dp, end = 24.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
                     .background(color = MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Top
             ) {
                 Row(
                     Modifier
@@ -137,90 +139,38 @@ fun SignUpScreen(
                 var password by remember { mutableStateOf("") }
                 var repeatPass by remember { mutableStateOf("") }
 
-                OutlinedTextField(
+                FoodPartTextField(
                     value = username,
                     onValueChange = { username = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
-
-                    placeholder = {
-                        Text(
-                            text = "نام کاربری",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    placeholder = "نام کاربری"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                OutlinedTextField(
+                FoodPartTextField(
                     value = password,
                     onValueChange = { password = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-                    placeholder = {
-                        Text(
-                            text = "رمز عبور",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    placeholder = "رمز عبور"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                OutlinedTextField(
+                FoodPartTextField(
                     value = repeatPass,
                     onValueChange = { repeatPass = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-                    placeholder = {
-                        Text(
-                            text = "تکرار رمز عبور",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    placeholder = "تکرار رمز عبور"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
-                    enabled = username.isNotEmpty() && password.isNotEmpty() && password == repeatPass,
+                    enabled = username.isNotEmpty()
+                            && password.isNotEmpty()
+                            && password == repeatPass,
                     onClick = {
                         navController.navigate(AppScreens.Profile.route)
                     },

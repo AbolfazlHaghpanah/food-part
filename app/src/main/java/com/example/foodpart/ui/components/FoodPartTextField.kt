@@ -17,13 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun FoodPartTextField(
     value: String,
-    onValueChange : (String)->Unit,
+    onValueChange: (String)->Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
     placeholderCND: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     keyboardActions: KeyboardActions = KeyboardActions(),
-    visualTransformation : VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     OutlinedTextField(
         keyboardOptions = keyboardOptions,
