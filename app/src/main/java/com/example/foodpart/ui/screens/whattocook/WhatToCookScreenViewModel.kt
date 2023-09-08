@@ -36,7 +36,14 @@ class WhatToCookScreenViewModel : ViewModel() {
     }
 
     fun getDescriptionText(): String {
-        return "نتایج جستجو با${itemsText.value}\n در مدت زمان ${timeText.value} با درجه سختی ${selectedDifficultyItems.value.name}"
+        return if (timeText.value.isNotEmpty()) {
+            "نتایج جستجو با${itemsText.value}" +
+                    "\n در مدت زمان ${timeText.value} با درجه سختی ${selectedDifficultyItems.value.name}"
+
+        } else {
+            "نتایج جستجو با ${itemsText.value}\n" +
+                    "با درجه سختی ${selectedDifficultyItems.value.name}"
+        }
     }
 
 }
