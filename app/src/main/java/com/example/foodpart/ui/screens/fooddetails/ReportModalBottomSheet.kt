@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 fun ReportModalBottomSheet(
     bottomSheetState: ModalBottomSheetState
 ) {
+    val focusManger = LocalFocusManager.current
     var reportTextState by remember {
         mutableStateOf("")
     }
@@ -54,6 +56,7 @@ fun ReportModalBottomSheet(
                 .padding(top = 16.dp),
             onClick = {
                 scope.launch {
+                    focusManger.clearFocus()
                     bottomSheetState.hide()
                 }
             },
