@@ -26,12 +26,14 @@ import kotlinx.coroutines.launch
 fun ReportModalBottomSheet(
     bottomSheetState: ModalBottomSheetState
 ) {
+
     val focusManger = LocalFocusManager.current
     var reportTextState by remember {
         mutableStateOf("")
     }
 
     val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colors.secondary)
@@ -47,7 +49,7 @@ fun ReportModalBottomSheet(
                 .padding(top = 16.dp)
                 .height(84.dp),
             value = reportTextState,
-            onValueChange = {reportTextState = it},
+            onValueChange = { reportTextState = it },
             placeholder = "اینجا بنویسید "
         )
 

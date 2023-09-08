@@ -2,6 +2,7 @@ package com.example.foodpart.ui.screens.fooddetails
 
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +45,7 @@ import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.FoodDifficultyChip
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.MoreFoodItem
+import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterialApi::class)
@@ -51,6 +54,7 @@ fun FoodDetailsScreen(
     navController: NavController,
     id: Int
 ) {
+
     val food = foodList.find { it.id == id }!!
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -58,7 +62,18 @@ fun FoodDetailsScreen(
         mutableStateOf(false)
     }
     val scaffoldState = rememberScaffoldState()
-
+    val scope = rememberCoroutineScope()
+    BackHandler {
+        if (bottomSheetState.isVisible)
+            scope.launch {
+                bottomSheetState.hide()
+            }
+        else
+            navController.popBackStack(
+                route = AppScreens.Category.route,
+                inclusive = false
+            )
+    }
 
 
     if (isFullImage.value) FullScreenPicture(
@@ -174,14 +189,14 @@ fun FoodDetailsScreen(
                                         .padding(end = 8.dp)
                                         .width(80.dp),
                                     onClick = {
-                                    navController.navigate(
-                                        AppScreens.FoodList.createRoute(
-                                            category = food.category.category,
-                                            appBar = item,
-                                            description = null
+                                        navController.navigate(
+                                            AppScreens.FoodList.createRoute(
+                                                category = food.category.category,
+                                                appBar = item,
+                                                description = null
+                                            )
                                         )
-                                    )
-                                }) {
+                                    }) {
                                     Text(
                                         text = item,
                                         style = MaterialTheme.typography.caption,
