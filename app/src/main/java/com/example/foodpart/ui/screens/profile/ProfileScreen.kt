@@ -1,6 +1,5 @@
 package com.example.foodpart.ui.screens.profile
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +30,6 @@ import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
     navController: NavController
@@ -56,11 +54,12 @@ fun ProfileScreen(
         content = {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(start = 24.dp, end = 24.dp)
+                    .fillMaxSize()
+                    .padding(it)
                     .background(color = MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Top
             ) {
                 Row(
                     Modifier.fillMaxWidth(),

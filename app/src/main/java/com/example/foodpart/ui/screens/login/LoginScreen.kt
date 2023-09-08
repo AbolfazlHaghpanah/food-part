@@ -2,7 +2,7 @@ package com.example.foodpart.ui.screens.login
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,13 +23,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.ui.components.FoodPartTextField
 
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
     navController: NavController
 ) {
+    BackHandler {
+        navController.popBackStack(AppScreens.Profile.route, inclusive = false)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,14 +59,15 @@ fun LoginScreen(
                 )
             }
         },
-        content = {
+        content = { paddingValues ->
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(start = 24.dp, end = 24.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
                     .background(color = MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Top
             ) {
                 Row(
                     Modifier
@@ -119,56 +122,20 @@ fun LoginScreen(
                 var username by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
 
-                OutlinedTextField(
+                FoodPartTextField(
                     value = username,
                     onValueChange = { username = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
-
-                    placeholder = {
-                        Text(
-                            text = "نام کاربری",
-                            style = MaterialTheme.typography.body1
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    placeholder = "نام کاربری"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                OutlinedTextField(
+                FoodPartTextField(
                     value = password,
                     onValueChange = { password = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(328.dp)
-                        .height(56.dp),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-                    placeholder = {
-                        Text(
-                            text = "رمز ورود",
-                            style = MaterialTheme.typography.body1,
-                        )
-                    },
-                    colors = TextFieldDefaults
-                        .textFieldColors(
-                            focusedIndicatorColor = MaterialTheme.colors.surface,
-                            unfocusedIndicatorColor = MaterialTheme.colors.surface
-                        ),
-                    shape = MaterialTheme.shapes.medium,
-                    textStyle = MaterialTheme.typography.subtitle1
-                        .copy(textAlign = TextAlign.Start)
+                    placeholder = "رمز ورود"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -215,7 +182,6 @@ fun LoginScreen(
                         style = MaterialTheme.typography.subtitle1,
                         color = Color(0xFF1976D2),
                     )
-
 
                     Text(
                         text = "کنید",
