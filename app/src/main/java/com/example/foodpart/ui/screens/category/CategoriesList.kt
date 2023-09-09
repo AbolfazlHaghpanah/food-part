@@ -12,11 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.foodpart.fooddata.Categories
 
 @Composable
 fun CategoriesList(
-    viewModel: CategoryScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: CategoryScreenViewModel = viewModel()
 ) {
     val indicationState = remember { MutableInteractionSource() }
     val categorySelectedState by viewModel.categoryFlow.collectAsState()

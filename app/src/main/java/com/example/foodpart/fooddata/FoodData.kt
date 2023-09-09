@@ -23,7 +23,26 @@ enum class Categories(
     ),
     SONATI(
         "سنتی", null
+    ),
+    SONAT1(
+        "سنتی", null
+    ),
+    SONAT2(
+        "سنتی", null
+    ),
+    SONAT3(
+        "سنتی", null
+    ),
+    SONAT4(
+        "سنتی", null
+    ),
+    SONAT5(
+        "سنتی", null
+    ), SONAT6(
+        "سنتی", null
     )
+
+
 }
 
 

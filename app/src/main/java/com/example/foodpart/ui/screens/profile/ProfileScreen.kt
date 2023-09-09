@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,55 +51,50 @@ fun ProfileScreen(
                 )
             }
         },
-        content = {
-            BackHandler {
-                navController.popBackStack(route = AppScreens.Category.route, inclusive = false)
-            }
-            Column(
-                modifier = Modifier
-                    .padding(start = 24.dp, end = 24.dp)
-                    .fillMaxSize()
-                    .padding(it)
-                    .background(color = MaterialTheme.colors.background),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+    ) {
+        BackHandler {
+            navController.popBackStack(route = AppScreens.Category.route, inclusive = false)
+        }
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .padding(start = 24.dp, end = 24.dp,top = 40.dp)
+                .fillMaxSize()
+                .background(color = MaterialTheme.colors.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Row(
+                Modifier
+                    .padding(bottom = 17.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .padding(1.dp)
-                            .width(64.dp)
-                            .height(64.dp)
-                            .clip(RoundedCornerShape(59.dp)),
-                        painter = painterResource(R.drawable.profile_photo),
-                        contentDescription = "profile photo",
-                        alignment = Alignment.CenterStart
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Text(
-                        text = "مهمان",
-                        modifier = Modifier
-                            .width(35.dp)
-                            .height(20.dp),
-                        color = MaterialTheme.colors.onBackground,
-                        style = MaterialTheme.typography.body2,
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(17.dp))
-
-                FoodPartButton(
-                    onClick = { navController.navigate(AppScreens.Login.route) },
-                    text = "وارد شوید"
+                Image(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .width(64.dp)
+                        .height(64.dp)
+                        .clip(RoundedCornerShape(59.dp)),
+                    painter = painterResource(R.drawable.profile_photo),
+                    contentDescription = "profile photo",
+                    alignment = Alignment.CenterStart
                 )
 
+                Text(
+                    text = "مهمان",
+                    color = MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.body2,
+                )
             }
+
+
+            FoodPartButton(
+                onClick = { navController.navigate(AppScreens.Login.route) },
+                text = "وارد شوید"
+            )
+
         }
-    )
+    }
+
 }

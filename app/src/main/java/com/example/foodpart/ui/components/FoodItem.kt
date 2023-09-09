@@ -30,8 +30,8 @@ fun FoodItem(
         Image(
             modifier = Modifier
                 .clip(shape = MaterialTheme.shapes.large)
-                .width(136.dp)
-                .height(84.dp),
+                .width(135.dp)
+                .height(85.dp),
             painter = painterResource(id = R.drawable.food_item),
             contentDescription = "",
             contentScale = ContentScale.Crop,
@@ -48,7 +48,7 @@ fun FoodItem(
                 style = MaterialTheme.typography.body1
             )
             Text(
-                modifier = Modifier.padding(8.dp, 4.dp),
+                modifier = Modifier.padding(8.dp, 0.dp),
                 text = time,
                 style = MaterialTheme.typography.subtitle1
             )

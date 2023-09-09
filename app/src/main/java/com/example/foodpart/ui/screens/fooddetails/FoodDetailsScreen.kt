@@ -128,13 +128,13 @@ fun FoodDetailsScreen(
                 LazyColumn(
                     modifier = Modifier
                         .padding(paddingValues),
-                    contentPadding = PaddingValues(16.dp)
                 ) {
                     item {
                         Image(
                             painter = painterResource(id = R.drawable.food_image_details),
                             contentDescription = "Food Photo",
                             modifier = Modifier
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                                 .clip(shape = MaterialTheme.shapes.large)
                                 .fillMaxWidth()
                                 .height(250.dp)
@@ -149,6 +149,8 @@ fun FoodDetailsScreen(
 
                     item {
                         Row(
+                            modifier = Modifier
+                                .padding(16.dp,0.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
@@ -162,7 +164,7 @@ fun FoodDetailsScreen(
                             )
 
                             Text(
-                                modifier = Modifier.padding(8.dp, 0.dp),
+                                modifier = Modifier.padding(16.dp, 0.dp),
                                 text = "برای ۴ نفر",
                                 style = MaterialTheme.typography.caption
                             )
@@ -181,6 +183,8 @@ fun FoodDetailsScreen(
 
                     item {
                         Row(
+                            modifier = Modifier
+                                .padding(16.dp,0.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             food.meals.forEach { item ->
@@ -224,13 +228,15 @@ fun FoodDetailsScreen(
                     }
                     item {
                         Text(
+                            modifier = Modifier
+                                .padding(top = 11.dp, start = 24.dp, bottom = 16.dp),
                             text = "بیشتر از این دسته",
                             style = MaterialTheme.typography.h3
                         )
                     }
                     item {
                         LazyRow(
-                            contentPadding = PaddingValues(16.dp),
+                            contentPadding = PaddingValues(end = 16.dp,start = 16.dp, bottom = 24.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -239,7 +245,6 @@ fun FoodDetailsScreen(
                                 .filter { foodList.indexOf(it) <= 5 }) { item ->
                                 FoodItem(
                                     modifier = Modifier
-                                        .padding(8.dp)
                                         .clickable {
                                             navController.navigate(
                                                 AppScreens.FoodDetails.createRoute(

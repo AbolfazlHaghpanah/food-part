@@ -90,9 +90,9 @@ fun FoodListScreen(
                     .fillMaxWidth(),
                 columns = GridCells
                     .Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(40.dp,0.dp,40.dp,16.dp)
             ) {
 
                 if (description != null) {

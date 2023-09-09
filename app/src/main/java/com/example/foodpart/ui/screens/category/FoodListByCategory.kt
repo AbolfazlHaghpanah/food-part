@@ -40,10 +40,9 @@ fun FoodListByCategory(
             modifier = Modifier
                 .fillMaxWidth(),
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-
+            contentPadding = PaddingValues(40.dp,16.dp),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
             items(foodListState) { item ->
 

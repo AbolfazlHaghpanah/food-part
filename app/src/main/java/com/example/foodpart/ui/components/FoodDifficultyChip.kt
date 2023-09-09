@@ -52,7 +52,7 @@ fun FoodDifficultyChip(
                 Difficulties.HARD -> red
             }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = food.difficulty.difficulty,
             style = MaterialTheme.typography.caption
