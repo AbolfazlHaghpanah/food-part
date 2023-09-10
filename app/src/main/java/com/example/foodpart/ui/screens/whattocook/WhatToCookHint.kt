@@ -46,7 +46,7 @@ fun WhatToCookHint(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                modifier = Modifier.padding(8.dp, 3.dp),
+                modifier = Modifier.padding(8.dp),
                 text = "راهنما",
                 style = MaterialTheme.typography.body1
             )
@@ -77,7 +77,7 @@ fun WhatToCookHint(
         }
         if (isHintShow) Text(
             modifier = Modifier
-                .padding(8.dp, bottom = 16.dp),
+                .padding(bottom = 24.dp, start = 8.dp, end = 8.dp),
             text = stringResource(R.string.what_to_cook_hint),
             style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
         )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -52,7 +53,6 @@ fun SearchScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -60,6 +60,7 @@ fun SearchScreen(
         ) {
             SearchTextField(
                 modifier = Modifier
+                    .padding(16.dp, 0.dp)
                     .fillMaxWidth(),
                 viewModel = viewModel,
             )
@@ -71,15 +72,17 @@ fun SearchScreen(
                     style = MaterialTheme.typography.subtitle1
                         .copy(textAlign = TextAlign.Start),
                     modifier = Modifier
+                        .padding(16.dp, 0.dp)
                         .fillMaxWidth()
                 )
 
                 if (foodList.any { it.foodName.contains(text) }) {
                     viewModel.setError(false)
                     LazyVerticalGrid(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(24.dp),
                         columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(bottom = 40.dp, start = 40.dp, end = 40.dp)
                     ) {
 
 
