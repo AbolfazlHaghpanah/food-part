@@ -28,18 +28,10 @@ fun FoodPartTextField(
     keyboardActions: KeyboardActions = KeyboardActions(),
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    errorMassage : String? = null
+    errorMassage: String? = null
 ) {
 
     Column {
-        if (isError && errorMassage != null){
-            Text(
-                text = errorMassage,
-                style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Start),
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
 
         OutlinedTextField(
 
@@ -82,6 +74,14 @@ fun FoodPartTextField(
             keyboardOptions = keyboardOptions,
             isError = isError,
         )
+        if (isError && errorMassage != null) {
+            Text(
+                text = errorMassage,
+                style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Start),
+                color = MaterialTheme.colors.error,
+                modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+            )
+        }
     }
 
 
