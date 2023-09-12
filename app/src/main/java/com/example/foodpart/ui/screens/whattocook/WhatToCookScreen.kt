@@ -14,6 +14,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ fun WhatToCookScreen(
     viewModel: WhatToCookScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
 ) {
+    val isHintShow by viewModel.isHintShow.collectAsState()
     var isItemTextValid by remember {
         mutableStateOf(true)
     }
@@ -77,6 +79,7 @@ fun WhatToCookScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
+            if (isHintShow)
             WhatToCookHint()
 
 

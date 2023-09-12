@@ -13,10 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +25,6 @@ import com.example.foodpart.R
 fun WhatToCookHint(
     viewModel: WhatToCookScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val isHintShow by viewModel.isHintShow.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,27 +51,19 @@ fun WhatToCookHint(
                     .weight(1F)
             )
 
-            if (isHintShow) {
-                IconButton(
-                    onClick = { viewModel.setHintShow(false) }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Clear,
-                        contentDescription = "close"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { viewModel.setHintShow(true) }) {
-                    Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowDown,
-                        contentDescription = "hint"
-                    )
-                }
+
+
+            IconButton(
+                onClick = { viewModel.setHintShow(false) }) {
+                Icon(
+                    imageVector = Icons.Rounded.Clear,
+                    contentDescription = "hint"
+                )
             }
 
 
         }
-        if (isHintShow) Text(
+        Text(
             modifier = Modifier
                 .padding(bottom = 24.dp, start = 8.dp, end = 8.dp),
             text = stringResource(R.string.what_to_cook_hint),

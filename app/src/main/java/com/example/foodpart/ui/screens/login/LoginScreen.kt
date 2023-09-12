@@ -1,6 +1,7 @@
 package com.example.foodpart.ui.screens.login
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -47,11 +50,12 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoginScreen(
     navController: NavController
 ) {
-
+    val focusManager = LocalFocusManager.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isUsernameValid by remember {
@@ -60,6 +64,7 @@ fun LoginScreen(
     var isPasswordValid by remember {
         mutableStateOf(true)
     }
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -90,22 +95,27 @@ fun LoginScreen(
             }
         },
     ) { paddingValues ->
-        val focusManager = LocalFocusManager.current
+
         BackHandler {
             navController.popBackStack(AppScreens.Profile.route, inclusive = false)
         }
         Column(
             modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp)
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(start = 24.dp, end = 24.dp)
                 .background(color = MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
+
+            Spacer(
+                modifier = Modifier
+                    .height(66.dp)
+            )
             Box(
                 Modifier
-                    .padding(top = 60.dp,bottom = 80.dp)
                     .width(75.dp)
                     .height(75.dp)
                     .padding(8.dp)
@@ -124,6 +134,11 @@ fun LoginScreen(
                     contentDescription = "Icon"
                 )
             }
+
+            Spacer(
+                modifier = Modifier
+                    .height(88.dp)
+            )
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.Start
@@ -193,7 +208,6 @@ fun LoginScreen(
                     text = "تایید"
                 )
             }
-
             Row(
                 modifier = Modifier
                     .align(Alignment.End)
@@ -220,8 +234,10 @@ fun LoginScreen(
                     color = MaterialTheme.colors.onBackground,
                 )
             }
-
         }
-    }
 
+
+    }
 }
+
+
