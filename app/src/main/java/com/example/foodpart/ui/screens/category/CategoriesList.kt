@@ -12,33 +12,34 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.foodpart.fooddata.Categories
 
 @Composable
 fun CategoriesList(
-    viewModel: CategoryScreenViewModel = viewModel()
+    viewModel: CategoryScreenViewModel = hiltViewModel()
 ) {
     val indicationState = remember { MutableInteractionSource() }
-    val categorySelectedState by viewModel.categoryFlow.collectAsState()
+    val categories by viewModel.category.collectAsState()
+    val selectedCategoryId by viewModel.selectedCategoryId.collectAsState()
     LazyRow(
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(Categories.values()) { item ->
+        items(categories) { item ->
             CategoryItem(
-                category = item.category,
-                isSelected = categorySelectedState == item,
+                category = item.name,
+                isSelected = selectedCategoryId?.id == item.id,
                 modifier = Modifier
                     .clickable(
                         interactionSource = indicationState,
                         indication = null
                     ) {
-                        viewModel.setCategory(item)
-                        viewModel.setSubCategory("")
-                        viewModel.updateFoodListByCategory()
+                        viewModel.setSelectedCategoryId(item)
 
-                    }
+                    },
+                image = item.image
             )
         }
     }

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 
@@ -34,7 +35,7 @@ fun FoodListByCategory(
 ) {
     val indicationState = remember { MutableInteractionSource() }
 
-    val foodListState by viewModel.foodListByCategoryFlow.collectAsState()
+    val foodListState = emptyList<FoodData>()
     if (foodListState.isNotEmpty()) {
         LazyVerticalGrid(
             modifier = Modifier
@@ -78,7 +79,9 @@ fun FoodListByCategory(
                     modifier = Modifier
                         .width(130.dp)
                         .height(45.dp),
-                    onClick = { },
+                    onClick = {
+                              viewModel.getCategory()
+                    },
                     text = "تلاش مجدد"
                 )
             }
