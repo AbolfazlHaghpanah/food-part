@@ -94,7 +94,7 @@ fun SearchScreen(
                                             .navigate(
                                                 AppScreens
                                                     .FoodDetails
-                                                    .createRoute(item.id)
+                                                    .createRoute(item.id.toString())
                                             )
                                     }, name = item.foodName,
                                 time = item.cookingTime

@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.Result
 
 @Composable
 fun FoodListByCategory(
@@ -33,19 +34,20 @@ fun FoodListByCategory(
     navController: NavController
 ) {
     val indicationState = remember { MutableInteractionSource() }
+    val foodList by viewModel.foodList.collectAsState()
+    val foodListResult by viewModel.foodListResult.collectAsState()
 
-    val foodListState by viewModel.foodListByCategoryFlow.collectAsState()
-    if (foodListState.isNotEmpty()) {
+
+    if (foodListResult == Result.Success) {
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth(),
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(40.dp,16.dp),
+            contentPadding = PaddingValues(40.dp, 16.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-            items(foodListState) { item ->
-
+        ) {
+            items(foodList?: emptyList()) { item ->
                 FoodItem(
                     modifier = Modifier
                         .clickable(
@@ -54,8 +56,9 @@ fun FoodListByCategory(
                         ) {
                             navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                         },
-                    item.foodName,
-                    item.cookingTime
+                    name = item.name,
+                    time = if (((item.readyTime?:0) + (item.cookTime?:0))!= 0 )"${ ((item.readyTime?:0) + (item.cookTime?:0))} دقیقه " else "",
+                    image = item.image
                 )
             }
         }
@@ -78,7 +81,9 @@ fun FoodListByCategory(
                     modifier = Modifier
                         .width(130.dp)
                         .height(45.dp),
-                    onClick = { },
+                    onClick = {
+                        viewModel.getFoodList()
+                    },
                     text = "تلاش مجدد"
                 )
             }

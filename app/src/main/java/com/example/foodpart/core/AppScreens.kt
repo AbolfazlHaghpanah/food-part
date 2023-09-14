@@ -5,7 +5,7 @@ sealed class AppScreens(val route: String) {
     object Category : AppScreens("category")
 
     object FoodDetails : AppScreens("food-details/{id}") {
-        fun createRoute(id: Int): String {
+        fun createRoute(id: String): String {
             return "food-details/$id"
         }
     }

@@ -29,7 +29,12 @@ import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.signup.SignUpScreen
 import com.example.foodpart.ui.screens.whattocook.WhatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+
+
+@AndroidEntryPoint
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
     private val viewModel: SplashScreenViewModel by viewModels()

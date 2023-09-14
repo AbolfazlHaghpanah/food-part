@@ -118,7 +118,7 @@ fun FoodListScreen(
                                     .navigate(
                                         AppScreens
                                             .FoodDetails
-                                            .createRoute(item.id)
+                                            .createRoute(item.id.toString())
                                     )
                             },
                         item.foodName,
