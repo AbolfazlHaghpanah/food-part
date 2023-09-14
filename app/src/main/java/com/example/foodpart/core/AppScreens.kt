@@ -4,9 +4,9 @@ sealed class AppScreens(val route: String) {
 
     object Category : AppScreens("category")
 
-    object FoodDetails : AppScreens("food-details/{id}") {
+    object FoodDetails : AppScreens("food-details?id={id}") {
         fun createRoute(id: String): String {
-            return "food-details/$id"
+            return "food-details?id=$id"
         }
     }
 

@@ -32,8 +32,6 @@ import com.example.foodpart.ui.theme.FoodPartTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
-
-
 @AndroidEntryPoint
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
@@ -42,8 +40,8 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setContent {
             FoodPartTheme {
@@ -95,19 +93,9 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(
         route = AppScreens.FoodDetails.route,
-        arguments = listOf(
-            navArgument("id") {
-                type = NavType.IntType
-                nullable = false
-            }
-        )
-    ) { backStackEntry ->
-        val id = backStackEntry.arguments?.getInt("id")
-            ?: throw IllegalStateException("id was null")
-        FoodDetailsScreen(
-            navController = navController,
-            id
-        )
+    ) {
+        FoodDetailsScreen(navController = navController)
+
     }
 
     composable(
