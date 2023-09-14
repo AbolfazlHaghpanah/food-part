@@ -72,26 +72,27 @@ fun CategoryScreen(
                             .align(Alignment.TopCenter),
                         backgroundColor = MaterialTheme.colors.background
                     )
-                }
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    verticalArrangement = Arrangement.spacedBy(21.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "خطا در برقراری ارتباط",
-                        style = MaterialTheme.typography.h3
-                    )
-                    FoodPartButton(
+                } else {
+                    Column(
                         modifier = Modifier
-                            .width(130.dp)
-                            .height(45.dp),
-                        onClick = {
-                            viewModel.getCategory()
-                        },
-                        text = "تلاش مجدد"
-                    )
+                            .align(Alignment.Center),
+                        verticalArrangement = Arrangement.spacedBy(21.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "خطا در برقراری ارتباط",
+                            style = MaterialTheme.typography.h3
+                        )
+                        FoodPartButton(
+                            modifier = Modifier
+                                .width(130.dp)
+                                .height(45.dp),
+                            onClick = {
+                                viewModel.getCategory()
+                            },
+                            text = "تلاش مجدد"
+                        )
+                    }
                 }
             }
         } else {

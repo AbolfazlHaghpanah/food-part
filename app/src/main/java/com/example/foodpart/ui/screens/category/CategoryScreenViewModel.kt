@@ -46,7 +46,8 @@ class CategoryScreenViewModel @Inject constructor(
 
     init {
         getCategory()
-        getFoodList()
+
+
     }
 
     fun getCategory() {
@@ -58,6 +59,7 @@ class CategoryScreenViewModel @Inject constructor(
                 onDataReady = {
                     _category.value = it.data
                     _selectedCategory.value = _category.value[0]
+                    getFoodList()
                 }
             ).collect(_categoryResult)
         }
