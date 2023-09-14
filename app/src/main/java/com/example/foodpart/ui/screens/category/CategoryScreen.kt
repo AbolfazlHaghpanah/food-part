@@ -51,7 +51,7 @@ fun CategoryScreen(
 
             Spacer(
                 modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
                     .height(1.dp)
                     .background(MaterialTheme.colors.onBackground)

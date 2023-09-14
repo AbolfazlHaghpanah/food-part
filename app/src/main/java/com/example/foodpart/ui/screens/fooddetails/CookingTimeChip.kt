@@ -34,7 +34,7 @@ fun CookingTimeChip(
             painter = painterResource(id = R.drawable.time),
             contentDescription = "Cooking Time",
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = time,
             style = MaterialTheme.typography.caption

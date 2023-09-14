@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -50,6 +53,17 @@ import com.example.foodpart.ui.components.FoodPartTextField
 fun LoginScreen(
     navController: NavController
 ) {
+    val focusManager = LocalFocusManager.current
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var isUsernameValid by remember {
+        mutableStateOf(true)
+    }
+    var isPasswordValid by remember {
+        mutableStateOf(true)
+    }
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,48 +92,55 @@ fun LoginScreen(
                 )
             }
         },
-        content = { paddingValues ->
+    ) { paddingValues ->
 
-            val focusManager = LocalFocusManager.current
-            BackHandler {
-                navController.popBackStack(AppScreens.Profile.route, inclusive = false)
-            }
-            Column(
+        BackHandler {
+            navController.popBackStack(AppScreens.Profile.route, inclusive = false)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(start = 24.dp, end = 24.dp)
+                .background(color = MaterialTheme.colors.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+
+            Spacer(
                 modifier = Modifier
-                    .padding(start = 24.dp, end = 24.dp)
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .background(color = MaterialTheme.colors.background),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row(
-                    Modifier
-                        .width(75.dp)
-                        .height(75.dp)
-                        .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
-                        .background(
-                            color = MaterialTheme.colors.primary,
-                            shape = RoundedCornerShape(size = 59.dp)
-                        ),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(1.dp)
-                            .width(55.dp)
-                            .height(55.dp),
-                        tint = Color.White,
-                        painter = painterResource(R.drawable.logo_dark),
-                        contentDescription = "Icon"
+                    .height(66.dp)
+            )
+            Box(
+                Modifier
+                    .width(75.dp)
+                    .height(75.dp)
+                    .padding(8.dp)
+                    .background(
+                        color = MaterialTheme.colors.primary,
+                        shape = RoundedCornerShape(size = 59.dp)
                     )
-                }
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .width(55.dp)
+                        .height(55.dp),
+                    tint = Color.White,
+                    painter = painterResource(R.drawable.logo_dark),
+                    contentDescription = "Icon"
+                )
+            }
 
-                Spacer(modifier = Modifier.height(50.dp))
+            Spacer(
+                modifier = Modifier
+                    .height(88.dp)
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
 
                 Text(
                     text = "خوش آمدید",
@@ -128,8 +149,6 @@ fun LoginScreen(
                     style = MaterialTheme.typography.h1
                         .copy(textAlign = TextAlign.Start)
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "برای ورود اطلاعات حساب خود را وارد کنید",
@@ -140,17 +159,7 @@ fun LoginScreen(
                             textAlign = TextAlign.Start
                         )
                 )
-
-                Spacer(modifier = Modifier.height(43.dp))
-
-                var username by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
-                var isUsernameValid by remember {
-                    mutableStateOf(true)
-                }
-                var isPasswordValid by remember {
-                    mutableStateOf(true)
-                }
+                Spacer(modifier = Modifier.height(32.dp))
 
                 FoodPartTextField(
                     value = username,
@@ -166,9 +175,6 @@ fun LoginScreen(
                         focusManager.moveFocus(FocusDirection.Down)
                     })
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 FoodPartTextField(
                     value = password,
                     onValueChange = {
@@ -187,9 +193,6 @@ fun LoginScreen(
                     isError = !isPasswordValid,
                     errorMassage = "رمز ورود را وارد کنید"
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
                 FoodPartButton(
                     onClick = {
                         focusManager.clearFocus()
@@ -202,40 +205,35 @@ fun LoginScreen(
                     },
                     text = "تایید"
                 )
+            }
+            Row(
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                Text(
+                    text = "حساب کاربری ندارید؟",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onBackground,
+                )
 
+                Text(
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(AppScreens.SignUp.route)
+                        },
+                    text = " ثبت نام ",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = Color(0xFF1976D2),
+                )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    Modifier
-                        .padding(start = 165.dp)
-                ) {
-                    Text(
-                        text = "حساب کاربری ندارید؟",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onBackground,
-                    )
-
-                    Text(
-                        modifier = Modifier
-                            .clickable {
-                                navController.navigate(AppScreens.SignUp.route)
-                            },
-                        text = " ثبت نام ",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Color(0xFF1976D2),
-                    )
-
-                    Text(
-                        text = "کنید",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onBackground,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(228.dp))
-
+                Text(
+                    text = "کنید",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onBackground,
+                )
             }
         }
-    )
+    }
 }
+
+

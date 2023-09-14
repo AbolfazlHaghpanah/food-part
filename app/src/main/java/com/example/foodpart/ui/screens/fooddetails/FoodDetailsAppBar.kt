@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -101,6 +102,8 @@ fun FoodDetailsAppBar(
                         contentDescription = "Report"
                     )
                     Text(
+                        modifier = Modifier
+                            .padding(start = 8.dp),
                         text = "گزارش",
                         style = MaterialTheme.typography.body1
                     )
@@ -121,6 +124,8 @@ fun FoodDetailsAppBar(
                         contentDescription = "Share"
                     )
                     Text(
+                        modifier = Modifier
+                            .padding(start = 8.dp),
                         text = "ارسال",
                         style = MaterialTheme.typography.body1
                     )
@@ -138,6 +143,8 @@ fun FoodDetailsAppBar(
                         contentDescription = "Save"
                     )
                     Text(
+                        modifier = Modifier
+                            .padding(start = 8.dp),
                         text = "ذخیره",
                         style = MaterialTheme.typography.body1
                     )

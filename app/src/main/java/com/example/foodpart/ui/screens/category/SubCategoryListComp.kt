@@ -31,7 +31,7 @@ fun SubCategoriesList(
     val subCategoryState by viewModel.subCategoryFlow.collectAsState()
     LazyRow(
         contentPadding = PaddingValues(16.dp, 2.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(categorySelectedState.subCategories ?: listOf()) { item ->
             Chip(
@@ -69,7 +69,7 @@ fun SubCategoriesList(
     if (categorySelectedState.subCategories!=null){
         Spacer(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(MaterialTheme.colors.onBackground)

@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun FullScreenPicture(
@@ -46,12 +45,14 @@ fun FullScreenPicture(
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.KeyboardArrowRight,
-                        contentDescription = "Back"
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colors.onBackground
                     )
                 }
                 Text(
                     text = "عکس",
-                    style = MaterialTheme.typography.h1
+                    style = MaterialTheme.typography.h1,
+                    color = MaterialTheme.colors.onBackground
                 )
                 Spacer(modifier = Modifier.weight(1F))
                 IconButton(onClick = {
@@ -59,7 +60,8 @@ fun FullScreenPicture(
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Share,
-                        contentDescription = "Save"
+                        contentDescription = "Save",
+                        tint = MaterialTheme.colors.onBackground
                     )
                 }
             }
@@ -86,8 +88,7 @@ fun FullScreenPicture(
                 Image(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .fillMaxWidth(),
                     painter = painterResource(imageRes),
                     contentDescription = "food image",
                     contentScale = ContentScale.Crop
