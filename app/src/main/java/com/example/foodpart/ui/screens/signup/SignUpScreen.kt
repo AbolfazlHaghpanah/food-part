@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -50,9 +53,9 @@ import com.example.foodpart.ui.components.FoodPartTextField
 fun SignUpScreen(
     navController: NavController
 ) {
-    BackHandler {
-        navController.popBackStack(AppScreens.Profile.route, inclusive = false)
-    }
+    val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -82,30 +85,32 @@ fun SignUpScreen(
             }
         },
     ) { paddingValues ->
-        val focusManager = LocalFocusManager.current
+        BackHandler {
+            navController.popBackStack(AppScreens.Profile.route, inclusive = false)
+        }
         Column(
             modifier = Modifier
-                .padding(paddingValues)
-                .padding(start = 24.dp, end = 24.dp)
                 .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(start = 24.dp, end = 24.dp)
                 .background(color = MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
-            Row(
+            Spacer(
+                modifier = Modifier
+                    .height(66.dp)
+            )
+            Box(
                 Modifier
                     .width(75.dp)
                     .height(75.dp)
-                    .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
+                    .padding(8.dp)
                     .background(
                         color = MaterialTheme.colors.primary,
                         shape = RoundedCornerShape(size = 59.dp)
-                    ),
-                horizontalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    Alignment.CenterHorizontally
-                ),
-                verticalAlignment = Alignment.CenterVertically,
+                    )
             ) {
                 Icon(
                     modifier = Modifier
@@ -210,7 +215,6 @@ fun SignUpScreen(
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 })
-
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -231,12 +235,11 @@ fun SignUpScreen(
                 text = "تایید"
             )
 
-
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
-                Modifier
-                    .padding(start = 205.dp)
+                modifier = Modifier
+                    .align(Alignment.End)
             ) {
                 Text(
                     text = "قبلا ثبت نام کردید؟",
@@ -254,10 +257,6 @@ fun SignUpScreen(
                     color = Color(0xFF1976D2),
                 )
             }
-
-            Spacer(modifier = Modifier.height(164.dp))
-
         }
     }
-
 }

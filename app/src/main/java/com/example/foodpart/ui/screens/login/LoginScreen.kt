@@ -1,7 +1,6 @@
 package com.example.foodpart.ui.screens.login
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +49,6 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoginScreen(
     navController: NavController
@@ -235,8 +233,6 @@ fun LoginScreen(
                 )
             }
         }
-
-
     }
 }
 
