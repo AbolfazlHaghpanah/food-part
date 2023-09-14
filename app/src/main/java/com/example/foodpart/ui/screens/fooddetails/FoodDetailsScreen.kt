@@ -248,7 +248,7 @@ fun FoodDetailsScreen(
                                         .clickable {
                                             navController.navigate(
                                                 AppScreens.FoodDetails.createRoute(
-                                                    item.id
+                                                    item.id.toString()
                                                 )
                                             )
                                         },

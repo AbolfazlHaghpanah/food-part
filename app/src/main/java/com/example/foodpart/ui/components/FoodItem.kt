@@ -1,6 +1,5 @@
 package com.example.foodpart.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.foodpart.R
 
 
@@ -21,22 +21,26 @@ import com.example.foodpart.R
 fun FoodItem(
     modifier: Modifier = Modifier,
     name: String,
-    time: String
+    time: String,
+    image : String? = null
 ) {
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
+
+        AsyncImage(
+            model = image,
             modifier = Modifier
                 .clip(shape = MaterialTheme.shapes.large)
                 .width(135.dp)
                 .height(85.dp),
-            painter = painterResource(id = R.drawable.food_item),
-            contentDescription = "",
+            contentDescription = name,
+            error = painterResource(id = R.drawable.food_item),
             contentScale = ContentScale.Crop,
+        )
 
-            )
         Column(
             modifier = Modifier
                 .width(136.dp)

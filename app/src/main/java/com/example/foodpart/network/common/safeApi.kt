@@ -15,7 +15,6 @@ suspend fun <T> safeApi(
 ): Flow<Result> {
     return flow {
         emit(Result.Loading)
-
         try {
             val response = call()
             if (response.isSuccessful) {

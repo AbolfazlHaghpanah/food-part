@@ -1,34 +1,34 @@
 package com.example.foodpart.ui.screens.category
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.network.category.CategoryApi
 import com.example.foodpart.network.category.CategoryDataResponse
-import com.example.foodpart.network.category.SubCategoryResponse
 import com.example.foodpart.network.common.safeApi
+import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryApi
+import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryItem
+import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
-import com.example.foodpart.ui.components.Result
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryScreenViewModel @Inject constructor(
-    private val categoryApi: CategoryApi
+    private val categoryApi: CategoryApi,
+    private val foodListByCategoryApi: FoodListByCategoryApi
 ) : ViewModel() {
 
 
-
-    private val _selectedCategoryId: MutableStateFlow<CategoryDataResponse?> = MutableStateFlow(null)
-    val selectedCategoryId = _selectedCategoryId.asStateFlow()
+    private val _selectedCategory: MutableStateFlow<CategoryDataResponse?> = MutableStateFlow(null)
+    val selectedCategory = _selectedCategory.asStateFlow()
 
     private val _selectedSubCategoryId: MutableStateFlow<String> = MutableStateFlow("")
     val selectedSubCategoryId = _selectedSubCategoryId.asStateFlow()
 
-
-    private val _subCategories = MutableStateFlow<List<SubCategoryResponse>>(emptyList())
-    val subCategories = _subCategories.asStateFlow()
 
     private val _categoryResult = MutableStateFlow<Result>(Result.Idle)
     val categoryResult = _categoryResult.asStateFlow()
@@ -37,19 +37,17 @@ class CategoryScreenViewModel @Inject constructor(
     private val _category = MutableStateFlow<List<CategoryDataResponse>>(emptyList())
     val category = _category.asStateFlow()
 
+    private val _foodList = MutableStateFlow<List<FoodListByCategoryItem>?>(null)
+    val foodList = _foodList.asStateFlow()
 
-
-
-
+    private val _foodListResult = MutableStateFlow<Result>(Result.Idle)
+    val foodListResult = _foodListResult.asStateFlow()
 
 
     init {
         getCategory()
+        getFoodList()
     }
-
-
-
-
 
     fun getCategory() {
         viewModelScope.launch {
@@ -59,46 +57,54 @@ class CategoryScreenViewModel @Inject constructor(
                 },
                 onDataReady = {
                     _category.value = it.data
+                    _selectedCategory.value = _category.value[0]
                 }
             ).collect(_categoryResult)
         }
     }
 
+    fun setSelectedCategory(categoryDataResponse: CategoryDataResponse) {
+        viewModelScope.launch {
+            _selectedCategory.emit(categoryDataResponse)
 
-
-    fun setSelectedCategoryId(categoryDataResponse: CategoryDataResponse) {
-        _selectedCategoryId.value = categoryDataResponse
+        }
     }
 
-    fun setSelectedSubCategoryId(id : String) {
-        _selectedSubCategoryId.value = id
+    fun setSelectedSubCategoryId(id: String) {
+
+        viewModelScope.launch {
+            _selectedSubCategoryId.emit(id)
+        }
     }
 
 
+    fun getFoodList() {
+        viewModelScope.launch {
 
+            safeApi(
+                call = {
+                    Log.d("request", " sab : ${selectedSubCategoryId.value}")
+                    Log.d("request", " cat : ${selectedCategory.value?.id ?: "nulle"}")
 
-//    fun setCategory(category: Categories) {
-//        _categoryFlow.value = category
-//    }
-//
-//    fun setSubCategory(subCategory: String) {
-//        _subCategoryFlow.value = subCategory
-//    }
-//
-//    fun updateFoodListByCategory() {
-//        _foodListByCategoryFlow.value = foodList.filter {
-//
-//            if (categoryFlow.value.subCategories == null || subCategoryFlow.value == "")
-//                it.category == categoryFlow.value
-//            else
-//                it.category == categoryFlow.value&& it.subCategory.contains(subCategoryFlow.value)
-//
-//        }
-//    }
-//
-//    init {
-//        updateFoodListByCategory()
-//    }
+                    if (selectedSubCategoryId.value.isNotEmpty()) {
+                        foodListByCategoryApi
+                            .getFoodListByCategory(selectedSubCategoryId.value)
+                    } else {
+                        foodListByCategoryApi
+                            .getFoodListByCategory(
+                                selectedCategory.value?.id ?: ""
+                            )
+                    }
+
+                },
+                onDataReady = {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        _foodList.emit(it.data)
+                    }
+                }
+            ).collect(_foodListResult)
+        }
+    }
 
 
 }

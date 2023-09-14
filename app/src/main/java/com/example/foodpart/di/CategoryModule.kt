@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-class CategoryModule {
+object CategoryModule {
 
     @Provides
     fun provideCategory(retrofit: Retrofit):CategoryApi{

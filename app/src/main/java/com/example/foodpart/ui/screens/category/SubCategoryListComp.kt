@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.foodpart.network.category.SubCategoryResponse
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
@@ -30,7 +29,7 @@ fun SubCategoriesList(
     viewModel: CategoryScreenViewModel = hiltViewModel(),
 ) {
 
-    val category by viewModel.selectedCategoryId.collectAsState()
+    val category by viewModel.selectedCategory.collectAsState()
     val subCategoryState by viewModel.selectedSubCategoryId.collectAsState()
 
     LazyRow(
@@ -45,6 +44,7 @@ fun SubCategoriesList(
                     } else {
                         viewModel.setSelectedSubCategoryId(item.id)
                     }
+                    viewModel.getFoodList()
 
                 },
                 border = if (subCategoryState == item.id) {

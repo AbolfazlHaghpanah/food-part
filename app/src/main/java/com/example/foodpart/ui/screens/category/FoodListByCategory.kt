@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.category
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.fooddata.FoodData
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 
@@ -35,17 +35,17 @@ fun FoodListByCategory(
 ) {
     val indicationState = remember { MutableInteractionSource() }
 
-    val foodListState = emptyList<FoodData>()
-    if (foodListState.isNotEmpty()) {
+    val foodList by viewModel.foodList.collectAsState()
+    if (foodList?.isNotEmpty()?: false) {
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth(),
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(40.dp,16.dp),
+            contentPadding = PaddingValues(40.dp, 16.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-            items(foodListState) { item ->
+        ) {
+            items(foodList?: emptyList()) { item ->
 
                 FoodItem(
                     modifier = Modifier
@@ -55,9 +55,11 @@ fun FoodListByCategory(
                         ) {
                             navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                         },
-                    item.foodName,
-                    item.cookingTime
+                    name = item.name,
+                    time = "${item.cookTime?:0 } دقیقه ",
+                    image = item.image
                 )
+                Log.d("foodList", "FoodListByCategory: ${item.image}")
             }
         }
     } else {
@@ -80,7 +82,7 @@ fun FoodListByCategory(
                         .width(130.dp)
                         .height(45.dp),
                     onClick = {
-                              viewModel.getCategory()
+                        viewModel.getFoodList()
                     },
                     text = "تلاش مجدد"
                 )
