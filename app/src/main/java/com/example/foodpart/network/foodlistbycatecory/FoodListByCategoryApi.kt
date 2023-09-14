@@ -31,5 +31,10 @@ interface FoodListByCategoryApi {
 
     ):Response<FoodListByCategoryResponse>
 
+    @GET("v1/food")
+    suspend fun getFoodListByIds(
+        @Query("ids") ids : String
+    ):Response<FoodListByCategoryResponse>
+
 
 }
