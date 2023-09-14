@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -72,6 +73,7 @@ fun CategoryItem(
         }
 
         Text(
+            modifier = Modifier.wrapContentWidth(unbounded = true),
             text = category,
             style = MaterialTheme.typography.body1,
             color = if (isSelected) MaterialTheme.colors.primary

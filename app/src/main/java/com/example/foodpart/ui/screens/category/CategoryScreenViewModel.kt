@@ -61,6 +61,7 @@ class CategoryScreenViewModel @Inject constructor(
                 }
             ).collect(_categoryResult)
         }
+
     }
 
     fun setSelectedCategory(categoryDataResponse: CategoryDataResponse) {

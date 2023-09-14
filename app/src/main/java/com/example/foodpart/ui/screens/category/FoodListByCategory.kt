@@ -1,6 +1,5 @@
 package com.example.foodpart.ui.screens.category
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.Result
 
 @Composable
 fun FoodListByCategory(
@@ -34,9 +34,11 @@ fun FoodListByCategory(
     navController: NavController
 ) {
     val indicationState = remember { MutableInteractionSource() }
-
     val foodList by viewModel.foodList.collectAsState()
-    if (foodList?.isNotEmpty()?: false) {
+    val foodListResult by viewModel.foodListResult.collectAsState()
+
+
+    if (foodListResult == Result.Success) {
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -46,7 +48,6 @@ fun FoodListByCategory(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             items(foodList?: emptyList()) { item ->
-
                 FoodItem(
                     modifier = Modifier
                         .clickable(
@@ -56,10 +57,9 @@ fun FoodListByCategory(
                             navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                         },
                     name = item.name,
-                    time = "${item.cookTime?:0 } دقیقه ",
+                    time = if (((item.readyTime?:0) + (item.cookTime?:0))!= 0 )"${ ((item.readyTime?:0) + (item.cookTime?:0))} دقیقه " else "",
                     image = item.image
                 )
-                Log.d("foodList", "FoodListByCategory: ${item.image}")
             }
         }
     } else {

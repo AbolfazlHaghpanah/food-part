@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.foodpart.R
@@ -47,14 +48,15 @@ fun FoodItem(
         ) {
 
             Text(
-                modifier = Modifier.padding(8.dp, 4.dp),
+                modifier = Modifier
+                    .padding(8.dp, 4.dp),
                 text = name,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start)
             )
             Text(
                 modifier = Modifier.padding(8.dp, 0.dp),
                 text = time,
-                style = MaterialTheme.typography.subtitle1
+                style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
             )
         }
     }
