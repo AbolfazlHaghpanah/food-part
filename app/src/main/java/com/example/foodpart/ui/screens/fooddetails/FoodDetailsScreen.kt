@@ -184,10 +184,12 @@ fun FoodDetailsScreen(
                                     text = food?.data?.count ?: "",
                                     style = MaterialTheme.typography.caption
                                 )
-                                if (((food?.data?.readyTime?:0) + (food?.data?.cookTime?:0))!= 0 ){
+                                if (((food?.data?.readyTime ?: 0) + (food?.data?.cookTime
+                                        ?: 0)) != 0
+                                ) {
 
                                     CookingTimeChip(
-                                        time ="${ ((food?.data?.readyTime?:0) + (food?.data?.cookTime?:0))} دقیقه "
+                                        time = "${((food?.data?.readyTime ?: 0) + (food?.data?.cookTime ?: 0))} دقیقه "
                                     ) {
                                         navController.navigate(
                                             AppScreens.FoodList.createRoute(
@@ -279,7 +281,8 @@ fun FoodDetailsScreen(
                                         name = item.name,
                                         time = if (((item.readyTime ?: 0) + (item.cookTime
                                                 ?: 0)) != 0
-                                        ) "${((item.readyTime ?: 0) + (item.cookTime ?: 0))} دقیقه " else ""
+                                        ) "${((item.readyTime ?: 0) + (item.cookTime ?: 0))} دقیقه " else "",
+                                        image = item.image
                                     )
 
                                 }
@@ -289,7 +292,7 @@ fun FoodDetailsScreen(
                                             .clickable {
                                                 navController.navigate(
                                                     AppScreens.FoodList.createRoute(
-                                                        category = food?.data?.categoryId?:"",
+                                                        category = food?.data?.categoryId ?: "",
                                                         appBar = "بیشتر از این دسته",
                                                         FoodListRequestType.Category.type
 

@@ -12,11 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.SplashScreenViewModel
 import com.example.foodpart.ui.screens.category.CategoryScreen
@@ -25,7 +23,6 @@ import com.example.foodpart.ui.screens.foodlist.FoodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.ProfileScreen
 import com.example.foodpart.ui.screens.search.SearchScreen
-import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.signup.SignUpScreen
 import com.example.foodpart.ui.screens.whattocook.WhatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
@@ -82,8 +79,7 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Search.route) {
         SearchScreen(
-            navController = navController,
-            viewModel = SearchViewModel()
+            navController = navController
         )
     }
 
