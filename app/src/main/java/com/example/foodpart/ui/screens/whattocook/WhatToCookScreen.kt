@@ -33,6 +33,7 @@ import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.fooddata.Categories
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 
 @SuppressLint("SuspiciousIndentation", "FlowOperatorInvokedInComposition")
 @Composable
@@ -42,7 +43,11 @@ fun WhatToCookScreen(
 
 ) {
     val isHintShow by viewModel.isHintShow.collectAsState()
+    val difficulty by viewModel.selectedDifficultyItems.collectAsState()
     var isItemTextValid by remember {
+        mutableStateOf(true)
+    }
+    var isTimeTextValid by remember {
         mutableStateOf(true)
     }
     val textFieldFocusManger = LocalFocusManager.current
@@ -80,7 +85,7 @@ fun WhatToCookScreen(
         ) {
 
             if (isHintShow)
-            WhatToCookHint()
+                WhatToCookHint()
 
 
             FoodPartTextField(
@@ -117,7 +122,8 @@ fun WhatToCookScreen(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                keyboardActions = KeyboardActions()
+                keyboardActions = KeyboardActions(),
+                errorMassage = "این فیلد باید پر بشه!"
             )
 
             Text(
@@ -137,19 +143,31 @@ fun WhatToCookScreen(
             FoodPartButton(
                 onClick = {
                     textFieldFocusManger.clearFocus()
-                    if (itemTextState.isNotEmpty()) {
-                        viewModel.setItemText(itemTextState)
-                        viewModel.setTimeText(timeTextState)
-                        navController.navigate(
-                            AppScreens.FoodList.createRoute(
-                                Categories.MAIN.category,
-                                "چی بپزم؟",
-                                viewModel.getDescriptionText()
-                            )
-                        )
 
-                    } else {
-                        isItemTextValid = false
+                    when ("") {
+                        itemTextState -> isItemTextValid = false
+                        timeTextState -> isTimeTextValid = false
+                        else -> {
+                            viewModel.setItemText(itemTextState)
+                            viewModel.setTimeText(timeTextState)
+                            FoodListRequestType.WhatToCook.createWhatToCookItems(
+                                ingredient = itemTextState,
+                                difficulties = when(difficulty){
+                                    DifficultyItems.Easy -> 1
+                                    DifficultyItems.Medium -> 2
+                                    DifficultyItems.Hard -> 3
+                                    DifficultyItems.NoMatter -> null
+                                },
+                                timeLimit = timeTextState.toInt()
+                                )
+                            navController.navigate(
+                                AppScreens.FoodList.createRoute(
+                                    "",
+                                    "چی بپزم؟",
+                                    requestType = FoodListRequestType.WhatToCook.type
+                                )
+                            )
+                        }
                     }
                 },
                 text = "جستجو"

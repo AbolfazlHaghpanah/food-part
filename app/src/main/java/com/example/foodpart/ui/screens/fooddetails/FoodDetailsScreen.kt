@@ -54,6 +54,7 @@ import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.MoreFoodItem
 import com.example.foodpart.ui.components.Result
+import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -114,7 +115,7 @@ fun FoodDetailsScreen(
                                         AppScreens.FoodList.createRoute(
                                             category = foodfake.category.category,
                                             appBar = "علاقه مندی ها",
-                                            description = null
+                                            FoodListRequestType.Category.type
                                         )
                                     )
                                 }) {
@@ -192,7 +193,7 @@ fun FoodDetailsScreen(
                                             AppScreens.FoodList.createRoute(
                                                 foodfake.category.category,
                                                 "زیر ${foodfake.cookingTime}",
-                                                null
+                                                FoodListRequestType.Category.type
                                             )
                                         )
                                     }
@@ -215,9 +216,9 @@ fun FoodDetailsScreen(
                                         onClick = {
                                             navController.navigate(
                                                 AppScreens.FoodList.createRoute(
-                                                    category = foodfake.category.category,
+                                                    category = item.id,
                                                     appBar = item.name,
-                                                    description = null
+                                                    requestType = FoodListRequestType.Meals.type
                                                 )
                                             )
                                         }) {
@@ -237,7 +238,8 @@ fun FoodDetailsScreen(
                                         AppScreens.FoodList.createRoute(
                                             foodfake.category.category,
                                             foodfake.difficulty.difficulty,
-                                            null
+                                            FoodListRequestType.Category.type
+
                                         )
                                     )
                                 })
@@ -287,9 +289,10 @@ fun FoodDetailsScreen(
                                             .clickable {
                                                 navController.navigate(
                                                     AppScreens.FoodList.createRoute(
-                                                        foodfake.category.category,
-                                                        foodfake.category.category,
-                                                        null
+                                                        category = food?.data?.categoryId?:"",
+                                                        appBar = "بیشتر از این دسته",
+                                                        FoodListRequestType.Category.type
+
                                                     )
                                                 )
                                             }

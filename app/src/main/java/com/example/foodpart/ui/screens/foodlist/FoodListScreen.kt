@@ -23,11 +23,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.fooddata.foodList
@@ -37,11 +40,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun FoodListScreen(
     navController: NavController,
-    category: String,
-    appBarText: String,
-    description: String? = null
-) {
-
+    viewModel: FoodListViewModel = hiltViewModel()
+    ) {
+    val appBarText = viewModel.appBarText
+    val foodList by viewModel.foodList.collectAsState()
     val lazyColumnState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -74,7 +76,7 @@ fun FoodListScreen(
         topBar = {
             FoodListAppBar(
                 navController = navController,
-                appBarText = appBarText
+                appBarText = appBarText ?: ""
             )
         }
     ) {
@@ -92,10 +94,10 @@ fun FoodListScreen(
                     .Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
-                contentPadding = PaddingValues(40.dp,0.dp,40.dp,16.dp)
+                contentPadding = PaddingValues(40.dp, 0.dp, 40.dp, 16.dp)
             ) {
 
-                if (description != null) {
+                {
                     item(
                         span = {
                             GridItemSpan(2)
@@ -104,13 +106,13 @@ fun FoodListScreen(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = description,
+                            text = "description",
                             style = MaterialTheme.typography.subtitle1.copy(textAlign = TextAlign.Start)
                         )
                     }
                 }
 
-                items(foodList.filter { it.category.category == category }) { item ->
+                items(foodList) { item ->
                     FoodItem(
                         modifier = Modifier
                             .clickable {
@@ -121,8 +123,10 @@ fun FoodListScreen(
                                             .createRoute(item.id.toString())
                                     )
                             },
-                        item.foodName,
-                        item.cookingTime
+                        name = item.name,
+                        time = if (((item.readyTime ?: 0) + (item.cookTime
+                                ?: 0)) != 0
+                        ) "${((item.readyTime ?: 0) + (item.cookTime ?: 0))} دقیقه " else "",
                     )
                 }
             }

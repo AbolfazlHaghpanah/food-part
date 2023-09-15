@@ -99,34 +99,11 @@ private fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(
-        route = AppScreens.FoodList.route,
-        arguments = listOf(
-            navArgument("category") {
-                type = NavType.StringType
-                nullable = false
-            },
-            navArgument("appbar") {
-                type = NavType.StringType
-                nullable = false
-            },
-            navArgument("description") {
-                type = NavType.StringType
-                nullable = true
-            }
-        )
-    ) { backStackEntry ->
-        val category = backStackEntry.arguments?.getString("category")
-            ?: throw IllegalStateException("category was null")
-
-        val appBar = backStackEntry.arguments?.getString("appbar")
-            ?: throw IllegalStateException("appbar was null")
-
-        val description = backStackEntry.arguments?.getString("description")
+        route = AppScreens.FoodList.route
+    )
+    {
         FoodListScreen(
-            navController,
-            category,
-            appBar,
-            description
+            navController
         )
     }
 

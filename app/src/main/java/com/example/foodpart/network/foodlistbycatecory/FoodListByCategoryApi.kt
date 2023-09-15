@@ -26,8 +26,8 @@ interface FoodListByCategoryApi {
     @GET("v1/what-to-cook")
     suspend fun getWhatToCookFoodList(
         @Query("ingredients") ingredients :String,
-        @Query("ingredients") difficulty :Int?,
-        @Query("ingredients") timeLimit :Int,
+        @Query("difficulty") difficulty :Int?,
+        @Query("timeLimit") timeLimit :Int,
 
     ):Response<FoodListByCategoryResponse>
 
