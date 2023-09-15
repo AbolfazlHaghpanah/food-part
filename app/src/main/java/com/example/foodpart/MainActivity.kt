@@ -82,8 +82,7 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Search.route) {
         SearchScreen(
-            navController = navController,
-            viewModel = SearchViewModel()
+            navController = navController
         )
     }
 

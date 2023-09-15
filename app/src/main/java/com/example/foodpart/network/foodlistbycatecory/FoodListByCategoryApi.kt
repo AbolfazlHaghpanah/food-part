@@ -20,7 +20,7 @@ interface FoodListByCategoryApi {
 
     @GET("v1/search")
     suspend fun getSearchedFoodList(
-        @Query("search") search: String
+        @Query("query") search: String
     ): Response<FoodListByCategoryResponse>
 
     @GET("v1/what-to-cook")
