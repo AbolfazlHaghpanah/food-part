@@ -41,7 +41,8 @@ fun FoodItem(
             contentDescription = name,
             error = painterResource(id = R.drawable.food_item),
             contentScale = ContentScale.Crop,
-            filterQuality = FilterQuality.Low
+            filterQuality = FilterQuality.None,
+
         )
 
         Column(
