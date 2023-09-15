@@ -74,7 +74,7 @@ fun SearchScreen(
             )
 
 
-            if (text?.isNotEmpty() ?: false) {
+            if (text.isNotEmpty()) {
                 if (foodListResult == Result.Success) {
                     Text(
                         text = "نتایج جستجو با $text",
@@ -105,7 +105,7 @@ fun SearchScreen(
                                                 .navigate(
                                                     AppScreens
                                                         .FoodDetails
-                                                        .createRoute(item.id.toString())
+                                                        .createRoute(item.id)
                                                 )
                                         }, name = item.name,
                                     time = if (((item.readyTime ?: 0) + (item.cookTime
