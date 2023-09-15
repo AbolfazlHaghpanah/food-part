@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
-import com.example.foodpart.fooddata.Categories
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
@@ -95,13 +94,14 @@ fun WhatToCookScreen(
                     .height(56.dp),
                 onValueChange = {
                     itemTextState = it
+                    isItemTextValid = true
                 },
                 isError = !isItemTextValid,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = {
                     textFieldFocusManger.moveFocus(FocusDirection.Down)
                 }),
-                errorMassage = "این فیلد باید پر بشه!"
+                errorMassage = if (itemTextState.isEmpty())"این فیلد باید پر بشه!" else "حداقل ۳ حرف داشته باشه"
             )
 
 
@@ -115,13 +115,17 @@ fun WhatToCookScreen(
             FoodPartTextField(
                 value = timeTextState,
                 placeholder = "چقد وقت داری؟",
-                onValueChange = { timeTextState = it },
+                onValueChange = {
+                    timeTextState = it
+                    isTimeTextValid = true
+                },
                 modifier = Modifier.height(56.dp),
                 placeholderCND = "دقیقه",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
+                isError = !isTimeTextValid,
                 keyboardActions = KeyboardActions(),
                 errorMassage = "این فیلد باید پر بشه!"
             )
@@ -148,25 +152,31 @@ fun WhatToCookScreen(
                         itemTextState -> isItemTextValid = false
                         timeTextState -> isTimeTextValid = false
                         else -> {
-                            viewModel.setItemText(itemTextState)
-                            viewModel.setTimeText(timeTextState)
-                            FoodListRequestType.WhatToCook.createWhatToCookItems(
-                                ingredient = itemTextState,
-                                difficulties = when(difficulty){
-                                    DifficultyItems.Easy -> 1
-                                    DifficultyItems.Medium -> 2
-                                    DifficultyItems.Hard -> 3
-                                    DifficultyItems.NoMatter -> null
-                                },
-                                timeLimit = timeTextState.toInt()
+                            if(itemTextState.length>2){
+                                viewModel.setItemText(itemTextState)
+                                viewModel.setTimeText(timeTextState)
+                                FoodListRequestType.WhatToCook.createWhatToCookItems(
+                                    ingredient = itemTextState,
+                                    difficulties = when (difficulty) {
+                                        DifficultyItems.Easy -> 1
+                                        DifficultyItems.Medium -> 2
+                                        DifficultyItems.Hard -> 3
+                                        DifficultyItems.NoMatter -> null
+                                    },
+                                    timeLimit = timeTextState.toInt(),
+                                    description = viewModel.getDescriptionText()
                                 )
-                            navController.navigate(
-                                AppScreens.FoodList.createRoute(
-                                    "",
-                                    "چی بپزم؟",
-                                    requestType = FoodListRequestType.WhatToCook.type
+                                navController.navigate(
+                                    AppScreens.FoodList.createRoute(
+                                        "",
+                                        "چی بپزم؟",
+                                        requestType = FoodListRequestType.WhatToCook.type
+                                    )
                                 )
-                            )
+                            }else{
+                                isItemTextValid = false
+                            }
+
                         }
                     }
                 },

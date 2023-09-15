@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +25,9 @@ class FoodListViewModel @Inject constructor(
     private val foodListRequestType = savedStateHandle.get<String>("request-type")
     val appBarText = savedStateHandle.get<String>("appbar")
 
+    private val _description = MutableStateFlow<String?>("")
+    val description = _description.asStateFlow()
+
     private val _foodList = MutableStateFlow<List<FoodListByCategoryItem>>(emptyList())
     val foodList = _foodList.asStateFlow()
 
@@ -34,11 +36,17 @@ class FoodListViewModel @Inject constructor(
 
 
     init {
+        getFoodList()
+    }
+
+    fun getFoodList() {
         when (foodListRequestType) {
             FoodListRequestType.Category.type -> getFoodListByCategory()
             FoodListRequestType.Meals.type -> getFoodListByMeals()
-            FoodListRequestType.WhatToCook.type -> getWhatToCookFoodList()
-            else -> ""
+            FoodListRequestType.WhatToCook.type -> {
+                getWhatToCookFoodList()
+                _description.value = FoodListRequestType.WhatToCook.whatToCookDescription
+            }
         }
     }
 
@@ -77,9 +85,9 @@ class FoodListViewModel @Inject constructor(
             safeApi(
                 call = {
                     foodListByCategoryApi.getWhatToCookFoodList(
-                        ingredients = FoodListRequestType.WhatToCook.whatToCookIngredients?:"",
+                        ingredients = FoodListRequestType.WhatToCook.whatToCookIngredients ?: "",
                         difficulty = FoodListRequestType.WhatToCook.whatToCookDifficulty,
-                        timeLimit = FoodListRequestType.WhatToCook.whatToCookTimeLimit?:0
+                        timeLimit = FoodListRequestType.WhatToCook.whatToCookTimeLimit ?: 0
                     )
                 },
                 onDataReady = {

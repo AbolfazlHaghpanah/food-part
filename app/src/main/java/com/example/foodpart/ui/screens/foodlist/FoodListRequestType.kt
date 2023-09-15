@@ -5,7 +5,8 @@ sealed class FoodListRequestType(
     val type: String,
     var whatToCookIngredients: String? = null,
     var whatToCookDifficulty: Int? = null,
-    var whatToCookTimeLimit: Int? = null
+    var whatToCookTimeLimit: Int? = null,
+    var whatToCookDescription : String? = null
 ) {
     object Category : FoodListRequestType("category")
     object Meals : FoodListRequestType("meals")
@@ -13,11 +14,13 @@ sealed class FoodListRequestType(
         fun createWhatToCookItems(
             ingredient: String,
             difficulties: Int?,
-            timeLimit: Int
+            timeLimit: Int,
+            description : String
         ) {
-            FoodListRequestType.WhatToCook.whatToCookDifficulty = difficulties
-            FoodListRequestType.WhatToCook.whatToCookTimeLimit = timeLimit
-            FoodListRequestType.WhatToCook.whatToCookIngredients = ingredient
+            whatToCookDifficulty = difficulties
+            whatToCookTimeLimit = timeLimit
+            whatToCookIngredients = ingredient
+            whatToCookDescription = description
         }
     }
 
