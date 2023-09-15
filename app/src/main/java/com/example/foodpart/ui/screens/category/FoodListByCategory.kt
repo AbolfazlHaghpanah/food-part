@@ -47,7 +47,7 @@ fun FoodListByCategory(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            items(foodList?: emptyList()) { item ->
+            items(foodList ?: emptyList()) { item ->
                 FoodItem(
                     modifier = Modifier
                         .clickable(
@@ -57,35 +57,39 @@ fun FoodListByCategory(
                             navController.navigate(AppScreens.FoodDetails.createRoute(item.id))
                         },
                     name = item.name,
-                    time = if (((item.readyTime?:0) + (item.cookTime?:0))!= 0 )"${ ((item.readyTime?:0) + (item.cookTime?:0))} دقیقه " else "",
+                    time = if (((item.readyTime ?: 0) + (item.cookTime
+                            ?: 0)) != 0
+                    ) "${((item.readyTime ?: 0) + (item.cookTime ?: 0))} دقیقه " else "",
                     image = item.image
                 )
             }
         }
     } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            Column(
+        if (foodListResult != Result.Loading) {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.Center),
-                verticalArrangement = Arrangement.spacedBy(21.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxSize(),
             ) {
-                Text(
-                    text = "غذایی برای نمایش وجود ندارد",
-                    style = MaterialTheme.typography.h3
-                )
-                FoodPartButton(
+                Column(
                     modifier = Modifier
-                        .width(130.dp)
-                        .height(45.dp),
-                    onClick = {
-                        viewModel.getFoodList()
-                    },
-                    text = "تلاش مجدد"
-                )
+                        .align(Alignment.Center),
+                    verticalArrangement = Arrangement.spacedBy(21.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "غذایی برای نمایش وجود ندارد",
+                        style = MaterialTheme.typography.h3
+                    )
+                    FoodPartButton(
+                        modifier = Modifier
+                            .width(130.dp)
+                            .height(45.dp),
+                        onClick = {
+                            viewModel.getFoodList()
+                        },
+                        text = "تلاش مجدد"
+                    )
+                }
             }
         }
     }
