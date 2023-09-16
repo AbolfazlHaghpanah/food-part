@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.profile
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,22 +18,33 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.decode.Decoder
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
+import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
+
     Scaffold(
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
@@ -58,7 +70,7 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(start = 24.dp, end = 24.dp,top = 40.dp)
+                .padding(start = 24.dp, end = 24.dp, top = 40.dp)
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,19 +82,23 @@ fun ProfileScreen(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
+
+                AsyncImage(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .width(64.dp)
                         .height(64.dp)
                         .clip(RoundedCornerShape(59.dp)),
-                    painter = painterResource(R.drawable.profile_photo),
-                    contentDescription = "profile photo",
-                    alignment = Alignment.CenterStart
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("https://foodpart.samentic.com/api/files/users/${UserInfo.id}/${UserInfo.avatar}")
+                        .decoderFactory(SvgDecoder.Factory())
+                        .build(),
+                    contentDescription = "",
+                    alignment = Alignment.CenterStart,
+                    error = painterResource(R.drawable.profile_photo)
                 )
-
                 Text(
-                    text = "مهمان",
+                    text = UserInfo.username,
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
@@ -90,6 +106,7 @@ fun ProfileScreen(
 
 
             FoodPartButton(
+                enabled = {UserInfo.token == null},
                 onClick = { navController.navigate(AppScreens.Login.route) },
                 text = "وارد شوید"
             )

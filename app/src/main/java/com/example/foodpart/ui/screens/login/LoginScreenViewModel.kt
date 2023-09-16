@@ -1,7 +1,10 @@
 package com.example.foodpart.ui.screens.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodpart.core.UserInfo
+import com.example.foodpart.core.UserInfo.token
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.EditUserPassword
 import com.example.foodpart.network.user.EditUserUsername
@@ -33,19 +36,45 @@ class LoginScreenViewModel @Inject constructor(
     private val _userLoginResult = MutableStateFlow<Result>(Result.Idle)
     val userLoginResult = _userLoginResult.asStateFlow()
 
-    private val _userResponse = MutableStateFlow<LoginUserResponse?>(null)
+    private val _userResponse = MutableStateFlow<UserData?>(null)
     val userResponse = _userResponse.asStateFlow()
 
+    private val _token = MutableStateFlow<String?>(null)
+    val token = _token.asStateFlow()
+
+    fun registerUserInApp(){
+        UserInfo.token = _token.value
+        UserInfo.avatar = _userResponse.value?.avatar
+        UserInfo.id = _userResponse.value?.id
+        UserInfo.username = _userResponse.value?.username?:""
+
+    }
     fun loginUser(){
         viewModelScope.launch (Dispatchers.IO){
-            safeApi(
-                call = {
-                       userApi.loginUser(RegisterUser(username.value,password.value))
-                },
-                onDataReady = {
-                    _userResponse.value = it
+
+
+
+            try {
+                _userLoginResult.emit(Result.Loading)
+                val response = userApi.loginUser(RegisterUser(username.value,password.value))
+                if (response.isSuccessful){
+                    if (response.body() != null){
+                        Log.d("TAG", "loginUser: test 1")
+                        _token.emit(response.body()?.data?.token)
+                        _userResponse.emit(response.body()?.data?.user)
+                        registerUserInApp()
+                        _userLoginResult.emit(Result.Success)
+                    }else{
+                        Log.d("TAG", "loginUser: test 2")
+                        _userLoginResult.emit(Result.Error(response.message()))
+                    }
                 }
-            ).collect(_userLoginResult)
+            }catch (t: Throwable){
+                _userLoginResult.emit(Result.Error("${t.message}"))
+                Log.d("TAG", "loginUser: test 3")
+
+            }
+
         }
     }
 

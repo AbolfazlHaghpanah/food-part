@@ -94,6 +94,8 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-base")
+    implementation("io.coil-kt:coil-svg:2.2.2")
+
 
 
 

@@ -71,10 +71,12 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         ProfileScreen(navController = navController)
+
     }
 
     composable(AppScreens.Login.route) {
         LoginScreen(navController = navController)
+
     }
 
     composable(AppScreens.Search.route) {

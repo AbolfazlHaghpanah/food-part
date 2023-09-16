@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.EditUserPassword
+import com.example.foodpart.network.user.LoginUserResponse
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
 import com.example.foodpart.network.user.UserData
@@ -32,7 +33,7 @@ class SignUpViewModel @Inject constructor(
     private val _userRegisterResult = MutableStateFlow<Result>(Result.Idle)
     val userRegisterResult = _userRegisterResult.asStateFlow()
 
-    private val _userResponse = MutableStateFlow<UserData?>(null)
+    private val _userResponse = MutableStateFlow<LoginUserResponse?>(null)
     val userResponse = _userResponse.asStateFlow()
 
     private val _usernameValid = MutableStateFlow<String?>(null)

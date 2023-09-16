@@ -1,11 +1,12 @@
 package com.example.foodpart.network.user
 
+import android.media.session.MediaSession.Token
 import com.squareup.moshi.JsonClass
 
 
 @JsonClass(generateAdapter = true)
 data class UserResponse(
-    val data : UserData
+    val data : LoginUserResponse
 )
 
 

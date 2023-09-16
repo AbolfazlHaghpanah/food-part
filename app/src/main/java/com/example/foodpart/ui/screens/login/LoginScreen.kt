@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.login
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 
@@ -58,6 +60,8 @@ fun LoginScreen(
 ) {
 
     val loginResult by viewModel.userLoginResult.collectAsState()
+    val token by viewModel.token.collectAsState()
+    val user by viewModel.userResponse.collectAsState()
     val focusManager = LocalFocusManager.current
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -78,6 +82,7 @@ fun LoginScreen(
             {
                 IconButton(onClick = {
                     navController.navigate(AppScreens.Profile.route)
+
                 }) {
                     Icon(
                         modifier = Modifier
@@ -207,7 +212,7 @@ fun LoginScreen(
                             password -> isPasswordValid = false
                             else -> {
                                 viewModel.loginUser()
-                                navController.navigate(AppScreens.Profile.route)
+
                             }
                         }
                     },
