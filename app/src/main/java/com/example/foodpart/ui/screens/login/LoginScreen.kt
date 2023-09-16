@@ -51,8 +51,10 @@ import com.example.foodpart.ui.components.FoodPartTextField
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
 ) {
+
+
     val focusManager = LocalFocusManager.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
