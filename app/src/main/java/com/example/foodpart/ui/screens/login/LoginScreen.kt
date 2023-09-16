@@ -27,6 +27,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
@@ -52,12 +54,13 @@ import com.example.foodpart.ui.components.FoodPartTextField
 @Composable
 fun LoginScreen(
     navController: NavController,
+    viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
 
-
+    val loginResult by viewModel.userLoginResult.collectAsState()
     val focusManager = LocalFocusManager.current
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val username by viewModel.username.collectAsState()
+    val password by viewModel.password.collectAsState()
     var isUsernameValid by remember {
         mutableStateOf(true)
     }
@@ -166,7 +169,7 @@ fun LoginScreen(
                 FoodPartTextField(
                     value = username,
                     onValueChange = {
-                        username = it
+                        viewModel.setUsername(it)
                         isUsernameValid = true
                     },
                     placeholder = "نام کاربری",
@@ -180,7 +183,7 @@ fun LoginScreen(
                 FoodPartTextField(
                     value = password,
                     onValueChange = {
-                        password = it
+                        viewModel.setPassword(it)
                         isPasswordValid = true
                     },
                     visualTransformation = PasswordVisualTransformation(),
@@ -202,7 +205,10 @@ fun LoginScreen(
                         when ("") {
                             username -> isUsernameValid = false
                             password -> isPasswordValid = false
-                            else -> navController.navigate(AppScreens.Profile.route)
+                            else -> {
+                                viewModel.loginUser()
+                                navController.navigate(AppScreens.Profile.route)
+                            }
                         }
                     },
                     text = "تایید"
