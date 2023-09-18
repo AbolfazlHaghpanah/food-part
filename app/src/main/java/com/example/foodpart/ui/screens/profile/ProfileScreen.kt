@@ -20,13 +20,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,20 +54,45 @@ import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.components.Result
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-
+    val username = UserInfo.username?.collectAsState("مهمان")
     val newUsername by viewModel.username.collectAsState()
     val oldPassword by viewModel.oldPassword.collectAsState()
     val newPassword by viewModel.newPassword.collectAsState()
     val isNewUsernameValid by viewModel.usernameValid.collectAsState()
     val isPasswordValid by viewModel.passwordValid.collectAsState()
+    var isLoading by remember { mutableStateOf(false) }
+    val editUserResult by viewModel.editUserResult.collectAsState()
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
+
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(it) {
+                Snackbar(
+                    modifier = Modifier
+                        .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
+                    contentColor = MaterialTheme.colors.onBackground,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                ) {
+                    Text(
+                        text = if (editUserResult == Result.Success) "ثبت نام با موفقیت انجام شد"
+                        else "مشکلی به وجود اومد",
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+            }
+        },
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
         },
@@ -105,7 +137,7 @@ fun ProfileScreen(
                         .height(64.dp)
                         .clip(RoundedCornerShape(59.dp)),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("https://foodpart.samentic.com/api/files/users/${UserInfo.id}/${UserInfo.avatar}")
+                        .data("https://foodpart.samentic.com/api/files/users/${UserInfo.id.value ?: ""}/${UserInfo.avatar.value ?: ""}")
                         .decoderFactory(SvgDecoder.Factory())
                         .build(),
                     contentDescription = "",
@@ -113,13 +145,13 @@ fun ProfileScreen(
                     error = painterResource(R.drawable.profile_photo)
                 )
                 Text(
-                    text = UserInfo.username,
+                    text = username?.value ?: "مهمان",
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
             }
 
-            if (UserInfo.token == null) {
+            if (UserInfo.token.value ?: null == null) {
                 FoodPartButton(
                     onClick = { navController.navigate(AppScreens.Login.route) },
                     text = "وارد شوید"
@@ -145,6 +177,7 @@ fun ProfileScreen(
                     value = newUsername,
                     onValueChange = {
                         viewModel.setUsername(it)
+                        viewModel.nullUsernameValid()
                     },
                     placeholder = "نام کاربری جدید",
                     isError = isNewUsernameValid != null,
@@ -180,6 +213,7 @@ fun ProfileScreen(
                     value = newPassword,
                     onValueChange = {
                         viewModel.setNewPassword(it)
+                        viewModel.nullPasswordValid()
                     },
                     placeholder = "رمز عبور جدید",
                     isError = isPasswordValid != null,
@@ -197,8 +231,52 @@ fun ProfileScreen(
                 ) {
 
                     FoodPartButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+
+                            if (newUsername.isNotEmpty()) viewModel.checkUsernameValidation()
+                            if (newPassword.isNotEmpty()) viewModel.checkPasswordValidation()
+                            scope.launch {
+                                delay(50)
+                            }
+                            if (isNewUsernameValid == null && isPasswordValid == null) {
+                                if (
+                                    newUsername.isNotEmpty()
+                                    && newPassword.isNotEmpty()
+                                    && oldPassword.isNotEmpty()
+                                ) {
+                                    viewModel.editAll()
+                                } else if (
+                                    newUsername.isNotEmpty()
+                                ) {
+                                    viewModel.editUsername()
+                                } else if (
+                                    newPassword.isNotEmpty()
+                                    && oldPassword.isNotEmpty()
+                                ) {
+                                    viewModel.editPassword()
+                                }
+                                scope.launch {
+                                    isLoading = true
+                                    while (editUserResult != Result.Success) {
+                                        delay(50)
+                                        if (editUserResult != Result.Loading) {
+                                            isLoading = false
+                                            break
+                                        }
+                                    }
+                                    if (editUserResult == Result.Success) {
+                                        viewModel.setNewPassword("")
+                                        viewModel.setUsername("")
+                                        viewModel.setOldPassword("")
+                                    }
+                                    scaffoldState.snackbarHostState.showSnackbar("")
+
+                                }
+                            }
+
+                        },
                         text = "تایید",
+                        isLoading = isLoading
                     )
                 }
 

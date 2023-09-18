@@ -46,10 +46,14 @@ class LoginScreenViewModel @Inject constructor(
     val isUserInfoTrue = _isUserinfoTrue.asStateFlow()
 
     fun registerUserInApp(){
-        UserInfo.token = _token.value
-        UserInfo.avatar = _userResponse.value?.avatar
-        UserInfo.id = _userResponse.value?.id
-        UserInfo.username = _userResponse.value?.username?:""
+
+        viewModelScope.launch {
+            UserInfo.token.emit(token.value)
+            UserInfo.avatar.emit(userResponse.value?.avatar)
+            UserInfo.id.emit(userResponse.value?.id)
+            UserInfo.username.emit(userResponse.value?.username)
+        }
+
 
     }
     fun loginUser(){

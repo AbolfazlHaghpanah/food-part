@@ -91,19 +91,19 @@ fun LoginScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = {
-                SnackbarHost(it) {
-                    Snackbar(
-                        modifier = Modifier
-                            .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
-                        contentColor = MaterialTheme.colors.onBackground,
-                        backgroundColor = MaterialTheme.colors.secondary,
-                        ) {
-                        Text(
-                            text = "نام کاربری یا رمز عبور اشتباه است",
-                            style = MaterialTheme.typography.caption
-                        )
-                    }
+            SnackbarHost(it) {
+                Snackbar(
+                    modifier = Modifier
+                        .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
+                    contentColor = MaterialTheme.colors.onBackground,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                ) {
+                    Text(
+                        text = "نام کاربری یا رمز عبور اشتباه است",
+                        style = MaterialTheme.typography.caption
+                    )
                 }
+            }
 
         },
         topBar = {
@@ -237,26 +237,32 @@ fun LoginScreen(
                 )
                 FoodPartButton(
                     onClick = {
+
                         focusManager.clearFocus()
                         when ("") {
                             username -> isUsernameValid = false
                             password -> isPasswordValid = false
                             else -> {
                                 viewModel.loginUser()
-
-                            }
-                        }
-                        scope.launch {
-                            isLoading = true
-                            while (loginResult != Result.Success) {
-                                delay(100)
-                                if (isUserInfoValid == false) {
-                                    isLoading = false
-                                    break
+                                scope.launch {
+                                    isLoading = true
+                                    while (loginResult != Result.Success) {
+                                        delay(100)
+                                        if (isUserInfoValid == false) {
+                                            isLoading = false
+                                            break
+                                        }
+                                    }
+                                    if (loginResult != Result.Success) scaffoldState.snackbarHostState.showSnackbar(
+                                        ""
+                                    )
+                                    if (loginResult == Result.Success) navController.popBackStack(
+                                        AppScreens.Profile.route,
+                                        false
+                                    )
                                 }
                             }
-                            if (loginResult == Result.Success)navController.popBackStack(AppScreens.Profile.route, false)
-                            else scaffoldState.snackbarHostState.showSnackbar("")
+
                         }
 
 

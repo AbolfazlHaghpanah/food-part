@@ -10,6 +10,7 @@ import com.example.foodpart.network.user.EditAllUser
 import com.example.foodpart.network.user.EditUserPassword
 import com.example.foodpart.network.user.EditUserUsername
 import com.example.foodpart.network.user.UserApi
+import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,29 +41,29 @@ class ProfileViewModel @Inject constructor(
     private val _passwordValid = MutableStateFlow<String?>(null)
     val passwordValid = _passwordValid.asStateFlow()
 
-
+    private val _editUserResult = MutableStateFlow<Result>(Result.Idle)
+    val editUserResult = _editUserResult.asStateFlow()
 
     fun editUsername() {
 
         viewModelScope.launch(Dispatchers.IO) {
+            safeApi(
+                call = {
+                    userApi.editUserUsername(
+                        body = EditUserUsername(
+                            username.value
+                        ),
+                        token = "Bearer ${UserInfo.token.value}"
+                    )
+                },
 
-            if (username.value.isNotEmpty()) {
-
-                safeApi(
-                    call = {
-                        userApi.editUserUsername(
-                            body = EditUserUsername(
-                                username.value
-                            )
-                        )
-                    },
-
-                    onDataReady = {
-                        UserInfo.username = username.value
+                onDataReady = {
+                    viewModelScope.launch {
+                        UserInfo.username?.emit(username.value)
                     }
-                ).collect()
+                }
+            ).collect(_editUserResult)
 
-            }
 
         }
     }
@@ -77,17 +78,21 @@ class ProfileViewModel @Inject constructor(
                 safeApi(
                     call = {
                         userApi.editUserPassword(
-                            EditUserPassword(
+                            body = EditUserPassword(
                                 oldPassword = oldPassword.value,
                                 newpassword = newPassword.value
-                            )
+                            ),
+                            token = "Bearer ${UserInfo.token.value}"
                         )
+
                     },
                     onDataReady = {
-                        UserInfo.token = it.additionalInfo.token
+                        viewModelScope.launch {
+                            UserInfo.token?.emit(it.additionalInfo.token)
+                        }
                         Log.d("editUser", "editPassword: passwordChanged")
                     }
-                ).collect()
+                ).collect(_editUserResult)
             }
         }
     }
@@ -103,7 +108,8 @@ class ProfileViewModel @Inject constructor(
                 safeApi(
                     call = {
                         userApi.editUserAll(
-                            EditAllUser(
+                            token = "Bearer ${UserInfo.token.value}",
+                            body = EditAllUser(
                                 username.value,
                                 oldPassword.value,
                                 newPassword.value
@@ -111,29 +117,39 @@ class ProfileViewModel @Inject constructor(
                         )
                     },
                     onDataReady = {
-                        UserInfo.token = it.additionalInfo.token
-                        UserInfo.username = username.value
+                        viewModelScope.launch {
+                            UserInfo.token?.emit(it.additionalInfo.token)
+                            UserInfo.username?.emit(username.value)
+                        }
                     }
-                ).collect()
+                ).collect(_editUserResult)
 
             }
         }
     }
 
+    fun nullUsernameValid() {
+        _usernameValid.value = null
+    }
 
-    fun setUsername(value : String){
+    fun nullPasswordValid() {
+        _passwordValid.value = null
+    }
+
+
+    fun setUsername(value: String) {
         viewModelScope.launch {
             _username.emit(value)
         }
     }
 
-    fun setOldPassword(value : String){
+    fun setOldPassword(value: String) {
         viewModelScope.launch {
             _oldPassword.emit(value)
         }
     }
 
-    fun setNewPassword(value : String){
+    fun setNewPassword(value: String) {
         viewModelScope.launch {
             _newPassword.emit(value)
         }
@@ -145,8 +161,9 @@ class ProfileViewModel @Inject constructor(
             if (username.value.isEmpty()) _usernameValid.emit("نام کاربری را وارد کنید")
             else if (username.value.length < 4) {
                 _usernameValid.emit("نام کاربری خیلی کوچیکه")
-            } else
-            {_usernameValid.emit(null)}
+            } else {
+                _usernameValid.emit(null)
+            }
         }
 
     }
@@ -160,10 +177,17 @@ class ProfileViewModel @Inject constructor(
                 && newPassword.value.length >= 8
             ) {
                 _passwordValid.emit(null)
-            } else {_passwordValid.emit("رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک و بزرگ باشد")}
+            } else {
+                _passwordValid.emit("رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک و بزرگ باشد")
+            }
 
 
         }
+    }
+
+
+    fun editRequest() {
+
     }
 
 }
