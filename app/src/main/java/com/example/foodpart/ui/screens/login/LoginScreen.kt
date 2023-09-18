@@ -23,15 +23,20 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +57,10 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.components.Result
+import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -72,8 +81,31 @@ fun LoginScreen(
         mutableStateOf(true)
     }
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+    val isUserInfoValid by viewModel.isUserInfoTrue.collectAsState()
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+                SnackbarHost(it) {
+                    Snackbar(
+                        modifier = Modifier
+                            .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
+                        contentColor = MaterialTheme.colors.onBackground,
+                        backgroundColor = MaterialTheme.colors.secondary,
+                        ) {
+                        Text(
+                            text = "نام کاربری یا رمز عبور اشتباه است",
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
+                }
+
+        },
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background,
@@ -206,7 +238,6 @@ fun LoginScreen(
                 FoodPartButton(
                     onClick = {
                         focusManager.clearFocus()
-
                         when ("") {
                             username -> isUsernameValid = false
                             password -> isPasswordValid = false
@@ -215,8 +246,23 @@ fun LoginScreen(
 
                             }
                         }
+                        scope.launch {
+                            isLoading = true
+                            while (loginResult != Result.Success) {
+                                delay(100)
+                                if (isUserInfoValid == false) {
+                                    isLoading = false
+                                    break
+                                }
+                            }
+                            if (loginResult == Result.Success)navController.popBackStack(AppScreens.Profile.route, false)
+                            else scaffoldState.snackbarHostState.showSnackbar("")
+                        }
+
+
                     },
-                    text = "تایید"
+                    text = "تایید",
+                    isLoading = isLoading
                 )
             }
             Row(

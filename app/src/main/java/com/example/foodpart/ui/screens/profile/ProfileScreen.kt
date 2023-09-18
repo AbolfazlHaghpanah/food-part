@@ -2,23 +2,31 @@ package com.example.foodpart.ui.screens.profile
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,12 +46,19 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
+import com.example.foodpart.ui.components.FoodPartTextField
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
+
+    val newUsername by viewModel.username.collectAsState()
+    val oldPassword by viewModel.oldPassword.collectAsState()
+    val newPassword by viewModel.newPassword.collectAsState()
+    val isNewUsernameValid by viewModel.usernameValid.collectAsState()
+    val isPasswordValid by viewModel.passwordValid.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -70,10 +85,10 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(start = 24.dp, end = 24.dp, top = 40.dp)
+                .padding(start = 24.dp, end = 24.dp, top = 40.dp, bottom = 16.dp)
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
             Row(
@@ -104,12 +119,92 @@ fun ProfileScreen(
                 )
             }
 
+            if (UserInfo.token == null) {
+                FoodPartButton(
+                    onClick = { navController.navigate(AppScreens.Login.route) },
+                    text = "وارد شوید"
+                )
+            } else {
 
-            FoodPartButton(
-                enabled = {UserInfo.token == null},
-                onClick = { navController.navigate(AppScreens.Login.route) },
-                text = "وارد شوید"
-            )
+                Row {
+                    Text(
+                        text = "تغییر نام کاربری",
+                        style = MaterialTheme.typography.h3
+                    )
+
+                    Icon(
+                        imageVector = Icons.Rounded.KeyboardArrowDown,
+                        contentDescription = "Change username"
+                    )
+
+                }
+
+                FoodPartTextField(
+                    modifier = Modifier
+                        .padding(0.dp, 8.dp),
+                    value = newUsername,
+                    onValueChange = {
+                        viewModel.setUsername(it)
+                    },
+                    placeholder = "نام کاربری جدید",
+                    isError = isNewUsernameValid != null,
+                    errorMassage = isNewUsernameValid
+                )
+
+                Row {
+                    Text(
+                        text = "تغییر رمز عبور",
+                        style = MaterialTheme.typography.h3
+                    )
+
+                    Icon(
+                        imageVector = Icons.Rounded.KeyboardArrowDown,
+                        contentDescription = "Change username"
+                    )
+
+                }
+
+                FoodPartTextField(
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp),
+                    value = oldPassword,
+                    onValueChange = {
+                        viewModel.setOldPassword(it)
+                    },
+                    placeholder = "رمز عبور فعلی"
+                )
+
+                FoodPartTextField(
+                    modifier = Modifier
+                        .padding(top = 0.dp, bottom = 8.dp),
+                    value = newPassword,
+                    onValueChange = {
+                        viewModel.setNewPassword(it)
+                    },
+                    placeholder = "رمز عبور جدید",
+                    isError = isPasswordValid != null,
+                    errorMassage = isPasswordValid
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                AnimatedVisibility(
+                    visible = newUsername.isNotEmpty()
+                            || newPassword.isNotEmpty()
+                            || oldPassword.isNotEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+
+                    FoodPartButton(
+                        onClick = { /*TODO*/ },
+                        text = "تایید",
+                    )
+                }
+
+
+            }
+
 
         }
     }

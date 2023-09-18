@@ -42,6 +42,9 @@ class LoginScreenViewModel @Inject constructor(
     private val _token = MutableStateFlow<String?>(null)
     val token = _token.asStateFlow()
 
+    private val _isUserinfoTrue = MutableStateFlow<Boolean>(true)
+    val isUserInfoTrue = _isUserinfoTrue.asStateFlow()
+
     fun registerUserInApp(){
         UserInfo.token = _token.value
         UserInfo.avatar = _userResponse.value?.avatar
@@ -51,8 +54,6 @@ class LoginScreenViewModel @Inject constructor(
     }
     fun loginUser(){
         viewModelScope.launch (Dispatchers.IO){
-
-
 
             try {
                 _userLoginResult.emit(Result.Loading)
@@ -68,6 +69,9 @@ class LoginScreenViewModel @Inject constructor(
                         Log.d("TAG", "loginUser: test 2")
                         _userLoginResult.emit(Result.Error(response.message()))
                     }
+                }else{
+                    _isUserinfoTrue.emit(false)
+                    _userLoginResult.emit(Result.Error(response.message()))
                 }
             }catch (t: Throwable){
                 _userLoginResult.emit(Result.Error("${t.message}"))
