@@ -1,12 +1,11 @@
 package com.example.foodpart.ui.screens.profile
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,12 +15,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -41,11 +45,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.decode.Decoder
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.example.foodpart.R
@@ -73,6 +76,7 @@ fun ProfileScreen(
     val editUserResult by viewModel.editUserResult.collectAsState()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    var alertDialog by remember { mutableStateOf(false) }
 
     Scaffold(
 
@@ -114,6 +118,75 @@ fun ProfileScreen(
         BackHandler {
             navController.popBackStack(route = AppScreens.Category.route, inclusive = false)
         }
+
+        if (alertDialog) {
+            Dialog(onDismissRequest = { alertDialog = false }) {
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .width(294.dp)
+                        .height(180.dp),
+                    color = MaterialTheme.colors.surface
+                ) {
+                    Column (
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        Text(
+                            text = "آیا تمایل به خروج از حساب کاربری خود را دارید؟",
+                            style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
+                            modifier = Modifier
+                                .width(214.dp)
+                                .padding(top = 36.dp)
+                                .align(Alignment.CenterHorizontally)
+
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Row(
+                            Modifier.padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            FoodPartButton(
+                                modifier = Modifier
+                                    .padding(end = 16.dp)
+                                    .width(180.dp),
+                                onClick = {
+                                    viewModel.logout()
+                                    alertDialog = false
+                                },
+                                text = "خروج"
+                            )
+
+                            Button(
+                                modifier = Modifier
+                                    .border(
+                                        1.dp,
+                                        MaterialTheme.colors.primary,
+                                        MaterialTheme.shapes.medium
+                                    ),
+                                onClick = {
+                                    alertDialog = false
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = MaterialTheme.colors.surface
+                                ),
+                                shape = MaterialTheme.shapes.medium
+                            ) {
+                                Text(
+                                    text = "انصراف",
+                                    style = MaterialTheme.typography.button,
+                                    modifier = Modifier
+                                        .wrapContentWidth(unbounded = true)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Column(
             modifier = Modifier
                 .padding(it)
@@ -149,11 +222,26 @@ fun ProfileScreen(
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
+                Spacer(modifier = Modifier.weight(1f))
+
+                if (UserInfo.token.value ?: null != null) {
+                    IconButton(onClick = {
+                        alertDialog = true
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.logout_1),
+                            contentDescription = "logout"
+                        )
+                    }
+
+                }
             }
 
             if (UserInfo.token.value ?: null == null) {
                 FoodPartButton(
-                    onClick = { navController.navigate(AppScreens.Login.route) },
+                    onClick = {
+                        navController.navigate(AppScreens.Login.route)
+                    },
                     text = "وارد شوید"
                 )
             } else {

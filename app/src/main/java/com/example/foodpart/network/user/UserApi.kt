@@ -40,5 +40,10 @@ interface UserApi {
         @Body body: EditAllUser
     ): Response<EditUserPasswordResponse>
 
+    @GET("v1/user/logout")
+    suspend fun logout(
+        @Header("Authorization") token : String
+    ):Response<Void>
+
 
 }

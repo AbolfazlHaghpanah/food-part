@@ -68,6 +68,9 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+
+
+
     fun editPassword() {
         viewModelScope.launch(Dispatchers.IO) {
             if (
@@ -126,6 +129,23 @@ class ProfileViewModel @Inject constructor(
 
             }
         }
+    }
+
+    fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                userApi.logout(token = "Bearer ${UserInfo.token.value}")
+                UserInfo.token.emit(null)
+                UserInfo.username.emit(null)
+                UserInfo.avatar.emit(null)
+                UserInfo.id.emit(null)
+            } catch (t: Throwable) {
+                Log.d("error", "logout error: ${t.message}")
+
+            }
+        }
+
+
     }
 
     fun nullUsernameValid() {
