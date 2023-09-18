@@ -78,6 +78,7 @@ fun SignUpScreen(
     val isPasswordValid by viewModel.passwordValid.collectAsState()
     val isUsernameValid by viewModel.usernameValid.collectAsState()
     val isRepeatPasswordValid by viewModel.repeatPasswordValid.collectAsState()
+    var isLoading by remember { mutableStateOf(false) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -264,24 +265,37 @@ fun SignUpScreen(
             FoodPartButton(
                 onClick = {
                     focusManager.clearFocus()
-                    scope.launch {
-                        viewModel.checkUsernameValidation()
-                        viewModel.checkPasswordValidation()
-                        viewModel.checkRepeatPasswordValidation(password, repeatPass)
-                        delay(500)
-                        if (
-                            isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
-                        ) {
-                            viewModel.registerUser()
 
-                            delay(3000)
+                    viewModel.checkUsernameValidation()
+                    viewModel.checkPasswordValidation()
+                    viewModel.checkRepeatPasswordValidation(password, repeatPass)
+                    scope.launch {
+                        delay(50)
+                    }
+                    if (
+                        isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
+                    ) {
+
+                        viewModel.registerUser()
+                        scope.launch {
+                            isLoading = true
+                            while (registerResult != Result.Success) {
+                                delay(50)
+                                if (registerResult != Result.Loading) {
+                                    isLoading = false
+                                    break
+                                }
+                            }
                             if (registerResult == Result.Success) {
                                 scaffoldState.snackbarHostState.showSnackbar("")
+                                navController.popBackStack(AppScreens.Login.route, false)
                             }
+
                         }
                     }
                 },
-                text = "تایید"
+                text = "تایید",
+                isLoading = isLoading
             )
 
             Spacer(modifier = Modifier.height(8.dp))

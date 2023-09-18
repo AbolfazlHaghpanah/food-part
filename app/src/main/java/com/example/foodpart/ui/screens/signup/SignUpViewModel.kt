@@ -1,5 +1,6 @@
 package com.example.foodpart.ui.screens.signup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.network.common.safeApi
@@ -33,7 +34,7 @@ class SignUpViewModel @Inject constructor(
     private val _userRegisterResult = MutableStateFlow<Result>(Result.Idle)
     val userRegisterResult = _userRegisterResult.asStateFlow()
 
-    private val _userResponse = MutableStateFlow<LoginUserResponse?>(null)
+    private val _userResponse = MutableStateFlow<UserResponse?>(null)
     val userResponse = _userResponse.asStateFlow()
 
     private val _usernameValid = MutableStateFlow<String?>(null)
@@ -51,10 +52,10 @@ class SignUpViewModel @Inject constructor(
 
             try {
                 _userRegisterResult.emit(Result.Loading)
-                val response = userApi.RegisterUser(RegisterUser(username.value,password.value))
+                val response = userApi.RegisterUser(RegisterUser(username.value, password.value))
                 if (response.isSuccessful) {
                     if (response.body() != null) {
-                        _userResponse.emit(response.body()?.data)
+                        _userResponse.emit(response.body())
                         _userRegisterResult.emit(Result.Success)
                     } else {
                         _userRegisterResult.emit(Result.Error("body was empty"))
@@ -62,21 +63,23 @@ class SignUpViewModel @Inject constructor(
                 } else {
                     _usernameValid.emit("این نام کاربری قبلا انتخاب شده")
                     _userRegisterResult.emit(Result.Error("Validation Error"))
-                }
-            } catch (t: Throwable) {
-                _userRegisterResult.emit(Result.Error("${t.message}"))
 
+                }
+
+            }catch (t: Throwable){
+                Log.e("error", "registerUser: ${t.message}", )
             }
+
         }
     }
 
-    fun setUsername(username: String ){
+    fun setUsername(username: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _username.emit(username)
         }
     }
 
-    fun setPassword (password: String){
+    fun setPassword(password: String) {
         viewModelScope.launch {
             _password.emit(password)
         }
@@ -89,8 +92,9 @@ class SignUpViewModel @Inject constructor(
             if (username.value.isEmpty()) _usernameValid.emit("نام کاربری را وارد کنید")
             else if (username.value.length < 4) {
                 _usernameValid.emit("نام کاربری خیلی کوچیکه")
-            } else
-            {_usernameValid.emit(null)}
+            } else {
+                _usernameValid.emit(null)
+            }
         }
 
     }
@@ -104,7 +108,9 @@ class SignUpViewModel @Inject constructor(
                 && password.value.length >= 8
             ) {
                 _passwordValid.emit(null)
-            } else {_passwordValid.emit("رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک و بزرگ باشد")}
+            } else {
+                _passwordValid.emit("رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک و بزرگ باشد")
+            }
 
 
         }

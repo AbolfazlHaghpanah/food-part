@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class UserResponse(
-    val data : LoginUserResponse
+    val data : UserData
 )
 
 

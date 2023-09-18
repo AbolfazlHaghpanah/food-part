@@ -36,7 +36,7 @@ class LoginScreenViewModel @Inject constructor(
     private val _userLoginResult = MutableStateFlow<Result>(Result.Idle)
     val userLoginResult = _userLoginResult.asStateFlow()
 
-    private val _userResponse = MutableStateFlow<UserData?>(null)
+    private val _userResponse = MutableStateFlow<LoginUserResponse?>(null)
     val userResponse = _userResponse.asStateFlow()
 
     private val _token = MutableStateFlow<String?>(null)
@@ -49,9 +49,9 @@ class LoginScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             UserInfo.token.emit(token.value)
-            UserInfo.avatar.emit(userResponse.value?.avatar)
-            UserInfo.id.emit(userResponse.value?.id)
-            UserInfo.username.emit(userResponse.value?.username)
+            UserInfo.avatar.emit(userResponse.value?.user?.avatar)
+            UserInfo.id.emit(userResponse.value?.user?.id)
+            UserInfo.username.emit(userResponse.value?.user?.username)
         }
 
 
@@ -66,7 +66,7 @@ class LoginScreenViewModel @Inject constructor(
                     if (response.body() != null){
                         Log.d("TAG", "loginUser: test 1")
                         _token.emit(response.body()?.data?.token)
-                        _userResponse.emit(response.body()?.data?.user)
+                        _userResponse.emit(response.body()?.data)
                         registerUserInApp()
                         _userLoginResult.emit(Result.Success)
                     }else{
@@ -78,10 +78,10 @@ class LoginScreenViewModel @Inject constructor(
                     _userLoginResult.emit(Result.Error(response.message()))
                 }
             }catch (t: Throwable){
-                _userLoginResult.emit(Result.Error("${t.message}"))
-                Log.d("TAG", "loginUser: test 3")
-
+                Log.e("error", "loginUser: ${t.message}", )
             }
+
+
 
         }
     }
