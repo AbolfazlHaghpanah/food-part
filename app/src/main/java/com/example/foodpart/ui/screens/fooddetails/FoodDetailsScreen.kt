@@ -145,7 +145,6 @@ fun FoodDetailsScreen(
                             .padding(paddingValues),
                     ) {
                         item {
-
                             AsyncImage(
                                 model = food?.data?.image,
                                 contentDescription = food?.data?.name,
@@ -187,18 +186,9 @@ fun FoodDetailsScreen(
                                 if (((food?.data?.readyTime ?: 0) + (food?.data?.cookTime
                                         ?: 0)) != 0
                                 ) {
-
                                     CookingTimeChip(
                                         time = "${((food?.data?.readyTime ?: 0) + (food?.data?.cookTime ?: 0))} دقیقه "
-                                    ) {
-                                        navController.navigate(
-                                            AppScreens.FoodList.createRoute(
-                                                foodfake.category.category,
-                                                "زیر ${foodfake.cookingTime}",
-                                                FoodListRequestType.Category.type
-                                            )
-                                        )
-                                    }
+                                    )
                                 }
                             }
                         }
@@ -235,16 +225,7 @@ fun FoodDetailsScreen(
 
                                 Spacer(modifier = Modifier.weight(1F))
 
-                                FoodDifficultyChip(onClick = {
-                                    navController.navigate(
-                                        AppScreens.FoodList.createRoute(
-                                            foodfake.category.category,
-                                            foodfake.difficulty.difficulty,
-                                            FoodListRequestType.Category.type
-
-                                        )
-                                    )
-                                })
+                                FoodDifficultyChip()
                             }
                         }
                         item {

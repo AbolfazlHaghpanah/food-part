@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,20 +18,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.components.Result
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReportModalBottomSheet(
-    bottomSheetState: ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState,
+    viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
 
     val focusManger = LocalFocusManager.current
-    var reportTextState by remember {
-        mutableStateOf("")
-    }
+    val reportTextState by viewModel.reportFoodText.collectAsState()
+    val reportResult by viewModel.reportFoodResult.collectAsState()
 
     val scope = rememberCoroutineScope()
 
@@ -49,7 +52,9 @@ fun ReportModalBottomSheet(
                 .padding(top = 16.dp)
                 .height(84.dp),
             value = reportTextState,
-            onValueChange = { reportTextState = it },
+            onValueChange = {
+                viewModel.setReportFoodText(it)
+            },
             placeholder = "اینجا بنویسید "
         )
 
@@ -58,11 +63,13 @@ fun ReportModalBottomSheet(
                 .padding(top = 16.dp),
             onClick = {
                 scope.launch {
+                    viewModel.reportFood()
                     focusManger.clearFocus()
                     bottomSheetState.hide()
                 }
             },
-            text = "ثبت"
+            text = "ثبت",
+            isLoading = reportResult == Result.Loading
         )
     }
 }

@@ -24,12 +24,11 @@ import com.example.foodpart.ui.theme.yellow
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FoodDifficultyChip(
-    onClick: () -> Unit,
     viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
     val food by viewModel.food.collectAsState()
     Chip(
-        onClick = onClick,
+        onClick = {},
         border = BorderStroke(
             1.dp, color = when (food?.additionalInfo?.difficulty?.id) {
                 "ppqrincaaop4cpp" -> green

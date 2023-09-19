@@ -4,6 +4,7 @@ import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryRespons
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,7 +18,8 @@ interface FoodDetailsApi {
     @POST("v1/food/{id}/report")
     suspend fun reportFood(
         @Path("id") id: String,
-        @Body body: ReportBody
+        @Body body: ReportBody,
+        @Header("Authorization") token : String
     ): Response<ReportResponse>
 
     @GET("v1/food")

@@ -1,11 +1,14 @@
 package com.example.foodpart.ui.screens.fooddetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodpart.core.UserInfo
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.fooddetails.FoodDetailsApi
 import com.example.foodpart.network.fooddetails.FoodDetailsResponse
+import com.example.foodpart.network.fooddetails.ReportBody
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryResponse
 import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +24,7 @@ import javax.inject.Inject
 class FoodDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val foodDetailsApi: FoodDetailsApi
-): ViewModel() {
+) : ViewModel() {
 
     val foodId = savedStateHandle.get<String>("id") ?: ""
 
@@ -32,25 +35,41 @@ class FoodDetailsViewModel @Inject constructor(
     val food = _food.asStateFlow()
 
 
+    private val _reportFoodText = MutableStateFlow<String>("")
+    val reportFoodText = _reportFoodText.asStateFlow()
+
     private val _foodSuggestionList = MutableStateFlow<FoodListByCategoryResponse?>(null)
     val foodSuggestionList = _foodSuggestionList.asStateFlow()
+
+    private val _reportFoodResult = MutableStateFlow<Result>(Result.Idle)
+    val reportFoodResult = _reportFoodResult.asStateFlow()
+
+    fun setReportFoodText(value: String) {
+        viewModelScope.launch {
+            _reportFoodText.emit(value)
+        }
+    }
+
+
     init {
         getFood()
     }
 
 
-    fun getSuggestionFoods(){
+    fun getSuggestionFoods() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {
-                    foodDetailsApi.getFoodListByIds(_food.value?.additionalInfo?.similarFoods?.joinToString { it }?:"")
+                    foodDetailsApi.getFoodListByIds(_food.value?.additionalInfo?.similarFoods?.joinToString { it }
+                        ?: "")
                 },
                 onDataReady = {
-                    _foodSuggestionList.value= it
+                    _foodSuggestionList.value = it
                 }
             ).collect()
         }
     }
+
     fun getFood() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
@@ -64,6 +83,23 @@ class FoodDetailsViewModel @Inject constructor(
             ).collect(_foodResult)
 
 
+        }
+    }
+
+    fun reportFood() {
+        viewModelScope.launch(Dispatchers.IO) {
+            safeApi(
+                call = {
+                    foodDetailsApi.reportFood(
+                        foodId,
+                        ReportBody(reportFoodText.value),
+                        "Bearer ${UserInfo.token.value}"
+                    )
+                },
+                onDataReady = {
+                    Log.d("report", "reportFood: success")
+                }
+            ).collect(_reportFoodResult)
         }
     }
 
