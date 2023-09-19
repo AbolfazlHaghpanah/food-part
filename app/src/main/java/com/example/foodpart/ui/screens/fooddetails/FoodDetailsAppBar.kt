@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
+import com.example.foodpart.core.UserInfo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -93,7 +94,16 @@ fun FoodDetailsAppBar(
             ) {
                 DropdownMenuItem(onClick = {
                     scope.launch {
-                        bottomSheetState.show()
+
+                        if (UserInfo.token.value!=null)
+                        {
+                            bottomSheetState.show()
+                        }else{
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "برای گزارش ابتدا باید وارد شوید"
+                            )
+                        }
+
                     }
                     menuState.value = false
                 }) {
@@ -133,7 +143,10 @@ fun FoodDetailsAppBar(
                 DropdownMenuItem(
                     onClick = {
                         scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar("")
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "دستور به علاقه مندی ها اضافه شد",
+                                actionLabel = "علاقه مندی ها"
+                            )
                         }
                         menuState.value = false
                     }

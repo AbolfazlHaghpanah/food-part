@@ -32,6 +32,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +50,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.fooddata.foodList
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.MoreFoodItem
@@ -67,9 +67,6 @@ fun FoodDetailsScreen(
     val food by viewModel.food.collectAsState()
     val foodResult by viewModel.foodResult.collectAsState()
     val similarFood by viewModel.foodSuggestionList.collectAsState()
-
-
-    val foodfake = foodList.find { it.id == 1 }!!
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val isFullImage = remember {
@@ -77,6 +74,10 @@ fun FoodDetailsScreen(
     }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val reportResult by viewModel.reportFoodResult.collectAsState()
+
+
+
     BackHandler {
         if (bottomSheetState.isVisible)
             scope.launch {
@@ -98,7 +99,9 @@ fun FoodDetailsScreen(
         ModalBottomSheetLayout(
             sheetState = bottomSheetState,
             sheetContent = {
-                ReportModalBottomSheet(bottomSheetState = bottomSheetState)
+                ReportModalBottomSheet(
+                    bottomSheetState = bottomSheetState
+                )
             }) {
             Scaffold(
                 scaffoldState = scaffoldState,
@@ -109,18 +112,13 @@ fun FoodDetailsScreen(
                                 .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
                             contentColor = MaterialTheme.colors.onBackground,
                             backgroundColor = MaterialTheme.colors.secondary,
-                            action = {
+                            action =
+                            {
                                 TextButton(onClick = {
-                                    navController.navigate(
-                                        AppScreens.FoodList.createRoute(
-                                            category = foodfake.category.category,
-                                            appBar = "علاقه مندی ها",
-                                            FoodListRequestType.Category.type
-                                        )
-                                    )
+
                                 }) {
                                     Text(
-                                        text = "علاقه مندی ها",
+                                        text = it.actionLabel.orEmpty(),
                                         style = MaterialTheme.typography.caption,
                                         color = MaterialTheme.colors.primary
                                     )
@@ -129,7 +127,7 @@ fun FoodDetailsScreen(
 
                             ) {
                             Text(
-                                text = "دستور به علاقه مندی ها اضافه شد",
+                                text = it.message,
                                 style = MaterialTheme.typography.caption
                             )
                         }
@@ -139,13 +137,30 @@ fun FoodDetailsScreen(
                     FoodDetailsAppBar(navController, bottomSheetState, scaffoldState)
                 }
             ) { paddingValues ->
+
+                LaunchedEffect(key1 = reportResult) {
+                    viewModel.setReportFoodText("")
+                    if (reportResult == Result.Success){
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            "گزارش شما برای ما ارسال شد"
+                        )
+                    }else if (reportResult == Result.Error("not_success_response")){
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            "مشکلی پیش اومد"
+                        )
+                    }else if (reportResult == Result.Error("not_status")){
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            "مشکل در برقراری ارتباط"
+                        )
+                    }
+                }
+
                 if (foodResult == Result.Success) {
                     LazyColumn(
                         modifier = Modifier
                             .padding(paddingValues),
                     ) {
                         item {
-
                             AsyncImage(
                                 model = food?.data?.image,
                                 contentDescription = food?.data?.name,
@@ -187,18 +202,9 @@ fun FoodDetailsScreen(
                                 if (((food?.data?.readyTime ?: 0) + (food?.data?.cookTime
                                         ?: 0)) != 0
                                 ) {
-
                                     CookingTimeChip(
                                         time = "${((food?.data?.readyTime ?: 0) + (food?.data?.cookTime ?: 0))} دقیقه "
-                                    ) {
-                                        navController.navigate(
-                                            AppScreens.FoodList.createRoute(
-                                                foodfake.category.category,
-                                                "زیر ${foodfake.cookingTime}",
-                                                FoodListRequestType.Category.type
-                                            )
-                                        )
-                                    }
+                                    )
                                 }
                             }
                         }
@@ -235,16 +241,7 @@ fun FoodDetailsScreen(
 
                                 Spacer(modifier = Modifier.weight(1F))
 
-                                FoodDifficultyChip(onClick = {
-                                    navController.navigate(
-                                        AppScreens.FoodList.createRoute(
-                                            foodfake.category.category,
-                                            foodfake.difficulty.difficulty,
-                                            FoodListRequestType.Category.type
-
-                                        )
-                                    )
-                                })
+                                FoodDifficultyChip()
                             }
                         }
                         item {
