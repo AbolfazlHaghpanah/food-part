@@ -28,10 +28,10 @@ suspend fun <T> safeApi(
                     emit(Result.Error("whoops body was empty"))
                 }
             } else {
-                emit(Result.Error("whoops: got ${response.code()} code!"))
+                emit(Result.Error("not_success_response"))
             }
         } catch (t: Throwable) {
-            emit(Result.Error("whoops: ${t.message}"))
+            emit(Result.Error("no_Status"))
         }
 
     }.cancellable()
