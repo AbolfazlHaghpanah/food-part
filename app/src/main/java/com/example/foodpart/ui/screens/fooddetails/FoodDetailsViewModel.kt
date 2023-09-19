@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.core.UserInfo
+import com.example.foodpart.database.savedfood.SavedFoodDao
+import com.example.foodpart.database.savedfood.SavedFoodEntity
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.fooddetails.FoodDetailsApi
 import com.example.foodpart.network.fooddetails.FoodDetailsResponse
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FoodDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val foodDetailsApi: FoodDetailsApi
+    private val foodDetailsApi: FoodDetailsApi,
+    private val savedFoodDao: SavedFoodDao
 ) : ViewModel() {
 
     val foodId = savedStateHandle.get<String>("id") ?: ""
@@ -53,6 +56,19 @@ class FoodDetailsViewModel @Inject constructor(
 
     init {
         getFood()
+    }
+
+
+    fun saveFood(){
+        viewModelScope.launch {
+            savedFoodDao.addFood(SavedFoodEntity(
+                id = foodId,
+                name = food.value?.data?.name?:"",
+                image = food.value?.data?.image,
+                cookTime = food.value?.data?.cookTime,
+                readyTime = food.value?.data?.readyTime
+            ))
+        }
     }
 
 

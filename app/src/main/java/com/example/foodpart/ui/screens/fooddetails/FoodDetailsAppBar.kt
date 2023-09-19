@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.UserInfo
@@ -42,13 +43,15 @@ import kotlinx.coroutines.launch
 fun FoodDetailsAppBar(
     navController: NavController,
     bottomSheetState: ModalBottomSheetState,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val menuState = remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
+
 
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
@@ -143,6 +146,7 @@ fun FoodDetailsAppBar(
                 DropdownMenuItem(
                     onClick = {
                         scope.launch {
+                            viewModel.saveFood()
                             scaffoldState.snackbarHostState.showSnackbar(
                                 message = "دستور به علاقه مندی ها اضافه شد",
                                 actionLabel = "علاقه مندی ها"

@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.core.UserInfo
+import com.example.foodpart.database.savedfood.SavedFoodDao
+import com.example.foodpart.database.savedfood.SavedFoodEntity
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.EditAllUser
 import com.example.foodpart.network.user.EditUserPassword
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userApi: UserApi
+    private val userApi: UserApi,
+    private val savedFoodDao: SavedFoodDao
 ) : ViewModel() {
 
     private val _username = MutableStateFlow<String>("")
@@ -40,6 +43,15 @@ class ProfileViewModel @Inject constructor(
 
     private val _editUserResult = MutableStateFlow<Result>(Result.Idle)
     val editUserResult = _editUserResult.asStateFlow()
+
+    private val _savedFoods = MutableStateFlow<List<SavedFoodEntity>>(emptyList())
+    val savedFoods = _savedFoods.asStateFlow()
+
+
+    init {
+        observeSavedFoods()
+    }
+
 
     fun editUsername() {
 
@@ -63,6 +75,13 @@ class ProfileViewModel @Inject constructor(
 
 
         }
+    }
+
+    fun observeSavedFoods(){
+        viewModelScope.launch (Dispatchers.IO) {
+            savedFoodDao.observeFoods().collect(_savedFoods)
+        }
+
     }
 
 

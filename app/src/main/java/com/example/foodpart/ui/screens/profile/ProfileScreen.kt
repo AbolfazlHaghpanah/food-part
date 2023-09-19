@@ -6,8 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -57,8 +61,10 @@ import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.core.UserInfo
+import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
+import com.example.foodpart.ui.components.MoreFoodItem
 import com.example.foodpart.ui.components.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,6 +87,7 @@ fun ProfileScreen(
     var alertDialog by remember { mutableStateOf(false) }
     var isEditingUsername by remember { mutableStateOf(false) }
     var isEditingPassword by remember { mutableStateOf(false) }
+    val savedFoods by viewModel.savedFoods.collectAsState()
 
     Scaffold(
 
@@ -229,7 +236,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
 
-                if (UserInfo.token.value?:null != null) {
+                if (UserInfo.token.value ?: null != null) {
                     IconButton(onClick = {
                         alertDialog = true
                     }) {
@@ -241,6 +248,40 @@ fun ProfileScreen(
 
                 }
             }
+            Text(
+                text = "غذا های مورد علاقه",
+                style = MaterialTheme.typography.h3.copy(textAlign = TextAlign.Start)
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.Top,
+                contentPadding = PaddingValues(0.dp, 16.dp),
+            ) {
+
+
+                items(if (savedFoods.size <= 6) savedFoods.size else 6) {
+                    FoodItem(
+                        Modifier.clickable {
+                            navController.navigate(AppScreens.FoodDetails.createRoute(savedFoods[it].id))
+                        },
+                        name = savedFoods[it].name,
+                        time = if (((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime
+                                ?: 0)) != 0
+                        ) "${((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime ?: 0))} دقیقه " else "",
+                        image = savedFoods[it].image
+                    )
+                }
+                item {
+                    MoreFoodItem(
+                        modifier = Modifier.clickable {
+
+                        }
+                    )
+                }
+
+            }
+
+
 
             if (UserInfo.token.value ?: null == null) {
                 FoodPartButton(
@@ -249,6 +290,7 @@ fun ProfileScreen(
                     },
                     text = "وارد شوید"
                 )
+
             } else {
 
                 TextButton(
@@ -386,7 +428,7 @@ fun ProfileScreen(
                                             || editUserResult == Result.Error("no_Status")
                                             || editUserResult == Result.Error("not_success_response")
                                         ) {
-                                            if (editUserResult == Result.Error("not_success_response")){
+                                            if (editUserResult == Result.Error("not_success_response")) {
                                                 viewModel.setUsernameValid("نام کاربری قبلا انتخاب شده")
                                             }
                                             isLoading = false
@@ -397,7 +439,7 @@ fun ProfileScreen(
                                     if (editUserResult == Result.Success
                                         || editUserResult != Result.Error("not_success_response")
                                     ) {
-                                        if (editUserResult == Result.Success){
+                                        if (editUserResult == Result.Success) {
                                             viewModel.setNewPassword("")
                                             viewModel.setUsername("")
                                             viewModel.setOldPassword("")
