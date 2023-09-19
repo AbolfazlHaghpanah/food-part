@@ -4,20 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.core.UserInfo
-import com.example.foodpart.core.UserInfo.token
-import com.example.foodpart.network.common.safeApi
-import com.example.foodpart.network.user.EditUserPassword
-import com.example.foodpart.network.user.EditUserUsername
 import com.example.foodpart.network.user.LoginUserResponse
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
-import com.example.foodpart.network.user.UserData
 import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -64,13 +58,11 @@ class LoginScreenViewModel @Inject constructor(
                 val response = userApi.loginUser(RegisterUser(username.value,password.value))
                 if (response.isSuccessful){
                     if (response.body() != null){
-                        Log.d("TAG", "loginUser: test 1")
                         _token.emit(response.body()?.data?.token)
                         _userResponse.emit(response.body()?.data)
                         registerUserInApp()
                         _userLoginResult.emit(Result.Success)
                     }else{
-                        Log.d("TAG", "loginUser: test 2")
                         _userLoginResult.emit(Result.Error(response.message()))
                     }
                 }else{
@@ -78,7 +70,9 @@ class LoginScreenViewModel @Inject constructor(
                     _userLoginResult.emit(Result.Error(response.message()))
                 }
             }catch (t: Throwable){
-                Log.e("error", "loginUser: ${t.message}", )
+                _userLoginResult.emit(Result.Error("no_status"))
+                Log.e("error", "loginUser: ${t.message}" )
+
             }
 
 

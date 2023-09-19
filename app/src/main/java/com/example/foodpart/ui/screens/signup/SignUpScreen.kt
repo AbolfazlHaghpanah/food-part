@@ -56,10 +56,7 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.Result
-import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -90,22 +87,25 @@ fun SignUpScreen(
                     contentColor = MaterialTheme.colors.onBackground,
                     backgroundColor = MaterialTheme.colors.secondary,
                     action = {
-                        TextButton(onClick = {
-                            navController.navigate(
-                                AppScreens.Login.route
-                            )
-                        }) {
-                            Text(
-                                text = "ورود",
-                                style = MaterialTheme.typography.caption,
-                                color = MaterialTheme.colors.primary
-                            )
+                        if (registerResult != Result.Error("no_status")) {
+                            TextButton(onClick = {
+                                navController.navigate(
+                                    AppScreens.Login.route
+                                )
+                            }) {
+                                Text(
+                                    text = "ورود",
+                                    style = MaterialTheme.typography.caption,
+                                    color = MaterialTheme.colors.primary
+                                )
+                            }
                         }
                     },
 
                     ) {
                     Text(
-                        text = "ثبت نام با موفقیت انجام شد"
+                        text = if (registerResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
+                        else "ثبت نام با موفقیت انجام شد"
 
                     )
                 }
@@ -281,14 +281,22 @@ fun SignUpScreen(
                             isLoading = true
                             while (registerResult != Result.Success) {
                                 delay(50)
-                                if (registerResult != Result.Loading) {
+                                if (registerResult != Result.Loading
+                                    || registerResult == Result.Error("no_status")
+                                ) {
                                     isLoading = false
                                     break
                                 }
                             }
-                            if (registerResult == Result.Success) {
+                            isLoading = false
+                            if (registerResult == Result.Success
+                                ||registerResult == Result.Error("no_status")) {
+
                                 scaffoldState.snackbarHostState.showSnackbar("")
-                                navController.popBackStack(AppScreens.Login.route, false)
+
+                                if (registerResult == Result.Success){
+                                    navController.popBackStack(AppScreens.Login.route, false)
+                                }
                             }
 
                         }

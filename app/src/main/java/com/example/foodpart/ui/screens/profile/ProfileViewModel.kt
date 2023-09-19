@@ -1,7 +1,6 @@
 package com.example.foodpart.ui.screens.profile
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.core.UserInfo
@@ -15,15 +14,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userApi: UserApi,
-    savedStateHandle: SavedStateHandle
+    private val userApi: UserApi
 ) : ViewModel() {
 
     private val _username = MutableStateFlow<String>("")
@@ -59,7 +56,7 @@ class ProfileViewModel @Inject constructor(
 
                 onDataReady = {
                     viewModelScope.launch {
-                        UserInfo.username?.emit(username.value)
+                        UserInfo.username.emit(username.value)
                     }
                 }
             ).collect(_editUserResult)
@@ -69,7 +66,11 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-
+    fun setUsernameValid(value : String?){
+        viewModelScope.launch {
+            _usernameValid.emit(value)
+        }
+    }
 
     fun editPassword() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -91,7 +92,7 @@ class ProfileViewModel @Inject constructor(
                     },
                     onDataReady = {
                         viewModelScope.launch {
-                            UserInfo.token?.emit(it.additionalInfo.token)
+                            UserInfo.token.emit(it.additionalInfo.token)
                         }
                         Log.d("editUser", "editPassword: passwordChanged")
                     }
@@ -121,8 +122,8 @@ class ProfileViewModel @Inject constructor(
                     },
                     onDataReady = {
                         viewModelScope.launch {
-                            UserInfo.token?.emit(it.additionalInfo.token)
-                            UserInfo.username?.emit(username.value)
+                            UserInfo.token.emit(it.additionalInfo.token)
+                            UserInfo.username.emit(username.value)
                         }
                     }
                 ).collect(_editUserResult)
@@ -206,8 +207,5 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-    fun editRequest() {
-
-    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.foodpart.ui.screens.login
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +25,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
@@ -54,11 +52,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.Result
-import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -69,8 +65,6 @@ fun LoginScreen(
 ) {
 
     val loginResult by viewModel.userLoginResult.collectAsState()
-    val token by viewModel.token.collectAsState()
-    val user by viewModel.userResponse.collectAsState()
     val focusManager = LocalFocusManager.current
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -99,7 +93,8 @@ fun LoginScreen(
                     backgroundColor = MaterialTheme.colors.secondary,
                 ) {
                     Text(
-                        text = "نام کاربری یا رمز عبور اشتباه است",
+                        text = if (loginResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
+                        else "نام کاربری یا رمز عبور اشتباه است",
                         style = MaterialTheme.typography.caption
                     )
                 }
@@ -248,11 +243,14 @@ fun LoginScreen(
                                     isLoading = true
                                     while (loginResult != Result.Success) {
                                         delay(100)
-                                        if (isUserInfoValid == false) {
+                                        if (isUserInfoValid == false
+                                            || loginResult == Result.Error("no_status")
+                                        ) {
                                             isLoading = false
                                             break
                                         }
                                     }
+                                    isLoading = false
                                     if (loginResult != Result.Success) scaffoldState.snackbarHostState.showSnackbar(
                                         ""
                                     )

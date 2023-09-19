@@ -3,20 +3,13 @@ package com.example.foodpart.ui.screens.signup
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodpart.network.common.safeApi
-import com.example.foodpart.network.user.EditUserPassword
-import com.example.foodpart.network.user.LoginUserResponse
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
-import com.example.foodpart.network.user.UserData
-import com.example.foodpart.network.user.UserResponse
 import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +26,6 @@ class SignUpViewModel @Inject constructor(
 
     private val _userRegisterResult = MutableStateFlow<Result>(Result.Idle)
     val userRegisterResult = _userRegisterResult.asStateFlow()
-
-    private val _userResponse = MutableStateFlow<UserResponse?>(null)
-    val userResponse = _userResponse.asStateFlow()
 
     private val _usernameValid = MutableStateFlow<String?>(null)
     val usernameValid = _usernameValid.asStateFlow()
@@ -55,7 +45,6 @@ class SignUpViewModel @Inject constructor(
                 val response = userApi.RegisterUser(RegisterUser(username.value, password.value))
                 if (response.isSuccessful) {
                     if (response.body() != null) {
-                        _userResponse.emit(response.body())
                         _userRegisterResult.emit(Result.Success)
                     } else {
                         _userRegisterResult.emit(Result.Error("body was empty"))
@@ -66,8 +55,9 @@ class SignUpViewModel @Inject constructor(
 
                 }
 
-            }catch (t: Throwable){
-                Log.e("error", "registerUser: ${t.message}", )
+            } catch (t: Throwable) {
+                _userRegisterResult.emit(Result.Error("no_status"))
+                Log.e("error", "registerUser: ${t.message}")
             }
 
         }

@@ -27,9 +27,11 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -66,7 +68,7 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val username = UserInfo.username?.collectAsState("مهمان")
+    val username = UserInfo.username.collectAsState("مهمان")
     val newUsername by viewModel.username.collectAsState()
     val oldPassword by viewModel.oldPassword.collectAsState()
     val newPassword by viewModel.newPassword.collectAsState()
@@ -77,6 +79,8 @@ fun ProfileScreen(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var alertDialog by remember { mutableStateOf(false) }
+    var isEditingUsername by remember { mutableStateOf(false) }
+    var isEditingPassword by remember { mutableStateOf(false) }
 
     Scaffold(
 
@@ -90,7 +94,7 @@ fun ProfileScreen(
                     backgroundColor = MaterialTheme.colors.secondary,
                 ) {
                     Text(
-                        text = if (editUserResult == Result.Success) "ثبت نام با موفقیت انجام شد"
+                        text = if (editUserResult == Result.Success) "تغییرات با موفقیت اعمال شد"
                         else "مشکلی به وجود اومد",
                         style = MaterialTheme.typography.caption
                     )
@@ -128,9 +132,9 @@ fun ProfileScreen(
                         .height(180.dp),
                     color = MaterialTheme.colors.surface
                 ) {
-                    Column (
+                    Column(
                         verticalArrangement = Arrangement.Center
-                    ){
+                    ) {
                         Text(
                             text = "آیا تمایل به خروج از حساب کاربری خود را دارید؟",
                             style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
@@ -218,13 +222,14 @@ fun ProfileScreen(
                     error = painterResource(R.drawable.profile_photo)
                 )
                 Text(
-                    text = username?.value ?: "مهمان",
+                    text = username.value ?: "مهمان",
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
                 Spacer(modifier = Modifier.weight(1f))
 
-                if (UserInfo.token.value ?: null != null) {
+
+                if (UserInfo.token.value?:null != null) {
                     IconButton(onClick = {
                         alertDialog = true
                     }) {
@@ -246,67 +251,97 @@ fun ProfileScreen(
                 )
             } else {
 
-                Row {
+                TextButton(
+                    onClick = {
+                        isEditingUsername = !isEditingUsername
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colors.onBackground,
+                        backgroundColor = MaterialTheme.colors.background
+                    )
+                ) {
                     Text(
                         text = "تغییر نام کاربری",
                         style = MaterialTheme.typography.h3
                     )
 
                     Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowDown,
+                        imageVector = if (isEditingUsername) Icons.Rounded.KeyboardArrowDown
+                        else Icons.Rounded.KeyboardArrowLeft,
                         contentDescription = "Change username"
                     )
 
                 }
+                AnimatedVisibility(
+                    visible = isEditingUsername,
+                ) {
+                    FoodPartTextField(
+                        modifier = Modifier
+                            .padding(0.dp, 8.dp),
+                        value = newUsername,
+                        onValueChange = {
+                            viewModel.setUsername(it)
+                            viewModel.nullUsernameValid()
+                        },
+                        placeholder = "نام کاربری جدید",
+                        isError = isNewUsernameValid != null,
+                        errorMassage = isNewUsernameValid
+                    )
 
-                FoodPartTextField(
-                    modifier = Modifier
-                        .padding(0.dp, 8.dp),
-                    value = newUsername,
-                    onValueChange = {
-                        viewModel.setUsername(it)
-                        viewModel.nullUsernameValid()
+                }
+
+                TextButton(
+                    onClick = {
+                        isEditingPassword = !isEditingPassword
                     },
-                    placeholder = "نام کاربری جدید",
-                    isError = isNewUsernameValid != null,
-                    errorMassage = isNewUsernameValid
-                )
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colors.onBackground,
+                        backgroundColor = MaterialTheme.colors.background
 
-                Row {
+                    )
+                ) {
                     Text(
                         text = "تغییر رمز عبور",
                         style = MaterialTheme.typography.h3
                     )
 
                     Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowDown,
+                        imageVector = if (isEditingPassword) Icons.Rounded.KeyboardArrowDown
+                        else Icons.Rounded.KeyboardArrowLeft,
                         contentDescription = "Change username"
                     )
 
                 }
+                AnimatedVisibility(
+                    visible = isEditingPassword
+                ) {
+                    FoodPartTextField(
+                        modifier = Modifier
+                            .padding(top = 8.dp, bottom = 8.dp),
+                        value = oldPassword,
+                        onValueChange = {
+                            viewModel.setOldPassword(it)
+                        },
+                        placeholder = "رمز عبور فعلی"
+                    )
+                }
+                AnimatedVisibility(
+                    visible = isEditingPassword
+                ) {
+                    FoodPartTextField(
+                        modifier = Modifier
+                            .padding(top = 0.dp, bottom = 8.dp),
+                        value = newPassword,
+                        onValueChange = {
+                            viewModel.setNewPassword(it)
+                            viewModel.nullPasswordValid()
+                        },
+                        placeholder = "رمز عبور جدید",
+                        isError = isPasswordValid != null,
+                        errorMassage = isPasswordValid
+                    )
+                }
 
-                FoodPartTextField(
-                    modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp),
-                    value = oldPassword,
-                    onValueChange = {
-                        viewModel.setOldPassword(it)
-                    },
-                    placeholder = "رمز عبور فعلی"
-                )
-
-                FoodPartTextField(
-                    modifier = Modifier
-                        .padding(top = 0.dp, bottom = 8.dp),
-                    value = newPassword,
-                    onValueChange = {
-                        viewModel.setNewPassword(it)
-                        viewModel.nullPasswordValid()
-                    },
-                    placeholder = "رمز عبور جدید",
-                    isError = isPasswordValid != null,
-                    errorMassage = isPasswordValid
-                )
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -347,17 +382,30 @@ fun ProfileScreen(
                                     isLoading = true
                                     while (editUserResult != Result.Success) {
                                         delay(50)
-                                        if (editUserResult != Result.Loading) {
+                                        if (editUserResult != Result.Loading
+                                            || editUserResult == Result.Error("no_Status")
+                                            || editUserResult == Result.Error("not_success_response")
+                                        ) {
+                                            if (editUserResult == Result.Error("not_success_response")){
+                                                viewModel.setUsernameValid("نام کاربری قبلا انتخاب شده")
+                                            }
                                             isLoading = false
                                             break
                                         }
                                     }
-                                    if (editUserResult == Result.Success) {
-                                        viewModel.setNewPassword("")
-                                        viewModel.setUsername("")
-                                        viewModel.setOldPassword("")
+                                    isLoading = false
+                                    if (editUserResult == Result.Success
+                                        || editUserResult != Result.Error("not_success_response")
+                                    ) {
+                                        if (editUserResult == Result.Success){
+                                            viewModel.setNewPassword("")
+                                            viewModel.setUsername("")
+                                            viewModel.setOldPassword("")
+                                        }
+                                        scaffoldState.snackbarHostState.showSnackbar("")
+
                                     }
-                                    scaffoldState.snackbarHostState.showSnackbar("")
+
 
                                 }
                             }
