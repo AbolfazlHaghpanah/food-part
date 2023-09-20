@@ -22,7 +22,7 @@ fun CategoriesList(
     val indicationState = remember { MutableInteractionSource() }
     val categorySelectedState by viewModel.categoryFlow.collectAsState()
     LazyRow(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(16.dp,16.dp,16.dp,0.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(Categories.values()) { item ->

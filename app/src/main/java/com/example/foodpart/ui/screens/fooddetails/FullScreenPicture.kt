@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -22,26 +21,30 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.example.foodpart.R
 
 @Composable
 fun FullScreenPicture(
-    isFullImage: MutableState<Boolean>,
-    imageRes: Int
+    viewModel: FoodDetailsViewModel = hiltViewModel(),
+    imageRes : String?
 
 ) {
+    val isFullImage by viewModel.isFullScreenImage.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background
             ) {
                 IconButton(onClick = {
-                    isFullImage.value = false
+                    viewModel.setIsFullScreenImage(false)
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.KeyboardArrowRight,
@@ -51,7 +54,7 @@ fun FullScreenPicture(
                 }
                 Text(
                     text = "عکس",
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h2,
                     color = MaterialTheme.colors.onBackground
                 )
                 Spacer(modifier = Modifier.weight(1F))
@@ -68,10 +71,10 @@ fun FullScreenPicture(
         }
     ) {
         BackHandler {
-            isFullImage.value = false
+            viewModel.setIsFullScreenImage(false)
         }
         AnimatedVisibility(
-            visible = isFullImage.value,
+            visible = isFullImage,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -82,17 +85,19 @@ fun FullScreenPicture(
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { isFullImage.value = false }
+                        onClick = { viewModel.setIsFullScreenImage(false) }
                     )
             ) {
-                Image(
+
+                AsyncImage(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxWidth(),
-                    painter = painterResource(imageRes),
-                    contentDescription = "food image",
-                    contentScale = ContentScale.Crop
+                    model = imageRes,
+                    contentDescription = "",
+                    error = painterResource(id = R.drawable.food_image_details),
                 )
+
             }
         }
 
