@@ -35,8 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -109,7 +108,7 @@ fun FoodDetailsScreen(
                             action =
                             {
                                 TextButton(onClick = {
-
+                                    navController.navigate(AppScreens.FoodList.createRoute("","غذا های مورد علاقه",FoodListRequestType.SavedFood.type))
                                 }) {
                                     Text(
                                         text = it.actionLabel.orEmpty(),
@@ -179,14 +178,12 @@ fun FoodDetailsScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
+                                    modifier = Modifier
+                                        .weight(0.6f),
                                     text = food?.data?.name ?: "",
-                                    style = MaterialTheme.typography.h1
+                                    style = MaterialTheme.typography.h1.copy(textAlign = TextAlign.Start)
                                 )
 
-                                Spacer(
-                                    modifier = Modifier
-                                        .weight(1F)
-                                )
 
                                 Text(
                                     modifier = Modifier.padding(16.dp, 0.dp),
@@ -257,7 +254,7 @@ fun FoodDetailsScreen(
                                     bottom = 24.dp
                                 ),
                                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.Top
                             ) {
                                 items(similarFood?.data ?: emptyList()) { item ->
                                     FoodItem(

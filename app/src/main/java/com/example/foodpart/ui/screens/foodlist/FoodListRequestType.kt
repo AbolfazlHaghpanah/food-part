@@ -23,5 +23,6 @@ sealed class FoodListRequestType(
             whatToCookDescription = description
         }
     }
+    object SavedFood : FoodListRequestType("saved-food")
 
 }

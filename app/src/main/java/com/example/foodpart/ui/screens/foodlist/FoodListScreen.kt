@@ -102,7 +102,7 @@ fun FoodListScreen(
         }
     ) {
 
-        if (foodListResult == Result.Success) {
+        if (foodListResult == Result.Success || foodListResult == Result.Idle) {
 
             if (foodList.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize()) {
