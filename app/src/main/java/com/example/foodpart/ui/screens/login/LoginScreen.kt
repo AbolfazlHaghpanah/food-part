@@ -51,7 +51,7 @@ import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -6,7 +6,7 @@ import com.example.foodpart.database.user.UserDao
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.ui.components.FoodPartBottomNavigation
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 
 @Composable
 fun SearchScreen(
