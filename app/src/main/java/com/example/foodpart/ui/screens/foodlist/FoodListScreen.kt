@@ -44,7 +44,7 @@ import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
-import com.example.foodpart.ui.components.Result
+import com.example.foodpart.core.Result
 import kotlinx.coroutines.launch
 
 @Composable

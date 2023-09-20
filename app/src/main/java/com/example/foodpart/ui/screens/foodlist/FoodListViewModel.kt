@@ -7,7 +7,7 @@ import com.example.foodpart.database.savedfood.SavedFoodDao
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryApi
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryItem
-import com.example.foodpart.ui.components.Result
+import com.example.foodpart.core.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

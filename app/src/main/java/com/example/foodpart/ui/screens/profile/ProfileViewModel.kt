@@ -12,7 +12,7 @@ import com.example.foodpart.network.user.EditAllUser
 import com.example.foodpart.network.user.EditUserPassword
 import com.example.foodpart.network.user.EditUserUsername
 import com.example.foodpart.network.user.UserApi
-import com.example.foodpart.ui.components.Result
+import com.example.foodpart.core.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

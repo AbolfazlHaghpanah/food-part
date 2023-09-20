@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
-import com.example.foodpart.ui.components.Result
+import com.example.foodpart.core.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.foodpart.core
+package com.example.foodpart.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.foodpart.core.bottomNavItems
 
 @Composable
 fun FoodPartBottomNavigation(

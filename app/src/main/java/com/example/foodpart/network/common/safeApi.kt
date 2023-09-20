@@ -1,6 +1,6 @@
 package com.example.foodpart.network.common
 
-import com.example.foodpart.ui.components.Result
+import com.example.foodpart.core.Result
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
