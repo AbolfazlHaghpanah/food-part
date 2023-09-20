@@ -1,6 +1,5 @@
 package com.example.foodpart.network.fooddetails
 
-import com.example.foodpart.ui.screens.whattocook.DifficultyItems
 import com.squareup.moshi.JsonClass
 
 

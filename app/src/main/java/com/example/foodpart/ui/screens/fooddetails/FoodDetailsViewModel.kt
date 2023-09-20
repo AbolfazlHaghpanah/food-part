@@ -33,7 +33,7 @@ class FoodDetailsViewModel @Inject constructor(
 
     private val _user = MutableStateFlow<UserEntity?>(null)
 
-    val foodId = savedStateHandle.get<String>("id") ?: ""
+    private val foodId = savedStateHandle.get<String>("id") ?: ""
 
     private val _foodResult = MutableStateFlow<Result>(Result.Idle)
     val foodResult = _foodResult.asStateFlow()
@@ -41,7 +41,7 @@ class FoodDetailsViewModel @Inject constructor(
     private val _food = MutableStateFlow<FoodDetailsResponse?>(null)
     val food = _food.asStateFlow()
     
-    private val _reportFoodText = MutableStateFlow<String>("")
+    private val _reportFoodText = MutableStateFlow("")
     val reportFoodText = _reportFoodText.asStateFlow()
 
     private val _foodSuggestionList = MutableStateFlow<FoodListByCategoryResponse?>(null)
@@ -86,7 +86,7 @@ class FoodDetailsViewModel @Inject constructor(
     }
 
 
-    fun getSuggestionFoods() {
+    private fun getSuggestionFoods() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {
@@ -116,7 +116,7 @@ class FoodDetailsViewModel @Inject constructor(
         }
     }
 
-    fun observeUser(){
+    private fun observeUser(){
         viewModelScope.launch {
             userDao.observeUser().collect(_user)
         }

@@ -1,8 +1,5 @@
 package com.example.foodpart.core
 
-import android.os.Parcelable
-import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
-
 sealed class AppScreens(val route: String) {
 
     object Category : AppScreens("category")

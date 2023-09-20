@@ -133,19 +133,27 @@ fun FoodDetailsScreen(
 
                 LaunchedEffect(key1 = reportResult) {
                     viewModel.setReportFoodText("")
-                    if (reportResult == Result.Success){
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            "گزارش شما برای ما ارسال شد"
-                        )
-                    }else if (reportResult == Result.Error("not_success_response")){
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            "مشکلی پیش اومد"
-                        )
-                    }else if (reportResult == Result.Error("not_status")){
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            "مشکل در برقراری ارتباط"
-                        )
+                    when(reportResult){
+                        Result.Success ->{
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                "گزارش شما برای ما ارسال شد"
+                            )
+                        }
+                        Result.Loading->{}
+                        Result.Error("not_status") -> {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                "مشکل در برقراری ارتباط"
+                            )
+                        }
+                        else -> {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                "مشکلی پیش اومد"
+                            )
+                        }
+
+
                     }
+
                 }
 
                 if (foodResult == Result.Success) {

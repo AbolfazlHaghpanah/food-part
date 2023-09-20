@@ -28,7 +28,7 @@ class SearchViewModel @Inject constructor(
     private val _isError = MutableStateFlow(false)
     val isError = _isError.asStateFlow()
 
-    private val _text = MutableStateFlow<String>("")
+    private val _text = MutableStateFlow("")
     val text = _text.asStateFlow()
 
 

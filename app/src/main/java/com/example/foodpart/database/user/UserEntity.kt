@@ -2,7 +2,6 @@ package com.example.foodpart.database.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.foodpart.network.user.EditUserUsername
 
 
 @Entity("user-table")

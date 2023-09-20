@@ -21,10 +21,10 @@ class LoginScreenViewModel @Inject constructor(
     private val userDao: UserDao
 ):ViewModel() {
 
-    private val _username = MutableStateFlow<String>("")
+    private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
 
-    private val _password = MutableStateFlow<String>("")
+    private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
 
     private val _userLoginResult = MutableStateFlow<Result>(Result.Idle)
@@ -33,13 +33,13 @@ class LoginScreenViewModel @Inject constructor(
     private val _token = MutableStateFlow<String?>(null)
     val token = _token.asStateFlow()
 
-    private val _isUserinfoTrue = MutableStateFlow<Boolean>(true)
+    private val _isUserinfoTrue = MutableStateFlow(true)
     val isUserInfoTrue = _isUserinfoTrue.asStateFlow()
 
-    private val _isUserNameValid = MutableStateFlow<Boolean>(true)
+    private val _isUserNameValid = MutableStateFlow(true)
     val isUsernameValid = _isUserNameValid.asStateFlow()
 
-    private val _isPasswordValid = MutableStateFlow<Boolean>(true)
+    private val _isPasswordValid = MutableStateFlow(true)
     val isPasswordValid = _isPasswordValid.asStateFlow()
 
 

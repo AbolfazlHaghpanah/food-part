@@ -1,6 +1,5 @@
 package com.example.foodpart.ui.screens.foodlist
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 
 @HiltViewModel
@@ -57,18 +55,16 @@ class FoodListViewModel @Inject constructor(
     }
 
 
-    fun observeSavedFoods(){
+    private fun observeSavedFoods(){
         viewModelScope.launch {
-            savedFoodDao.observeFoods().collect(
-                {
-                    _foodList.emit(it.map { it.toFoodListByCategoryItem() })
-                }
-            )
+            savedFoodDao.observeFoods().collect {
+                _foodList.emit(it.map { it.toFoodListByCategoryItem() })
+            }
         }
     }
 
 
-    fun getFoodListByCategory() {
+    private fun getFoodListByCategory() {
 
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
@@ -83,7 +79,7 @@ class FoodListViewModel @Inject constructor(
         }
     }
 
-    fun getFoodListByMeals() {
+    private fun getFoodListByMeals() {
 
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
@@ -98,7 +94,7 @@ class FoodListViewModel @Inject constructor(
         }
     }
 
-    fun getWhatToCookFoodList() {
+    private fun getWhatToCookFoodList() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {

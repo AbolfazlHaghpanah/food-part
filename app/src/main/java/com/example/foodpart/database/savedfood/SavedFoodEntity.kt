@@ -1,6 +1,5 @@
 package com.example.foodpart.database.savedfood
 
-import androidx.compose.ui.Modifier
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryItem

@@ -18,10 +18,10 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val userApi: UserApi
 ) : ViewModel() {
-    private val _username = MutableStateFlow<String>("")
+    private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
 
-    private val _password = MutableStateFlow<String>("")
+    private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
 
     private val _userRegisterResult = MutableStateFlow<Result>(Result.Idle)
@@ -36,7 +36,7 @@ class SignUpViewModel @Inject constructor(
     private val _repeatPasswordValid = MutableStateFlow<String?>(null)
     val repeatPasswordValid = _repeatPasswordValid.asStateFlow()
 
-    private val _repeatPassword = MutableStateFlow<String>("")
+    private val _repeatPassword = MutableStateFlow("")
     val repeatPassword = _repeatPassword.asStateFlow()
 
     fun registerUser() {
@@ -44,7 +44,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {
-                    userApi.RegisterUser(RegisterUser(username.value, password.value))
+                    userApi.registerUser(RegisterUser(username.value, password.value))
                 },
                 onDataReady = {}
             ).collect(_userRegisterResult)

@@ -31,13 +31,13 @@ class ProfileViewModel @Inject constructor(
     private val _user = MutableStateFlow<UserEntity?>(null)
     val user = _user.asStateFlow()
 
-    private val _username = MutableStateFlow<String>("")
+    private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
 
-    private val _oldPassword = MutableStateFlow<String>("")
+    private val _oldPassword = MutableStateFlow("")
     val oldPassword = _oldPassword.asStateFlow()
 
-    private val _newPassword = MutableStateFlow<String>("")
+    private val _newPassword = MutableStateFlow("")
     val newPassword = _newPassword.asStateFlow()
 
     private val _usernameValid = MutableStateFlow<String?>(null)
@@ -58,7 +58,7 @@ class ProfileViewModel @Inject constructor(
         observeSavedFoods()
     }
 
-    fun observeUser(){
+    private fun observeUser(){
         viewModelScope.launch {
             userDao.observeUser().collect(_user)
         }
@@ -99,7 +99,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun observeSavedFoods(){
+    private fun observeSavedFoods(){
         viewModelScope.launch (Dispatchers.IO) {
             savedFoodDao.observeFoods().collect(_savedFoods)
         }

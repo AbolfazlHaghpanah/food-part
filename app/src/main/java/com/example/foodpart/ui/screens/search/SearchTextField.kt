@@ -89,7 +89,7 @@ fun SearchTextField(
                 }
             )
         )
-        if ((textState.length < 3) && (textState.length != 0)){
+        if ((textState.length < 3) && (textState.isNotEmpty())){
             Text(
                 text = "حداقل ۳ کاراکتر وارد کنید",
                 style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Start),

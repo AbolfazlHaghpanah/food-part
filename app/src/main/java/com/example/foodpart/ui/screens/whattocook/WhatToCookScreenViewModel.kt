@@ -24,7 +24,7 @@ class WhatToCookScreenViewModel @Inject constructor() : ViewModel() {
     private val _timeText = MutableStateFlow("")
     val timeText = _timeText.asStateFlow()
 
-    private val _isTimeTextValid = MutableStateFlow<Boolean>(true)
+    private val _isTimeTextValid = MutableStateFlow(true)
     val isTimeTextValid = _isTimeTextValid.asStateFlow()
 
     private val _isItemTextValid = MutableStateFlow(true)

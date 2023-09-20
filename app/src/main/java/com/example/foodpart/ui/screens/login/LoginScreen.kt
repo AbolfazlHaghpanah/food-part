@@ -232,8 +232,7 @@ fun LoginScreen(
                                     viewModel.loginUser()
                                     while (loginResult != Result.Success) {
                                         delay(100)
-                                        if (isUserInfoValid == false
-                                            || loginResult != Result.Loading
+                                        if (!isUserInfoValid || loginResult != Result.Loading
                                         ) {
                                             break
                                         }
