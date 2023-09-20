@@ -1,8 +1,5 @@
 package com.example.foodpart.ui.screens.search
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -22,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchTextField(
@@ -34,72 +30,46 @@ fun SearchTextField(
     var textState: String by remember {
         mutableStateOf("")
     }
-
-    Column (
-        modifier = modifier
-    ){
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = textState,
-            onValueChange = {
-                textState = it
-            },
-            textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
-            placeholder = {
-                Text(
-                    text = "اینجا بنویس ...",
-                    style = MaterialTheme.typography.body1
-                )
-            },
-            colors = TextFieldDefaults
-                .textFieldColors(
-                    unfocusedIndicatorColor = MaterialTheme.colors.surface,
-                    focusedIndicatorColor = MaterialTheme.colors.onBackground,
-                    errorIndicatorColor = MaterialTheme.colors.error,
-                    errorLabelColor = MaterialTheme.colors.error,
-                    trailingIconColor = MaterialTheme.colors.onBackground,
-                ),
-            shape = MaterialTheme.shapes.medium,
-            isError = isError,
-            trailingIcon = {
-                if (text != "" || textState != "")
-                    IconButton(onClick = {
-                        textState = ""
-                        viewModel.setText("")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Clear,
-                            contentDescription = "Clear"
-                        )
-                    }
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    if (textState.length>=3){
-                        viewModel.setText(textState)
-                        viewModel.getFoodListBySearch()
-                    }else{
-                        viewModel.setText("")
-                    }
-
-                }
-            )
-        )
-        if ((textState.length < 3) && (textState.length != 0)){
+    OutlinedTextField(
+        modifier = modifier,
+        value = textState,
+        onValueChange = {
+            textState = it
+        },
+        textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Start),
+        placeholder = {
             Text(
-                text = "حداقل ۳ کاراکتر وارد کنید",
-                style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Start),
-                color = MaterialTheme.colors.onBackground,
-                modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+                text = "اینجا بنویس ...",
+                style = MaterialTheme.typography.body1
             )
-        }
-
-    }
-
-
-
+        },
+        colors = TextFieldDefaults
+            .textFieldColors(
+                unfocusedIndicatorColor = MaterialTheme.colors.surface,
+                focusedIndicatorColor = MaterialTheme.colors.onBackground,
+                errorIndicatorColor = MaterialTheme.colors.error,
+                errorLabelColor = MaterialTheme.colors.error,
+                trailingIconColor = MaterialTheme.colors.onBackground,
+            ),
+        shape = MaterialTheme.shapes.medium,
+        isError = isError,
+        trailingIcon = {
+            if (text != "" || textState != "")
+                IconButton(onClick = {
+                    textState = ""
+                    viewModel.setText("")
+                }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Clear,
+                        contentDescription = "Clear"
+                    )
+                }
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                viewModel.setText(textState)
+            }
+        )
+    )
 }

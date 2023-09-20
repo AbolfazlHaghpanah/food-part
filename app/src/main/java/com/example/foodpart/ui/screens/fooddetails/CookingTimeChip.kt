@@ -18,10 +18,11 @@ import com.example.foodpart.R
 @Composable
 fun CookingTimeChip(
     time : String,
+    onClick : ()->Unit
 ) {
     Chip(
         onClick = {
-            
+            onClick()
         },
         colors = ChipDefaults.chipColors(
             backgroundColor = MaterialTheme.colors.error.copy(

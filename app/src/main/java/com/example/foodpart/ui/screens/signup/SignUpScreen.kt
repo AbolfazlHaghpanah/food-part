@@ -22,20 +22,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,68 +43,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
-import com.example.foodpart.ui.components.Result
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
-    navController: NavController,
-    viewModel: SignUpViewModel = hiltViewModel()
+    navController: NavController
 ) {
-    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
-    val scaffoldState = rememberScaffoldState()
-    val registerResult by viewModel.userRegisterResult.collectAsState()
-    val username by viewModel.username.collectAsState()
-    val password by viewModel.password.collectAsState()
-    var repeatPass by remember { mutableStateOf("") }
-    val isPasswordValid by viewModel.passwordValid.collectAsState()
-    val isUsernameValid by viewModel.usernameValid.collectAsState()
-    val isRepeatPasswordValid by viewModel.repeatPasswordValid.collectAsState()
-    var isLoading by remember { mutableStateOf(false) }
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        snackbarHost = {
-            SnackbarHost(it) {
-                Snackbar(
-                    modifier = Modifier
-                        .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
-                    contentColor = MaterialTheme.colors.onBackground,
-                    backgroundColor = MaterialTheme.colors.secondary,
-                    action = {
-                        if (registerResult != Result.Error("no_status")) {
-                            TextButton(onClick = {
-                                navController.navigate(
-                                    AppScreens.Login.route
-                                )
-                            }) {
-                                Text(
-                                    text = "ورود",
-                                    style = MaterialTheme.typography.caption,
-                                    color = MaterialTheme.colors.primary
-                                )
-                            }
-                        }
-                    },
-
-                    ) {
-                    Text(
-                        text = if (registerResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
-                        else "ثبت نام با موفقیت انجام شد"
-
-                    )
-                }
-            }
-        },
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background,
@@ -199,19 +145,29 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(43.dp))
 
-
-
+            var username by remember { mutableStateOf("") }
+            var password by remember { mutableStateOf("") }
+            var repeatPass by remember { mutableStateOf("") }
+            var isUsernameVaild by remember {
+                mutableStateOf(true)
+            }
+            var isPasswordVaild by remember {
+                mutableStateOf(true)
+            }
+            var isRepeatPasswordVaild by remember {
+                mutableStateOf(true)
+            }
 
 
             FoodPartTextField(
                 value = username,
                 onValueChange = {
-                    viewModel.setUsername(it)
-                    viewModel.nullUsernameValid()
+                    username = it
+                    isUsernameVaild = true
                 },
                 placeholder = "نام کاربری",
-                isError = isUsernameValid != null,
-                errorMassage = isUsernameValid,
+                isError = !isUsernameVaild,
+                errorMassage = "نام کاربری را وارد کنید",
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
@@ -223,8 +179,8 @@ fun SignUpScreen(
             FoodPartTextField(
                 value = password,
                 onValueChange = {
-                    viewModel.setPassword(it)
-                    viewModel.nullPasswordValid()
+                    password = it
+                    isPasswordVaild = true
                 },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -232,8 +188,8 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next
                 ),
                 placeholder = "رمز عبور",
-                isError = isPasswordValid != null,
-                errorMassage = isPasswordValid,
+                isError = !isPasswordVaild,
+                errorMassage = if (password == repeatPass) "رمز عبور را وارد کنید" else null,
                 keyboardActions = KeyboardActions(onNext = {
                     focusManager.moveFocus(FocusDirection.Down)
                 })
@@ -245,7 +201,7 @@ fun SignUpScreen(
                 value = repeatPass,
                 onValueChange = {
                     repeatPass = it
-                    viewModel.nullRepeatPasswordValid()
+                    isRepeatPasswordVaild = true
                 },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -253,8 +209,9 @@ fun SignUpScreen(
                     imeAction = ImeAction.Done
                 ),
                 placeholder = "تکرار رمز عبور",
-                isError = isRepeatPasswordValid != null,
-                errorMassage = isRepeatPasswordValid,
+                isError = !isRepeatPasswordVaild,
+                errorMassage = if (repeatPass.isEmpty()) "رمزعبور را مجدد وارد کنید"
+                else "رمز عبور با رمز عبور مجدد یکسان نیست",
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 })
@@ -265,45 +222,17 @@ fun SignUpScreen(
             FoodPartButton(
                 onClick = {
                     focusManager.clearFocus()
-
-                    viewModel.checkUsernameValidation()
-                    viewModel.checkPasswordValidation()
-                    viewModel.checkRepeatPasswordValidation(password, repeatPass)
-                    scope.launch {
-                        delay(50)
-                    }
-                    if (
-                        isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
-                    ) {
-
-                        viewModel.registerUser()
-                        scope.launch {
-                            isLoading = true
-                            while (registerResult != Result.Success) {
-                                delay(50)
-                                if (registerResult != Result.Loading
-                                    || registerResult == Result.Error("no_status")
-                                ) {
-                                    isLoading = false
-                                    break
-                                }
-                            }
-                            isLoading = false
-                            if (registerResult == Result.Success
-                                ||registerResult == Result.Error("no_status")) {
-
-                                scaffoldState.snackbarHostState.showSnackbar("")
-
-                                if (registerResult == Result.Success){
-                                    navController.popBackStack(AppScreens.Login.route, false)
-                                }
-                            }
-
+                    when ("") {
+                        username -> isUsernameVaild = false
+                        password -> isPasswordVaild = false
+                        repeatPass -> isRepeatPasswordVaild = false
+                        else -> {
+                            if (repeatPass == password) navController.navigate(AppScreens.Profile.route)
+                            else isRepeatPasswordVaild = false
                         }
                     }
                 },
-                text = "تایید",
-                isLoading = isLoading
+                text = "تایید"
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -331,4 +260,3 @@ fun SignUpScreen(
         }
     }
 }
-

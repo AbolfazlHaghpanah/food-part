@@ -20,34 +20,30 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SubCategoriesList(
-    viewModel: CategoryScreenViewModel = hiltViewModel(),
+    viewModel: CategoryScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
-
-    val category by viewModel.selectedCategory.collectAsState()
-    val subCategoryState by viewModel.selectedSubCategoryId.collectAsState()
-
+    val categorySelectedState by viewModel.categoryFlow.collectAsState()
+    val subCategoryState by viewModel.subCategoryFlow.collectAsState()
     LazyRow(
         contentPadding = PaddingValues(16.dp, 2.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(category?.subCategories?: emptyList()) { item ->
+        items(categorySelectedState.subCategories ?: listOf()) { item ->
             Chip(
                 onClick = {
-                    if (subCategoryState == item.id) {
-                        viewModel.setSelectedSubCategoryId("")
+                    if (subCategoryState == item) {
+                        viewModel.setSubCategory("")
                     } else {
-                        viewModel.setSelectedSubCategoryId(item.id)
+                        viewModel.setSubCategory(item)
                     }
-                    viewModel.getFoodList()
-
+                    viewModel.updateFoodListByCategory()
                 },
-                border = if (subCategoryState == item.id) {
+                border = if (subCategoryState == item) {
                     BorderStroke(
                         color = MaterialTheme.colors.primary,
                         width = 1.dp
@@ -57,9 +53,9 @@ fun SubCategoriesList(
                 }
             ) {
                 Text(
-                    text = item.name,
+                    text = item,
                     style = MaterialTheme.typography.subtitle1,
-                    color = if (subCategoryState == item.id) MaterialTheme.colors.primary
+                    color = if (subCategoryState == item) MaterialTheme.colors.primary
                     else MaterialTheme.colors.onBackground
                 )
             }
@@ -70,7 +66,7 @@ fun SubCategoriesList(
 
     }
 
-    if (category?.subCategories != null){
+    if (categorySelectedState.subCategories!=null){
         Spacer(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)
