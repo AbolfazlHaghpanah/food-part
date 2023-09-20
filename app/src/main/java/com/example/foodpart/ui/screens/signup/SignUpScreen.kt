@@ -33,10 +33,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -71,11 +68,12 @@ fun SignUpScreen(
     val registerResult by viewModel.userRegisterResult.collectAsState()
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
-    var repeatPass by remember { mutableStateOf("") }
+    val repeatPass by viewModel.repeatPassword.collectAsState()
     val isPasswordValid by viewModel.passwordValid.collectAsState()
     val isUsernameValid by viewModel.usernameValid.collectAsState()
     val isRepeatPasswordValid by viewModel.repeatPasswordValid.collectAsState()
-    var isLoading by remember { mutableStateOf(false) }
+
+
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -104,9 +102,7 @@ fun SignUpScreen(
 
                     ) {
                     Text(
-                        text = if (registerResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
-                        else "ثبت نام با موفقیت انجام شد"
-
+                        text = it.message
                     )
                 }
             }
@@ -207,7 +203,7 @@ fun SignUpScreen(
                 value = username,
                 onValueChange = {
                     viewModel.setUsername(it)
-                    viewModel.nullUsernameValid()
+                    viewModel.setUsernameValid(null)
                 },
                 placeholder = "نام کاربری",
                 isError = isUsernameValid != null,
@@ -244,7 +240,7 @@ fun SignUpScreen(
             FoodPartTextField(
                 value = repeatPass,
                 onValueChange = {
-                    repeatPass = it
+                    viewModel.setRepeatPassword(it)
                     viewModel.nullRepeatPasswordValid()
                 },
                 visualTransformation = PasswordVisualTransformation(),
@@ -270,41 +266,49 @@ fun SignUpScreen(
                         viewModel.checkPasswordValidation()
                         viewModel.checkRepeatPasswordValidation(password, repeatPass)
                         delay(50)
-
                         if (
                             isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
                         ) {
 
                             viewModel.registerUser()
 
-                            isLoading = true
                             while (registerResult != Result.Success) {
                                 delay(50)
                                 if (registerResult != Result.Loading
                                     || registerResult == Result.Error("no_status")
                                 ) {
-                                    isLoading = false
                                     break
                                 }
                             }
-                            isLoading = false
-                            if (registerResult == Result.Success
-                                || registerResult == Result.Error("no_status")
-                            ) {
 
-                                scaffoldState.snackbarHostState.showSnackbar("")
+                            when(registerResult){
 
-                                if (registerResult == Result.Success) {
+                                Result.Success -> {
+                                    scaffoldState.snackbarHostState.showSnackbar("ثبت نام با موفقیت انجام شد")
                                     navController.popBackStack(AppScreens.Login.route, false)
                                 }
+                                Result.Error("no_status") -> {
+                                    scaffoldState.snackbarHostState.showSnackbar("خطا در برقاری ارتباط",
+                                        actionLabel = null)
+                                }
+                                Result.Error("not_success_response") ->{
+                                    viewModel.setUsernameValid("این نام کاربری قبلا انتخاب شده")
+                                }
+                                Result.Loading -> {}
+                                else -> {
+                                    scaffoldState.snackbarHostState.showSnackbar("مشکلی پیش اومد",
+                                        actionLabel = null)
+
+                                }
                             }
+
 
 
                         }
                     }
                 },
                 text = "تایید",
-                isLoading = isLoading
+                isLoading = registerResult == Result.Loading
             )
 
             Spacer(modifier = Modifier.height(8.dp))

@@ -1,8 +1,8 @@
 package com.example.foodpart.ui.screens.signup
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
 import com.example.foodpart.ui.components.Result
@@ -36,42 +36,38 @@ class SignUpViewModel @Inject constructor(
     private val _repeatPasswordValid = MutableStateFlow<String?>(null)
     val repeatPasswordValid = _repeatPasswordValid.asStateFlow()
 
+    private val _repeatPassword = MutableStateFlow<String>("")
+    val repeatPassword = _repeatPassword.asStateFlow()
+
     fun registerUser() {
 
         viewModelScope.launch(Dispatchers.IO) {
+            safeApi(
+                call = {
+                    userApi.RegisterUser(RegisterUser(username.value, password.value))
+                },
+                onDataReady = {}
+            ).collect(_userRegisterResult)
 
-            try {
-                _userRegisterResult.emit(Result.Loading)
-                val response = userApi.RegisterUser(RegisterUser(username.value, password.value))
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        _userRegisterResult.emit(Result.Success)
-                    } else {
-                        _userRegisterResult.emit(Result.Error("body was empty"))
-                    }
-                } else {
-                    _usernameValid.emit("این نام کاربری قبلا انتخاب شده")
-                    _userRegisterResult.emit(Result.Error("Validation Error"))
-
-                }
-
-            } catch (t: Throwable) {
-                _userRegisterResult.emit(Result.Error("no_status"))
-                Log.e("error", "registerUser: ${t.message}")
-            }
 
         }
     }
 
-    fun setUsername(username: String) {
+    fun setUsername(value: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _username.emit(username)
+            _username.emit(value)
         }
     }
 
-    fun setPassword(password: String) {
+    fun setPassword(value: String) {
         viewModelScope.launch {
-            _password.emit(password)
+            _password.emit(value)
+        }
+    }
+
+    fun setRepeatPassword( value: String){
+        viewModelScope.launch {
+            _repeatPassword.emit(value)
         }
     }
 
@@ -118,8 +114,8 @@ class SignUpViewModel @Inject constructor(
     }
 
 
-    fun nullUsernameValid() {
-        _usernameValid.value = null
+    fun setUsernameValid(value : String?) {
+        _usernameValid.value = value
     }
 
     fun nullPasswordValid() {
