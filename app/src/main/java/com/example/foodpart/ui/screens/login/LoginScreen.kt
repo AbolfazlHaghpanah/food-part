@@ -63,24 +63,19 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
-
     val loginResult by viewModel.userLoginResult.collectAsState()
-    val focusManager = LocalFocusManager.current
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
-    var isUsernameValid by remember {
-        mutableStateOf(true)
-    }
-    var isPasswordValid by remember {
-        mutableStateOf(true)
-    }
-    val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
-    var isLoading by remember {
-        mutableStateOf(false)
-    }
+    val isUsernameValid by viewModel.isUsernameValid.collectAsState()
+    val isPasswordValid by viewModel.isPasswordValid.collectAsState()
     val isUserInfoValid by viewModel.isUserInfoTrue.collectAsState()
     val scaffoldState = rememberScaffoldState()
+    val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+
+
+
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -93,8 +88,7 @@ fun LoginScreen(
                     backgroundColor = MaterialTheme.colors.secondary,
                 ) {
                     Text(
-                        text = if (loginResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
-                        else "نام کاربری یا رمز عبور اشتباه است",
+                        text = it.message,
                         style = MaterialTheme.typography.caption
                     )
                 }
@@ -202,7 +196,7 @@ fun LoginScreen(
                     value = username,
                     onValueChange = {
                         viewModel.setUsername(it)
-                        isUsernameValid = true
+                        viewModel.setIsUsernameValid(true)
                     },
                     placeholder = "نام کاربری",
                     isError = !isUsernameValid,
@@ -216,7 +210,7 @@ fun LoginScreen(
                     value = password,
                     onValueChange = {
                         viewModel.setPassword(it)
-                        isPasswordValid = true
+                        viewModel.setIsPasswordValid(true)
                     },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
@@ -232,32 +226,44 @@ fun LoginScreen(
                 )
                 FoodPartButton(
                     onClick = {
-
                         focusManager.clearFocus()
                         when ("") {
-                            username -> isUsernameValid = false
-                            password -> isPasswordValid = false
+                            username -> viewModel.setIsUsernameValid(false)
+                            password -> viewModel.setIsPasswordValid(false)
                             else -> {
-                                viewModel.loginUser()
                                 scope.launch {
-                                    isLoading = true
+                                    viewModel.loginUser()
                                     while (loginResult != Result.Success) {
                                         delay(100)
                                         if (isUserInfoValid == false
-                                            || loginResult == Result.Error("no_status")
+                                            || loginResult != Result.Loading
                                         ) {
-                                            isLoading = false
                                             break
                                         }
                                     }
-                                    isLoading = false
-                                    if (loginResult != Result.Success) scaffoldState.snackbarHostState.showSnackbar(
-                                        ""
-                                    )
-                                    if (loginResult == Result.Success) navController.popBackStack(
-                                        AppScreens.Profile.route,
-                                        false
-                                    )
+
+                                    when (loginResult) {
+                                        Result.Success -> {
+                                            navController.popBackStack(
+                                                AppScreens.Profile.route,
+                                                false
+                                            )
+                                        }
+                                        Result.Error("no_Status") -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("خطا در برقراری ارتباط")
+                                        }
+
+                                        Result.Error("not_success_response") -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("نام کاربری یا رمز عبور اشتباه است")
+                                        }
+                                        Result.Loading -> {}
+
+                                        else -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("مشکلی پیش اومد")
+                                        }
+
+                                    }
+
                                 }
                             }
 
@@ -266,7 +272,7 @@ fun LoginScreen(
 
                     },
                     text = "تایید",
-                    isLoading = isLoading
+                    isLoading = loginResult == Result.Loading
                 )
             }
             Row(
