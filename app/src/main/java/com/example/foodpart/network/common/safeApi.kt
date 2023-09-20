@@ -25,7 +25,7 @@ suspend fun <T> safeApi(
                     }
                     emit(Result.Success)
                 } else {
-                    emit(Result.Error("whoops body was empty"))
+                    emit(Result.Error("body_was_empty"))
                 }
             } else {
                 emit(Result.Error("not_success_response"))

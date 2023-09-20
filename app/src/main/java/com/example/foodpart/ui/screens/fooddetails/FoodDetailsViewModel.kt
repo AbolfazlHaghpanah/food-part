@@ -40,8 +40,7 @@ class FoodDetailsViewModel @Inject constructor(
 
     private val _food = MutableStateFlow<FoodDetailsResponse?>(null)
     val food = _food.asStateFlow()
-
-
+    
     private val _reportFoodText = MutableStateFlow<String>("")
     val reportFoodText = _reportFoodText.asStateFlow()
 
@@ -50,6 +49,16 @@ class FoodDetailsViewModel @Inject constructor(
 
     private val _reportFoodResult = MutableStateFlow<Result>(Result.Idle)
     val reportFoodResult = _reportFoodResult.asStateFlow()
+
+    private val _isFullScreenImage = MutableStateFlow(false)
+    val isFullScreenImage = _isFullScreenImage.asStateFlow()
+
+
+    fun setIsFullScreenImage(value: Boolean){
+        viewModelScope.launch{
+            _isFullScreenImage.emit(value)
+        }
+    }
 
     fun setReportFoodText(value: String) {
         viewModelScope.launch {

@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
@@ -46,10 +47,9 @@ fun FoodDetailsAppBar(
     viewModel: FoodDetailsViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
-    val menuState = remember {
-        mutableStateOf(false)
-    }
+    val menuState = remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp
@@ -103,9 +103,8 @@ fun FoodDetailsAppBar(
                                 message = "برای گزارش ابتدا باید وارد شوید"
                             )
                         }
-
+                        menuState.value = false
                     }
-                    menuState.value = false
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Warning,
@@ -119,15 +118,17 @@ fun FoodDetailsAppBar(
                     )
                 }
                 DropdownMenuItem(onClick = {
-                    val sendIntent: Intent = Intent().apply {
-                        this.action = Intent.ACTION_SEND
-                        this.putExtra(Intent.EXTRA_TEXT, "Sharing a food from Food Part")
-                        type = "text/plain"
+                    scope.launch{
+                        val sendIntent: Intent = Intent().apply {
+                            this.action = Intent.ACTION_SEND
+                            this.putExtra(Intent.EXTRA_TEXT, "Sharing a food from Food Part")
+                            type = "text/plain"
+                        }
+                        val bundle: Bundle = Bundle.EMPTY
+                        startActivity(context, sendIntent, bundle)
+                        menuState.value = false
                     }
-                    val bundle: Bundle = Bundle.EMPTY
 
-                    startActivity(context, sendIntent, bundle)
-                    menuState.value = false
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Share,
@@ -148,8 +149,8 @@ fun FoodDetailsAppBar(
                                 message = "دستور به علاقه مندی ها اضافه شد",
                                 actionLabel = "علاقه مندی ها"
                             )
+                            menuState.value = false
                         }
-                        menuState.value = false
                     }
                 ) {
                     Icon(

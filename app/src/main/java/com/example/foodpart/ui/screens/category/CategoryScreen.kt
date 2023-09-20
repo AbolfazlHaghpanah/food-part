@@ -17,6 +17,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,6 +38,11 @@ fun CategoryScreen(
     navController: NavController,
     viewModel: CategoryScreenViewModel = hiltViewModel()
 ) {
+
+    val categoryResult by viewModel.categoryResult.collectAsState()
+    val foodListResult by viewModel.foodListResult.collectAsState()
+
+
     Scaffold(
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
@@ -54,9 +60,6 @@ fun CategoryScreen(
             )
         }
     ) {
-
-        val categoryResult by viewModel.categoryResult.collectAsState()
-        val foodListResult by viewModel.foodListResult.collectAsState()
 
         if (categoryResult != Result.Success) {
 
@@ -128,15 +131,11 @@ fun CategoryScreen(
                     )
                 }
 
-
-
-
-
                 FoodListByCategory(navController = navController)
-
 
             }
         }
+
 
     }
 }

@@ -107,12 +107,6 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-    fun setUsernameValid(value : String?){
-        viewModelScope.launch {
-            _usernameValid.emit(value)
-        }
-    }
-
     fun editPassword() {
         viewModelScope.launch(Dispatchers.IO) {
             if (
@@ -133,9 +127,14 @@ class ProfileViewModel @Inject constructor(
                     },
                     onDataReady = {
                         viewModelScope.launch {
+                            userDao.updateUser(UserEntity(
+                                token = it.additionalInfo.token,
+                                id = user.value?.id,
+                                username = username.value,
+                                avatar = user.value?.avatar
 
+                            ))
                         }
-                        Log.d("editUser", "editPassword: passwordChanged")
                     }
                 ).collect(_editUserResult)
             }
