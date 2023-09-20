@@ -66,6 +66,7 @@ import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.MoreFoodItem
 import com.example.foodpart.ui.components.Result
+import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -201,7 +202,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .verticalScroll(scrollState)
                 .padding(it)
-                .padding(start = 24.dp, end = 24.dp, top = 40.dp, bottom = 16.dp)
+                .padding(top = 40.dp, bottom = 16.dp)
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background),
             horizontalAlignment = Alignment.Start,
@@ -216,7 +217,7 @@ fun ProfileScreen(
 
                 AsyncImage(
                     modifier = Modifier
-                        .padding(end = 16.dp)
+                        .padding(start = 24.dp, end = 24.dp)
                         .width(64.dp)
                         .height(64.dp)
                         .clip(RoundedCornerShape(59.dp)),
@@ -241,6 +242,7 @@ fun ProfileScreen(
                         alertDialog = true
                     }) {
                         Icon(
+                            modifier = Modifier.padding(end = 24.dp),
                             painter = painterResource(id = R.drawable.logout_1),
                             contentDescription = "logout"
                         )
@@ -248,41 +250,52 @@ fun ProfileScreen(
 
                 }
             }
-            Text(
-                text = "غذا های مورد علاقه",
-                style = MaterialTheme.typography.h3.copy(textAlign = TextAlign.Start)
-            )
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.Top,
-                contentPadding = PaddingValues(0.dp, 16.dp),
-            ) {
+            if (savedFoods.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    text = "غذا های مورد علاقه",
+                    style = MaterialTheme.typography.h3.copy(textAlign = TextAlign.Start)
+                )
 
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.Top,
+                    contentPadding = PaddingValues(24.dp, 16.dp),
+                ) {
 
-                items(if (savedFoods.size <= 6) savedFoods.size else 6) {
-                    FoodItem(
-                        Modifier.clickable {
-                            navController.navigate(AppScreens.FoodDetails.createRoute(savedFoods[it].id))
-                        },
-                        name = savedFoods[it].name,
-                        time = if (((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime
-                                ?: 0)) != 0
-                        ) "${((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime ?: 0))} دقیقه " else "",
-                        image = savedFoods[it].image
-                    )
-                }
-                item {
-                    MoreFoodItem(
-                        modifier = Modifier.clickable {
-
+                    items(if (savedFoods.size <= 4) savedFoods.size else 4) {
+                        FoodItem(
+                            Modifier.clickable {
+                                navController.navigate(AppScreens.FoodDetails.createRoute(savedFoods[it].id))
+                            },
+                            name = savedFoods[it].name,
+                            time = if (((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime
+                                    ?: 0)) != 0
+                            ) "${((savedFoods[it].readyTime ?: 0) + (savedFoods[it].cookTime ?: 0))} دقیقه " else "",
+                            image = savedFoods[it].image
+                        )
+                    }
+                    if (savedFoods.size > 4) {
+                        item {
+                            MoreFoodItem(
+                                modifier = Modifier.clickable {
+                                    navController.navigate(
+                                        AppScreens.FoodList.createRoute(
+                                            "",
+                                            "غذا های مورد علاقه",
+                                            FoodListRequestType.SavedFood.type
+                                        )
+                                    )
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-
             }
 
             if (!viewModel.isUserLoggedIn()) {
                 FoodPartButton(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
                     onClick = {
                         navController.navigate(AppScreens.Login.route)
                     },
@@ -292,6 +305,7 @@ fun ProfileScreen(
             } else {
 
                 TextButton(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
                     onClick = {
                         isEditingUsername = !isEditingUsername
                     },
@@ -317,7 +331,7 @@ fun ProfileScreen(
                 ) {
                     FoodPartTextField(
                         modifier = Modifier
-                            .padding(0.dp, 8.dp),
+                            .padding(24.dp, 8.dp),
                         value = newUsername,
                         onValueChange = {
                             viewModel.setUsername(it)
@@ -331,6 +345,8 @@ fun ProfileScreen(
                 }
 
                 TextButton(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+
                     onClick = {
                         isEditingPassword = !isEditingPassword
                     },
@@ -357,7 +373,7 @@ fun ProfileScreen(
                 ) {
                     FoodPartTextField(
                         modifier = Modifier
-                            .padding(top = 8.dp, bottom = 8.dp),
+                            .padding(top = 8.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
                         value = oldPassword,
                         onValueChange = {
                             viewModel.setOldPassword(it)
@@ -370,7 +386,7 @@ fun ProfileScreen(
                 ) {
                     FoodPartTextField(
                         modifier = Modifier
-                            .padding(top = 0.dp, bottom = 8.dp),
+                            .padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
                         value = newPassword,
                         onValueChange = {
                             viewModel.setNewPassword(it)
@@ -380,8 +396,9 @@ fun ProfileScreen(
                         isError = isPasswordValid != null,
                         errorMassage = isPasswordValid
                     )
-                }
 
+
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -393,7 +410,10 @@ fun ProfileScreen(
                     exit = fadeOut()
                 ) {
 
+
                     FoodPartButton(
+                        modifier = Modifier
+                            .padding(top = 8.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
                         onClick = {
                             scope.launch {
                                 if (newUsername.isNotEmpty()) viewModel.checkUsernameValidation()

@@ -108,7 +108,7 @@ fun FoodDetailsScreen(
                             action =
                             {
                                 TextButton(onClick = {
-
+                                    navController.navigate(AppScreens.FoodList.createRoute("","غذا های مورد علاقه",FoodListRequestType.SavedFood.type))
                                 }) {
                                     Text(
                                         text = it.actionLabel.orEmpty(),

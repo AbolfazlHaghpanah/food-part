@@ -1,8 +1,10 @@
 package com.example.foodpart.ui.screens.foodlist
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodpart.database.savedfood.SavedFoodDao
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryApi
 import com.example.foodpart.network.foodlistbycatecory.FoodListByCategoryItem
@@ -13,11 +15,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
 
 @HiltViewModel
 class FoodListViewModel @Inject constructor(
     private val foodListByCategoryApi: FoodListByCategoryApi,
+    private val savedFoodDao: SavedFoodDao,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -48,8 +52,21 @@ class FoodListViewModel @Inject constructor(
                 getWhatToCookFoodList()
                 _description.value = FoodListRequestType.WhatToCook.whatToCookDescription
             }
+            FoodListRequestType.SavedFood.type -> observeSavedFoods()
         }
     }
+
+
+    fun observeSavedFoods(){
+        viewModelScope.launch {
+            savedFoodDao.observeFoods().collect(
+                {
+                    _foodList.emit(it.map { it.toFoodListByCategoryItem() })
+                }
+            )
+        }
+    }
+
 
     fun getFoodListByCategory() {
 
