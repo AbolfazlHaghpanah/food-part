@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -73,7 +74,8 @@ fun CategoryItem(
         }
 
         Text(
-            modifier = Modifier.wrapContentWidth(unbounded = true),
+            modifier = Modifier
+                .height(32.dp),
             text = category,
             style = MaterialTheme.typography.body1,
             color = if (isSelected) MaterialTheme.colors.primary
