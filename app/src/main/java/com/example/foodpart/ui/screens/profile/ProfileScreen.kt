@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -77,7 +79,6 @@ fun ProfileScreen(
     val newPassword by viewModel.newPassword.collectAsState()
     val isNewUsernameValid by viewModel.usernameValid.collectAsState()
     val isPasswordValid by viewModel.passwordValid.collectAsState()
-    var isLoading by remember { mutableStateOf(false) }
     val editUserResult by viewModel.editUserResult.collectAsState()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -86,6 +87,7 @@ fun ProfileScreen(
     var isEditingPassword by remember { mutableStateOf(false) }
     val savedFoods by viewModel.savedFoods.collectAsState()
     val user by viewModel.user.collectAsState()
+    val scrollState = rememberScrollState()
 
     Scaffold(
 
@@ -99,8 +101,7 @@ fun ProfileScreen(
                     backgroundColor = MaterialTheme.colors.secondary,
                 ) {
                     Text(
-                        text = if (editUserResult == Result.Success) "تغییرات با موفقیت اعمال شد"
-                        else "مشکلی به وجود اومد",
+                        text = it.message,
                         style = MaterialTheme.typography.caption
                     )
                 }
@@ -198,6 +199,7 @@ fun ProfileScreen(
 
         Column(
             modifier = Modifier
+                .verticalScroll(scrollState)
                 .padding(it)
                 .padding(start = 24.dp, end = 24.dp, top = 40.dp, bottom = 16.dp)
                 .fillMaxSize()
@@ -219,7 +221,7 @@ fun ProfileScreen(
                         .height(64.dp)
                         .clip(RoundedCornerShape(59.dp)),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("https://foodpart.samentic.com/api/files/users/${user?.id ?: ""}/${user?.avatar?: ""}")
+                        .data("https://foodpart.samentic.com/api/files/users/${user?.id ?: ""}/${user?.avatar ?: ""}")
                         .decoderFactory(SvgDecoder.Factory())
                         .build(),
                     contentDescription = "",
@@ -227,7 +229,7 @@ fun ProfileScreen(
                     error = painterResource(R.drawable.profile_photo)
                 )
                 Text(
-                    text = user?.username?: "مهمان",
+                    text = user?.username ?: "مهمان",
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
@@ -393,64 +395,68 @@ fun ProfileScreen(
 
                     FoodPartButton(
                         onClick = {
-
-                            if (newUsername.isNotEmpty()) viewModel.checkUsernameValidation()
-                            if (newPassword.isNotEmpty()) viewModel.checkPasswordValidation()
                             scope.launch {
+                                if (newUsername.isNotEmpty()) viewModel.checkUsernameValidation()
+                                if (newPassword.isNotEmpty()) viewModel.checkPasswordValidation()
+
                                 delay(50)
-                            }
-                            if (isNewUsernameValid == null && isPasswordValid == null) {
-                                if (
-                                    newUsername.isNotEmpty()
-                                    && newPassword.isNotEmpty()
-                                    && oldPassword.isNotEmpty()
-                                ) {
-                                    viewModel.editAll()
-                                } else if (
-                                    newUsername.isNotEmpty()
-                                ) {
-                                    viewModel.editUsername()
-                                } else if (
-                                    newPassword.isNotEmpty()
-                                    && oldPassword.isNotEmpty()
-                                ) {
-                                    viewModel.editPassword()
-                                }
-                                scope.launch {
-                                    isLoading = true
+
+                                if (isNewUsernameValid == null && isPasswordValid == null) {
+                                    if (
+                                        newUsername.isNotEmpty()
+                                        && newPassword.isNotEmpty()
+                                        && oldPassword.isNotEmpty()
+                                    ) {
+                                        viewModel.editAll()
+                                    } else if (
+                                        newUsername.isNotEmpty()
+                                    ) {
+                                        viewModel.editUsername()
+                                    } else if (
+                                        newPassword.isNotEmpty()
+                                        && oldPassword.isNotEmpty()
+                                    ) {
+                                        viewModel.editPassword()
+                                    }
+
                                     while (editUserResult != Result.Success) {
                                         delay(50)
                                         if (editUserResult != Result.Loading
-                                            || editUserResult == Result.Error("no_Status")
-                                            || editUserResult == Result.Error("not_success_response")
                                         ) {
-                                            if (editUserResult == Result.Error("not_success_response")) {
-                                                viewModel.setUsernameValid("نام کاربری قبلا انتخاب شده")
-                                            }
-                                            isLoading = false
                                             break
                                         }
                                     }
-                                    isLoading = false
-                                    if (editUserResult == Result.Success
-                                        || editUserResult != Result.Error("not_success_response")
-                                    ) {
-                                        if (editUserResult == Result.Success) {
+
+                                    when (editUserResult) {
+                                        Result.Success -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("تغییرات با موفقیت اعمال شد")
                                             viewModel.setNewPassword("")
                                             viewModel.setUsername("")
                                             viewModel.setOldPassword("")
                                         }
-                                        scaffoldState.snackbarHostState.showSnackbar("")
+
+                                        Result.Loading -> {}
+                                        Result.Error("not_success_response") -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("اطلاعات وارد شده صحیح نیست")
+                                        }
+
+                                        Result.Error("no_Status") -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("خطا در برقراری ارتباط")
+                                        }
+
+                                        else -> {
+                                            scaffoldState.snackbarHostState.showSnackbar("مشکلی پیش اومد")
+
+                                        }
+
 
                                     }
-
-
                                 }
                             }
 
                         },
                         text = "تایید",
-                        isLoading = isLoading
+                        isLoading = editUserResult == Result.Loading
                     )
                 }
 
