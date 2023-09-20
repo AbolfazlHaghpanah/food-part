@@ -1,11 +1,9 @@
 package com.example.foodpart.ui.screens.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodpart.database.user.UserDao
 import com.example.foodpart.network.common.safeApi
-import com.example.foodpart.network.user.LoginUserResponse
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
 import com.example.foodpart.ui.components.Result
@@ -13,8 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +29,6 @@ class LoginScreenViewModel @Inject constructor(
 
     private val _userLoginResult = MutableStateFlow<Result>(Result.Idle)
     val userLoginResult = _userLoginResult.asStateFlow()
-
-    private val _userResponse = MutableStateFlow<LoginUserResponse?>(null)
-    val userResponse = _userResponse.asStateFlow()
 
     private val _token = MutableStateFlow<String?>(null)
     val token = _token.asStateFlow()
