@@ -16,9 +16,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -27,6 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
@@ -38,26 +36,19 @@ import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 @Composable
 fun WhatToCookScreen(
     navController: NavController,
-    viewModel: WhatToCookScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: WhatToCookScreenViewModel = hiltViewModel()
 
 ) {
     val isHintShow by viewModel.isHintShow.collectAsState()
     val difficulty by viewModel.selectedDifficultyItems.collectAsState()
-    var isItemTextValid by remember {
-        mutableStateOf(true)
-    }
-    var isTimeTextValid by remember {
-        mutableStateOf(true)
-    }
+    val isItemTextValid by viewModel.isItemTextValid.collectAsState()
+    val isTimeTextValid by viewModel.isTimeTextValid.collectAsState()
+    val itemTextState by viewModel.itemsText.collectAsState()
+    val timeTextState by viewModel.timeText.collectAsState()
     val textFieldFocusManger = LocalFocusManager.current
 
-    var itemTextState by remember {
-        mutableStateOf("")
-    }
 
-    var timeTextState by remember {
-        mutableStateOf("")
-    }
+
     Scaffold(
         bottomBar = {
             FoodPartBottomNavigation(navController = navController)
@@ -93,8 +84,8 @@ fun WhatToCookScreen(
                 modifier = Modifier
                     .height(56.dp),
                 onValueChange = {
-                    itemTextState = it
-                    isItemTextValid = true
+                   viewModel.setItemText(it)
+                    viewModel.setIsItemValid(true)
                 },
                 isError = !isItemTextValid,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -116,8 +107,8 @@ fun WhatToCookScreen(
                 value = timeTextState,
                 placeholder = "چقد وقت داری؟",
                 onValueChange = {
-                    timeTextState = it
-                    isTimeTextValid = true
+                    viewModel.setTimeText(it)
+                    viewModel.setIsTimeValid(true)
                 },
                 modifier = Modifier.height(56.dp),
                 placeholderCND = "دقیقه",
@@ -147,14 +138,11 @@ fun WhatToCookScreen(
             FoodPartButton(
                 onClick = {
                     textFieldFocusManger.clearFocus()
-
                     when ("") {
-                        itemTextState -> isItemTextValid = false
-                        timeTextState -> isTimeTextValid = false
+                        itemTextState -> viewModel.setIsItemValid(false)
+                        timeTextState -> viewModel.setIsTimeValid(false)
                         else -> {
                             if(itemTextState.length>2){
-                                viewModel.setItemText(itemTextState)
-                                viewModel.setTimeText(timeTextState)
                                 FoodListRequestType.WhatToCook.createWhatToCookItems(
                                     ingredient = itemTextState,
                                     difficulties = when (difficulty) {
@@ -174,7 +162,7 @@ fun WhatToCookScreen(
                                     )
                                 )
                             }else{
-                                isItemTextValid = false
+                                viewModel.setIsItemValid(false)
                             }
 
                         }

@@ -1,10 +1,16 @@
 package com.example.foodpart.ui.screens.whattocook
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WhatToCookScreenViewModel : ViewModel() {
+
+@HiltViewModel
+class WhatToCookScreenViewModel @Inject constructor() : ViewModel() {
     private val _isHintShow = MutableStateFlow(true)
     val isHintShow = _isHintShow.asStateFlow()
 
@@ -18,21 +24,49 @@ class WhatToCookScreenViewModel : ViewModel() {
     private val _timeText = MutableStateFlow("")
     val timeText = _timeText.asStateFlow()
 
+    private val _isTimeTextValid = MutableStateFlow<Boolean>(true)
+    val isTimeTextValid = _isTimeTextValid.asStateFlow()
+
+    private val _isItemTextValid = MutableStateFlow(true)
+    val isItemTextValid = _isItemTextValid.asStateFlow()
+
+
+
 
     fun setHintShow(isHintShow: Boolean) {
-        _isHintShow.value = isHintShow
+        viewModelScope.launch {
+            _isHintShow.emit(isHintShow)
+        }
     }
 
     fun setSelectedDifficultyItems(difficultyItems: DifficultyItems) {
-        _selectedDifficultyItems.value = difficultyItems
+        viewModelScope.launch {
+            _selectedDifficultyItems.emit(difficultyItems)
+        }
     }
 
     fun setItemText(text: String) {
-        _itemsText.value = text
+        viewModelScope.launch {
+            _itemsText.emit(text)
+        }
     }
 
     fun setTimeText(text: String) {
-        _timeText.value = text
+        viewModelScope.launch {
+            _timeText.emit(text)
+        }
+    }
+
+    fun setIsTimeValid(value : Boolean){
+        viewModelScope.launch {
+            _isTimeTextValid.emit(value)
+        }
+    }
+
+    fun setIsItemValid(value : Boolean){
+        viewModelScope.launch {
+            _isItemTextValid.emit(value)
+        }
     }
 
     fun getDescriptionText(): String {

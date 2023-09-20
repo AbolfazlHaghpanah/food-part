@@ -15,17 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.foodpart.R
 
 @Composable
 fun DifficultyList(
-    viewModel : WhatToCookScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel : WhatToCookScreenViewModel = hiltViewModel()
 ) {
     val selectedDifficultyItems by viewModel.selectedDifficultyItems.collectAsState()
     selectedDifficultyItems.icon = R.drawable.check_circle_outline
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
+    val interactionSource = remember { MutableInteractionSource() }
+
+
     Row(
 
         verticalAlignment = Alignment.CenterVertically,
