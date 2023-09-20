@@ -52,7 +52,7 @@ import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.MoreFoodItem
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.launch
 
@@ -145,12 +145,11 @@ fun FoodDetailsScreen(
                                 "مشکل در برقراری ارتباط"
                             )
                         }
-                        Result.Error("not_success_response") -> {
+                        else -> {
                             scaffoldState.snackbarHostState.showSnackbar(
                                 "مشکلی پیش اومد"
                             )
                         }
-                        else -> {}
 
 
                     }

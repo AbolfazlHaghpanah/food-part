@@ -60,12 +60,12 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.ui.components.FoodPartBottomNavigation
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
 import com.example.foodpart.ui.components.MoreFoodItem
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 import com.example.foodpart.ui.screens.foodlist.FoodListRequestType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

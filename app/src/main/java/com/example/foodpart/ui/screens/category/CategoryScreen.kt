@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
-import com.example.foodpart.ui.components.FoodPartBottomNavigation
+import com.example.foodpart.core.FoodPartBottomNavigation
 import com.example.foodpart.ui.components.FoodPartButton
-import com.example.foodpart.core.Result
+import com.example.foodpart.ui.components.Result
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
