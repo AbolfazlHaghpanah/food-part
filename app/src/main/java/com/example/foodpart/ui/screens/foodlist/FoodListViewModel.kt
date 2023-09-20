@@ -22,6 +22,7 @@ class FoodListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val categoryId = savedStateHandle.get<String>("category-id")
+
     private val foodListRequestType = savedStateHandle.get<String>("request-type")
     val appBarText = savedStateHandle.get<String>("appbar")
 

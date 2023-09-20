@@ -22,26 +22,30 @@ import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.foodpart.R
 
 @Composable
 fun FullScreenPicture(
-    isFullImage: MutableState<Boolean>,
-    imageRes: String?
+    viewModel: FoodDetailsViewModel = hiltViewModel(),
+    imageRes : String?
 
 ) {
+    val isFullImage by viewModel.isFullScreenImage.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background
             ) {
                 IconButton(onClick = {
-                    isFullImage.value = false
+                    viewModel.setIsFullScreenImage(false)
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.KeyboardArrowRight,
@@ -68,10 +72,10 @@ fun FullScreenPicture(
         }
     ) {
         BackHandler {
-            isFullImage.value = false
+            viewModel.setIsFullScreenImage(false)
         }
         AnimatedVisibility(
-            visible = isFullImage.value,
+            visible = isFullImage,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -82,7 +86,7 @@ fun FullScreenPicture(
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { isFullImage.value = false }
+                        onClick = { viewModel.setIsFullScreenImage(false) }
                     )
             ) {
 

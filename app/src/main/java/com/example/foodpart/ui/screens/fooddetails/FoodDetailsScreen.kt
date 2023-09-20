@@ -67,16 +67,11 @@ fun FoodDetailsScreen(
     val food by viewModel.food.collectAsState()
     val foodResult by viewModel.foodResult.collectAsState()
     val similarFood by viewModel.foodSuggestionList.collectAsState()
-    val bottomSheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val isFullImage = remember {
-        mutableStateOf(false)
-    }
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val isFullImage by viewModel.isFullScreenImage.collectAsState()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val reportResult by viewModel.reportFoodResult.collectAsState()
-
-
 
     BackHandler {
         if (bottomSheetState.isVisible)
@@ -91,8 +86,7 @@ fun FoodDetailsScreen(
     }
 
 
-    if (isFullImage.value) FullScreenPicture(
-        isFullImage = isFullImage,
+    if (isFullImage) FullScreenPicture(
         imageRes = food?.data?.image
     )
     else
@@ -171,7 +165,7 @@ fun FoodDetailsScreen(
                                     .fillMaxWidth()
                                     .height(250.dp)
                                     .clickable {
-                                        isFullImage.value = true
+                                        viewModel.setIsFullScreenImage(true)
                                     },
                                 filterQuality = FilterQuality.None,
                                 contentScale = ContentScale.FillWidth

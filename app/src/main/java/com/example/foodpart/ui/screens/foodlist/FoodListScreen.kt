@@ -29,10 +29,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -54,19 +58,21 @@ fun FoodListScreen(
     val appBarText = viewModel.appBarText
     val foodList by viewModel.foodList.collectAsState()
     val foodListResult by viewModel.foodListResult.collectAsState()
-
     val lazyColumnState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
     val indicationState = remember { MutableInteractionSource() }
+    val isFABShow by remember {
+        derivedStateOf { if (lazyColumnState.firstVisibleItemIndex > 1 ) true else false }
+    }
+
 
 
 
     Scaffold(
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-
             AnimatedVisibility(
-                visible = lazyColumnState.firstVisibleItemIndex > 1,
+                visible = isFABShow,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {

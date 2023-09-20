@@ -31,8 +31,6 @@ class WhatToCookScreenViewModel @Inject constructor() : ViewModel() {
     val isItemTextValid = _isItemTextValid.asStateFlow()
 
 
-
-
     fun setHintShow(isHintShow: Boolean) {
         viewModelScope.launch {
             _isHintShow.emit(isHintShow)
