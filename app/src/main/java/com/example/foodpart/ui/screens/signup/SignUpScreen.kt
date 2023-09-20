@@ -264,20 +264,19 @@ fun SignUpScreen(
 
             FoodPartButton(
                 onClick = {
-                    focusManager.clearFocus()
-
-                    viewModel.checkUsernameValidation()
-                    viewModel.checkPasswordValidation()
-                    viewModel.checkRepeatPasswordValidation(password, repeatPass)
                     scope.launch {
+                        focusManager.clearFocus()
+                        viewModel.checkUsernameValidation()
+                        viewModel.checkPasswordValidation()
+                        viewModel.checkRepeatPasswordValidation(password, repeatPass)
                         delay(50)
-                    }
-                    if (
-                        isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
-                    ) {
 
-                        viewModel.registerUser()
-                        scope.launch {
+                        if (
+                            isPasswordValid == null && isUsernameValid == null && isRepeatPasswordValid == null
+                        ) {
+
+                            viewModel.registerUser()
+
                             isLoading = true
                             while (registerResult != Result.Success) {
                                 delay(50)
@@ -290,14 +289,16 @@ fun SignUpScreen(
                             }
                             isLoading = false
                             if (registerResult == Result.Success
-                                ||registerResult == Result.Error("no_status")) {
+                                || registerResult == Result.Error("no_status")
+                            ) {
 
                                 scaffoldState.snackbarHostState.showSnackbar("")
 
-                                if (registerResult == Result.Success){
+                                if (registerResult == Result.Success) {
                                     navController.popBackStack(AppScreens.Login.route, false)
                                 }
                             }
+
 
                         }
                     }
