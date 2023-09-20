@@ -32,7 +32,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
 import kotlinx.coroutines.launch
@@ -42,14 +41,14 @@ import kotlinx.coroutines.launch
 fun FoodDetailsAppBar(
     navController: NavController,
     bottomSheetState: ModalBottomSheetState,
-    scaffoldState: ScaffoldState,
-    viewModel: FoodDetailsViewModel = hiltViewModel()
+    scaffoldState: ScaffoldState
 ) {
     val scope = rememberCoroutineScope()
     val menuState = remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
+
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp
@@ -94,16 +93,7 @@ fun FoodDetailsAppBar(
             ) {
                 DropdownMenuItem(onClick = {
                     scope.launch {
-
-                        if (viewModel.isUserLoggedIn())
-                        {
-                            bottomSheetState.show()
-                        }else{
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "برای گزارش ابتدا باید وارد شوید"
-                            )
-                        }
-
+                        bottomSheetState.show()
                     }
                     menuState.value = false
                 }) {
@@ -143,11 +133,7 @@ fun FoodDetailsAppBar(
                 DropdownMenuItem(
                     onClick = {
                         scope.launch {
-                            viewModel.saveFood()
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "دستور به علاقه مندی ها اضافه شد",
-                                actionLabel = "علاقه مندی ها"
-                            )
+                            scaffoldState.snackbarHostState.showSnackbar("")
                         }
                         menuState.value = false
                     }

@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -25,14 +26,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import coil.compose.AsyncImage
-import com.example.foodpart.R
 
 @Composable
 fun FullScreenPicture(
     isFullImage: MutableState<Boolean>,
-    imageRes: String?
+    imageRes: Int
 
 ) {
     Scaffold(
@@ -51,7 +51,7 @@ fun FullScreenPicture(
                 }
                 Text(
                     text = "عکس",
-                    style = MaterialTheme.typography.h2,
+                    style = MaterialTheme.typography.h1,
                     color = MaterialTheme.colors.onBackground
                 )
                 Spacer(modifier = Modifier.weight(1F))
@@ -85,16 +85,14 @@ fun FullScreenPicture(
                         onClick = { isFullImage.value = false }
                     )
             ) {
-
-                AsyncImage(
+                Image(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxWidth(),
-                    model = imageRes,
-                    contentDescription = "",
-                    error = painterResource(id = R.drawable.food_image_details),
+                    painter = painterResource(imageRes),
+                    contentDescription = "food image",
+                    contentScale = ContentScale.Crop
                 )
-
             }
         }
 

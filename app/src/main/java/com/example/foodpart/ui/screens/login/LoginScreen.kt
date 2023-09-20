@@ -22,19 +22,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,26 +43,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
-import com.example.foodpart.ui.components.Result
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
-    viewModel: LoginScreenViewModel = hiltViewModel()
+    navController: NavController
 ) {
-
-    val loginResult by viewModel.userLoginResult.collectAsState()
     val focusManager = LocalFocusManager.current
-    val username by viewModel.username.collectAsState()
-    val password by viewModel.password.collectAsState()
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var isUsernameValid by remember {
         mutableStateOf(true)
     }
@@ -75,32 +63,8 @@ fun LoginScreen(
         mutableStateOf(true)
     }
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
-    var isLoading by remember {
-        mutableStateOf(false)
-    }
-    val isUserInfoValid by viewModel.isUserInfoTrue.collectAsState()
-    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        snackbarHost = {
-            SnackbarHost(it) {
-                Snackbar(
-                    modifier = Modifier
-                        .padding(bottom = 85.dp, start = 8.dp, end = 8.dp),
-                    contentColor = MaterialTheme.colors.onBackground,
-                    backgroundColor = MaterialTheme.colors.secondary,
-                ) {
-                    Text(
-                        text = if (loginResult == Result.Error("no_status")) "مشکل در برقراری ارتباط"
-                        else "نام کاربری یا رمز عبور اشتباه است",
-                        style = MaterialTheme.typography.caption
-                    )
-                }
-            }
-
-        },
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background,
@@ -109,7 +73,6 @@ fun LoginScreen(
             {
                 IconButton(onClick = {
                     navController.navigate(AppScreens.Profile.route)
-
                 }) {
                     Icon(
                         modifier = Modifier
@@ -201,7 +164,7 @@ fun LoginScreen(
                 FoodPartTextField(
                     value = username,
                     onValueChange = {
-                        viewModel.setUsername(it)
+                        username = it
                         isUsernameValid = true
                     },
                     placeholder = "نام کاربری",
@@ -215,7 +178,7 @@ fun LoginScreen(
                 FoodPartTextField(
                     value = password,
                     onValueChange = {
-                        viewModel.setPassword(it)
+                        password = it
                         isPasswordValid = true
                     },
                     visualTransformation = PasswordVisualTransformation(),
@@ -232,41 +195,15 @@ fun LoginScreen(
                 )
                 FoodPartButton(
                     onClick = {
-
                         focusManager.clearFocus()
+
                         when ("") {
                             username -> isUsernameValid = false
                             password -> isPasswordValid = false
-                            else -> {
-                                viewModel.loginUser()
-                                scope.launch {
-                                    isLoading = true
-                                    while (loginResult != Result.Success) {
-                                        delay(100)
-                                        if (isUserInfoValid == false
-                                            || loginResult == Result.Error("no_status")
-                                        ) {
-                                            isLoading = false
-                                            break
-                                        }
-                                    }
-                                    isLoading = false
-                                    if (loginResult != Result.Success) scaffoldState.snackbarHostState.showSnackbar(
-                                        ""
-                                    )
-                                    if (loginResult == Result.Success) navController.popBackStack(
-                                        AppScreens.Profile.route,
-                                        false
-                                    )
-                                }
-                            }
-
+                            else -> navController.navigate(AppScreens.Profile.route)
                         }
-
-
                     },
-                    text = "تایید",
-                    isLoading = isLoading
+                    text = "تایید"
                 )
             }
             Row(
