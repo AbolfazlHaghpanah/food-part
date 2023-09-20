@@ -1,6 +1,8 @@
 package com.example.foodpart.ui.screens.whattocook
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -74,8 +76,11 @@ fun WhatToCookScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            if (isHintShow)
+            AnimatedVisibility(visible = isHintShow,
+                exit = fadeOut()
+            ) {
                 WhatToCookHint()
+            }
 
 
             FoodPartTextField(

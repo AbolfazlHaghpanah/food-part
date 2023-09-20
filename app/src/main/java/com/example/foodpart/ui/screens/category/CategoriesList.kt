@@ -23,7 +23,7 @@ fun CategoriesList(
     val selectedCategoryId by viewModel.selectedCategory.collectAsState()
 
     LazyRow(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(16.dp,16.dp,16.dp,0.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(categories) { item ->

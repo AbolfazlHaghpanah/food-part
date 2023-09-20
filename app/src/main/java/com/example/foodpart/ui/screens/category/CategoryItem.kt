@@ -74,7 +74,7 @@ fun CategoryItem(
 
         Text(
             modifier = Modifier
-                .height(32.dp),
+                .height(48.dp),
             text = category,
             style = MaterialTheme.typography.body1,
             color = if (isSelected) MaterialTheme.colors.primary
