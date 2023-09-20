@@ -12,11 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.SplashScreenViewModel
 import com.example.foodpart.ui.screens.category.CategoryScreen
@@ -25,11 +23,13 @@ import com.example.foodpart.ui.screens.foodlist.FoodListScreen
 import com.example.foodpart.ui.screens.login.LoginScreen
 import com.example.foodpart.ui.screens.profile.ProfileScreen
 import com.example.foodpart.ui.screens.search.SearchScreen
-import com.example.foodpart.ui.screens.search.SearchViewModel
 import com.example.foodpart.ui.screens.signup.SignUpScreen
 import com.example.foodpart.ui.screens.whattocook.WhatToCookScreen
 import com.example.foodpart.ui.theme.FoodPartTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 @Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
     private val viewModel: SplashScreenViewModel by viewModels()
@@ -37,8 +37,8 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition{viewModel.isLoading.value}
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setContent {
             FoodPartTheme {
@@ -71,16 +71,17 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(AppScreens.Profile.route) {
         ProfileScreen(navController = navController)
+
     }
 
     composable(AppScreens.Login.route) {
         LoginScreen(navController = navController)
+
     }
 
     composable(AppScreens.Search.route) {
         SearchScreen(
-            navController = navController,
-            viewModel = SearchViewModel()
+            navController = navController
         )
     }
 
@@ -90,50 +91,17 @@ private fun NavGraphBuilder.mainNavGraph(
 
     composable(
         route = AppScreens.FoodDetails.route,
-        arguments = listOf(
-            navArgument("id") {
-                type = NavType.IntType
-                nullable = false
-            }
-        )
-    ) { backStackEntry ->
-        val id = backStackEntry.arguments?.getInt("id")
-            ?: throw IllegalStateException("id was null")
-        FoodDetailsScreen(
-            navController = navController,
-            id
-        )
+    ) {
+        FoodDetailsScreen(navController = navController)
+
     }
 
     composable(
-        route = AppScreens.FoodList.route,
-        arguments = listOf(
-            navArgument("category") {
-                type = NavType.StringType
-                nullable = false
-            },
-            navArgument("appbar") {
-                type = NavType.StringType
-                nullable = false
-            },
-            navArgument("description") {
-                type = NavType.StringType
-                nullable = true
-            }
-        )
-    ) { backStackEntry ->
-        val category = backStackEntry.arguments?.getString("category")
-            ?: throw IllegalStateException("category was null")
-
-        val appBar = backStackEntry.arguments?.getString("appbar")
-            ?: throw IllegalStateException("appbar was null")
-
-        val description = backStackEntry.arguments?.getString("description")
+        route = AppScreens.FoodList.route
+    )
+    {
         FoodListScreen(
-            navController,
-            category,
-            appBar,
-            description
+            navController
         )
     }
 

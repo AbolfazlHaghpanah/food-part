@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.foodpart">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name=".HiltApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/food_part_logo"
         android:roundIcon="@mipmap/food_part_logo_round"
