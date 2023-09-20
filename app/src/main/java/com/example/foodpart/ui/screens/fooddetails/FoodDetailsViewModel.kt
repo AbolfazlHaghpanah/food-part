@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodpart.core.UserInfo
 import com.example.foodpart.database.savedfood.SavedFoodDao
 import com.example.foodpart.database.savedfood.SavedFoodEntity
+import com.example.foodpart.database.user.UserDao
+import com.example.foodpart.database.user.UserEntity
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.fooddetails.FoodDetailsApi
 import com.example.foodpart.network.fooddetails.FoodDetailsResponse
@@ -26,8 +27,11 @@ import javax.inject.Inject
 class FoodDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val foodDetailsApi: FoodDetailsApi,
-    private val savedFoodDao: SavedFoodDao
+    private val savedFoodDao: SavedFoodDao,
+    private val userDao: UserDao
 ) : ViewModel() {
+
+    private val _user = MutableStateFlow<UserEntity?>(null)
 
     val foodId = savedStateHandle.get<String>("id") ?: ""
 
@@ -56,6 +60,7 @@ class FoodDetailsViewModel @Inject constructor(
 
     init {
         getFood()
+        observeUser()
     }
 
 
@@ -102,6 +107,16 @@ class FoodDetailsViewModel @Inject constructor(
         }
     }
 
+    fun observeUser(){
+        viewModelScope.launch {
+            userDao.observeUser().collect(_user)
+        }
+    }
+
+    fun isUserLoggedIn():Boolean{
+        return _user.value != null
+    }
+
     fun reportFood() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
@@ -109,7 +124,7 @@ class FoodDetailsViewModel @Inject constructor(
                     foodDetailsApi.reportFood(
                         foodId,
                         ReportBody(reportFoodText.value),
-                        "Bearer ${UserInfo.token.value}"
+                        "Bearer ${_user.value?.token}"
                     )
                 },
                 onDataReady = {

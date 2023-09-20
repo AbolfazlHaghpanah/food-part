@@ -35,7 +35,6 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodpart.core.AppScreens
-import com.example.foodpart.core.UserInfo
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -51,8 +50,6 @@ fun FoodDetailsAppBar(
         mutableStateOf(false)
     }
     val context = LocalContext.current
-
-
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp
@@ -98,7 +95,7 @@ fun FoodDetailsAppBar(
                 DropdownMenuItem(onClick = {
                     scope.launch {
 
-                        if (UserInfo.token.value!=null)
+                        if (viewModel.isUserLoggedIn())
                         {
                             bottomSheetState.show()
                         }else{

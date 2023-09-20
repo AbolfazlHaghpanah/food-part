@@ -3,7 +3,7 @@ package com.example.foodpart.ui.screens.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodpart.core.UserInfo
+import com.example.foodpart.database.user.UserDao
 import com.example.foodpart.network.user.LoginUserResponse
 import com.example.foodpart.network.user.RegisterUser
 import com.example.foodpart.network.user.UserApi
@@ -18,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
-    private val userApi: UserApi
+    private val userApi: UserApi,
+    private val userDao: UserDao
 ):ViewModel() {
 
     private val _username = MutableStateFlow<String>("")
@@ -39,17 +40,8 @@ class LoginScreenViewModel @Inject constructor(
     private val _isUserinfoTrue = MutableStateFlow<Boolean>(true)
     val isUserInfoTrue = _isUserinfoTrue.asStateFlow()
 
-    fun registerUserInApp(){
-
-        viewModelScope.launch {
-            UserInfo.token.emit(token.value)
-            UserInfo.avatar.emit(userResponse.value?.user?.avatar)
-            UserInfo.id.emit(userResponse.value?.user?.id)
-            UserInfo.username.emit(userResponse.value?.user?.username)
-        }
 
 
-    }
     fun loginUser(){
         viewModelScope.launch (Dispatchers.IO){
 
@@ -57,10 +49,9 @@ class LoginScreenViewModel @Inject constructor(
                 _userLoginResult.emit(Result.Loading)
                 val response = userApi.loginUser(RegisterUser(username.value,password.value))
                 if (response.isSuccessful){
-                    if (response.body() != null){
-                        _token.emit(response.body()?.data?.token)
-                        _userResponse.emit(response.body()?.data)
-                        registerUserInApp()
+                    val body = response.body()
+                    if (body != null){
+                        userDao.addUser(body.toUserEntity())
                         _userLoginResult.emit(Result.Success)
                     }else{
                         _userLoginResult.emit(Result.Error(response.message()))

@@ -1,5 +1,7 @@
 package com.example.foodpart.di
 
+import com.example.foodpart.core.AppDatabase
+import com.example.foodpart.database.user.UserDao
 import com.example.foodpart.network.user.UserApi
 import dagger.Module
 import dagger.Provides
@@ -15,5 +17,11 @@ object UserModule {
     @Provides
     fun provideUser(retrofit: Retrofit): UserApi {
         return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    fun provideUserDatabase(appDatabase: AppDatabase):UserDao{
+        return appDatabase.userDao()
+
     }
 }

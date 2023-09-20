@@ -3,9 +3,10 @@ package com.example.foodpart.ui.screens.profile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodpart.core.UserInfo
 import com.example.foodpart.database.savedfood.SavedFoodDao
 import com.example.foodpart.database.savedfood.SavedFoodEntity
+import com.example.foodpart.database.user.UserDao
+import com.example.foodpart.database.user.UserEntity
 import com.example.foodpart.network.common.safeApi
 import com.example.foodpart.network.user.EditAllUser
 import com.example.foodpart.network.user.EditUserPassword
@@ -23,8 +24,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userApi: UserApi,
-    private val savedFoodDao: SavedFoodDao
+    private val savedFoodDao: SavedFoodDao,
+    private val userDao: UserDao
 ) : ViewModel() {
+
+    private val _user = MutableStateFlow<UserEntity?>(null)
+    val user = _user.asStateFlow()
 
     private val _username = MutableStateFlow<String>("")
     val username = _username.asStateFlow()
@@ -49,7 +54,18 @@ class ProfileViewModel @Inject constructor(
 
 
     init {
+        observeUser()
         observeSavedFoods()
+    }
+
+    fun observeUser(){
+        viewModelScope.launch {
+            userDao.observeUser().collect(_user)
+        }
+    }
+
+    fun isUserLoggedIn():Boolean{
+        return user.value != null
     }
 
 
@@ -62,13 +78,19 @@ class ProfileViewModel @Inject constructor(
                         body = EditUserUsername(
                             username.value
                         ),
-                        token = "Bearer ${UserInfo.token.value}"
+                        token = "Bearer ${user.value?.token}"
                     )
                 },
 
                 onDataReady = {
                     viewModelScope.launch {
-                        UserInfo.username.emit(username.value)
+                        userDao.updateUser(UserEntity(
+                            token = user.value?.token?:"",
+                            id = user.value?.id,
+                            username = username.value,
+                            avatar = user.value?.avatar
+
+                        ))
                     }
                 }
             ).collect(_editUserResult)
@@ -105,13 +127,13 @@ class ProfileViewModel @Inject constructor(
                                 oldPassword = oldPassword.value,
                                 newpassword = newPassword.value
                             ),
-                            token = "Bearer ${UserInfo.token.value}"
+                            token = "Bearer ${user.value?.token}"
                         )
 
                     },
                     onDataReady = {
                         viewModelScope.launch {
-                            UserInfo.token.emit(it.additionalInfo.token)
+
                         }
                         Log.d("editUser", "editPassword: passwordChanged")
                     }
@@ -131,7 +153,7 @@ class ProfileViewModel @Inject constructor(
                 safeApi(
                     call = {
                         userApi.editUserAll(
-                            token = "Bearer ${UserInfo.token.value}",
+                            token = "Bearer ${user.value?.token}",
                             body = EditAllUser(
                                 username.value,
                                 oldPassword.value,
@@ -141,8 +163,14 @@ class ProfileViewModel @Inject constructor(
                     },
                     onDataReady = {
                         viewModelScope.launch {
-                            UserInfo.token.emit(it.additionalInfo.token)
-                            UserInfo.username.emit(username.value)
+                            userDao.updateUser(
+                                UserEntity(
+                                    it.additionalInfo.token,
+                                    username.value,
+                                    user.value?.id,
+                                    user.value?.avatar
+                                )
+                            )
                         }
                     }
                 ).collect(_editUserResult)
@@ -154,14 +182,11 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                userApi.logout(token = "Bearer ${UserInfo.token.value}")
-                UserInfo.token.emit(null)
-                UserInfo.username.emit(null)
-                UserInfo.avatar.emit(null)
-                UserInfo.id.emit(null)
+                userApi.logout(token = "Bearer ${user.value?.token}")
+                userDao.deleteUser()
+
             } catch (t: Throwable) {
                 Log.d("error", "logout error: ${t.message}")
-
             }
         }
 

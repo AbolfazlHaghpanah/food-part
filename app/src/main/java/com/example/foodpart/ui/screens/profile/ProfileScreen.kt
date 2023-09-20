@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -60,7 +59,6 @@ import coil.request.ImageRequest
 import com.example.foodpart.R
 import com.example.foodpart.core.AppScreens
 import com.example.foodpart.core.FoodPartBottomNavigation
-import com.example.foodpart.core.UserInfo
 import com.example.foodpart.ui.components.FoodItem
 import com.example.foodpart.ui.components.FoodPartButton
 import com.example.foodpart.ui.components.FoodPartTextField
@@ -74,7 +72,6 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val username = UserInfo.username.collectAsState("مهمان")
     val newUsername by viewModel.username.collectAsState()
     val oldPassword by viewModel.oldPassword.collectAsState()
     val newPassword by viewModel.newPassword.collectAsState()
@@ -88,6 +85,7 @@ fun ProfileScreen(
     var isEditingUsername by remember { mutableStateOf(false) }
     var isEditingPassword by remember { mutableStateOf(false) }
     val savedFoods by viewModel.savedFoods.collectAsState()
+    val user by viewModel.user.collectAsState()
 
     Scaffold(
 
@@ -221,7 +219,7 @@ fun ProfileScreen(
                         .height(64.dp)
                         .clip(RoundedCornerShape(59.dp)),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("https://foodpart.samentic.com/api/files/users/${UserInfo.id.value ?: ""}/${UserInfo.avatar.value ?: ""}")
+                        .data("https://foodpart.samentic.com/api/files/users/${user?.id ?: ""}/${user?.avatar?: ""}")
                         .decoderFactory(SvgDecoder.Factory())
                         .build(),
                     contentDescription = "",
@@ -229,14 +227,14 @@ fun ProfileScreen(
                     error = painterResource(R.drawable.profile_photo)
                 )
                 Text(
-                    text = username.value ?: "مهمان",
+                    text = user?.username?: "مهمان",
                     color = MaterialTheme.colors.onBackground,
                     style = MaterialTheme.typography.body2,
                 )
                 Spacer(modifier = Modifier.weight(1f))
 
 
-                if (UserInfo.token.value ?: null != null) {
+                if (viewModel.isUserLoggedIn()) {
                     IconButton(onClick = {
                         alertDialog = true
                     }) {
@@ -281,9 +279,7 @@ fun ProfileScreen(
 
             }
 
-
-
-            if (UserInfo.token.value ?: null == null) {
+            if (!viewModel.isUserLoggedIn()) {
                 FoodPartButton(
                     onClick = {
                         navController.navigate(AppScreens.Login.route)
